@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑简历 - AI简历生成器</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/edit.css">
+</head>
+<body>
+    <div class="container">
+        <div class="editor-header">
+            <h1>简历编辑</h1>
+            <div class="action-buttons">
+                <button class="btn" id="saveBtn">保存</button>
+                <button class="btn primary" id="downloadBtn">导出PDF</button>
+            </div>
+        </div>
+
+        <div class="editor-container">
+            <!-- 简历预览区 - 居中 -->
+            <div class="preview-panel">
+                <div class="resume-preview" id="resumePreview">
+                    <div class="resume-container">
+                        <!-- 简历头部 -->
+                        <div class="resume-header">
+                            <div class="resume-header-flex">
+                                <!-- 头像区域 -->
+                                <div class="avatar-container editable-section" data-section="avatar">
+                                    <div class="avatar-wrapper">
+                                        <img id="userAvatar" src="/images/default-avatar.png" alt="用户头像" class="avatar-img">
+                                        <div class="avatar-overlay">
+                                            <i class="avatar-edit-icon">+</i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 基本信息 -->
+                                <div class="basic-info-container editable-section" data-section="basic">
+                                    <h1 class="resume-name" id="previewName">张三</h1>
+                                    <p class="resume-info" id="previewBasicInfo">男 | 24岁 | 本科 | 1年工作经验 | 在职</p>
+                                    <p class="resume-contact" id="previewContact">联系电话：188****8888 | 邮箱：example@email.com</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 求职意向 -->
+                        <div class="resume-section editable-section" data-section="jobIntention">
+                            <h2 class="section-title">求职意向</h2>
+                            <div class="job-intention">
+                                <div class="intention-item">
+                                    <span>求职岗位: </span>
+                                    <span id="previewPosition">产品经理</span> | 
+                                    <span>意向城市: </span>
+                                    <span id="previewCity">广东广州</span> | 
+                                    <span>期望薪资: </span>
+                                    <span id="previewSalary">11-13k</span> | 
+                                    <span>到岗时间: </span>
+                                    <span id="previewEntryTime">随时到岗</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 教育经历 -->
+                        <div class="resume-section editable-section" data-section="education">
+                            <h2 class="section-title">教育经历</h2>
+                            <div class="education-items" id="previewEducationList">
+                                <div class="education-item">
+                                    <div class="edu-main">
+                                        <span id="previewSchool">腾讯大学·计算机</span>
+                                        <span id="previewDegree">本科</span>
+                                        <span id="previewEduTime">2014.9 - 2018.6</span>
+                                    </div>
+                                    <div class="edu-detail">
+                                        <span>绩点: </span>
+                                        <span id="previewGPA">3.8/4.0</span>
+                                        <span>成绩排名: </span>
+                                        <span id="previewRank">前30%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 工作经历 -->
+                        <div class="resume-section editable-section" data-section="work">
+                            <h2 class="section-title">工作经历</h2>
+                            <div class="work-items" id="previewWorkList">
+                                <div class="work-item">
+                                    <div class="work-header">
+                                        <span id="previewCompany">腾讯科技广州有限公司</span>
+                                        <span id="previewRole">QQ邮箱产品部 产品实习生</span>
+                                        <span id="previewWorkTime">2018.9 - 2020.3</span>
+                                    </div>
+                                    <div class="work-description">
+                                        <p id="previewWorkDescription">负责版本上线后的推广工作，通过微博、博客和论坛等渠道将新功能触达用户</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 项目经历 -->
+                        <div class="resume-section editable-section" data-section="project">
+                            <h2 class="section-title">项目经历</h2>
+                            <div class="project-items" id="previewProjectList">
+                                <div class="project-item">
+                                    <div class="project-header">
+                                        <span id="previewProjectName">腾讯大学 "最亮的明天"暖灯行动</span>
+                                        <span id="previewProjectRole">项目负责人</span>
+                                        <span id="previewProjectTime">2014.9 - 2014.11</span>
+                                    </div>
+                                    <div class="project-description">
+                                        <p>引导释放邮箱空间, 帮助贫困山区</p>
+                                        <p>1、引导用户删除旧邮件，倡导资源节约和合理利用，将节约下来的运营成本投入公益项目，帮助贫困山区的教室改善照明环境</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 校内经历 -->
+                        <div class="resume-section editable-section" data-section="campus">
+                            <h2 class="section-title">校内经历</h2>
+                            <div class="campus-items" id="previewCampusList">
+                                <div class="campus-item">
+                                    <div class="campus-header">
+                                        <span id="previewCampusOrg">腾讯大学产品协会</span>
+                                        <span id="previewCampusRole">产品研发部 副主席</span>
+                                        <span id="previewCampusTime">2015.3 - 2015.6</span>
+                                    </div>
+                                    <div class="campus-description">
+                                        <p>主导产品项目立项</p>
+                                        <p>主导QQ邮箱超大附件、漂流瓶、记事本等多个产品的立项，资源协调、进度管理和对外合作工作</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 荣誉奖项 -->
+                        <div class="resume-section editable-section" data-section="awards">
+                            <h2 class="section-title">荣誉奖项</h2>
+                            <div class="awards-items" id="previewAwardsList">
+                                <div class="award-item">
+                                    <span>2014.8 腾讯大学求是杯"腾讯文化奖"金奖</span>
+                                </div>
+                                <div class="award-item">
+                                    <span>2014.3 腾讯大学一等奖学金</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 个人技能 -->
+                        <div class="resume-section editable-section" data-section="skills">
+                            <h2 class="section-title">个人技能</h2>
+                            <div class="skills-items" id="previewSkillsList">
+                                <div class="skill-item">
+                                    <span>语言技能: 英语CET6、粤语</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span>办公技能: 熟练使用Office办公软件、Axure RP、Visio</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧浮动工具栏和输入区 -->
+            <div class="right-sidebar">
+                <!-- 简历工具栏 -->
+                <div class="tools-container">
+                    <div class="floating-toolbar">
+                        <div class="toolbar-header">
+                            <span>简历工具</span>
+                        </div>
+                        <div class="toolbar-btn-group">
+                            <button class="toolbar-btn active" data-tool="template">
+                                <i class="icon-template">T</i>
+                                <span>简历模板</span>
+                            </button>
+                            <button class="toolbar-btn" data-tool="analysis">
+                                <i class="icon-analysis">A</i>
+                                <span>智能分析</span>
+                            </button>
+                            <button class="toolbar-btn" data-tool="optimize">
+                                <i class="icon-optimize">O</i>
+                                <span>一键优化</span>
+                            </button>
+                        </div>
+                        
+                        <!-- 工具内容区域 -->
+                        <div class="toolbar-content">
+                            <!-- 简历模板面板 -->
+                            <div class="tool-panel active" id="template-panel">
+                                <h3>选择模板样式</h3>
+                                <div class="template-list">
+                                    <div class="template-item active">
+                                        <div class="template-preview standard"></div>
+                                        <span>标准模板</span>
+                                    </div>
+                                    <div class="template-item">
+                                        <div class="template-preview modern"></div>
+                                        <span>现代模板</span>
+                                    </div>
+                                    <div class="template-item">
+                                        <div class="template-preview classic"></div>
+                                        <span>经典模板</span>
+                                    </div>
+                                    <div class="template-item">
+                                        <div class="template-preview creative"></div>
+                                        <span>创意模板</span>
+                                    </div>
+                                </div>
+                                
+                                <h3>自定义颜色</h3>
+                                <div class="color-picker">
+                                    <div class="color-option" style="background-color: #1a73e8"></div>
+                                    <div class="color-option" style="background-color: #34a853"></div>
+                                    <div class="color-option" style="background-color: #ea4335"></div>
+                                    <div class="color-option" style="background-color: #fbbc05"></div>
+                                    <div class="color-option" style="background-color: #4285f4"></div>
+                                    <div class="color-option" style="background-color: #202124"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- 智能分析面板 -->
+                            <div class="tool-panel" id="analysis-panel">
+                                <h3>简历得分</h3>
+                                <div class="score-circle">
+                                    <span class="score">85</span>
+                                    <span class="max">/100</span>
+                                </div>
+                                
+                                <div class="analysis-results">
+                                    <div class="analysis-item">
+                                        <h4>内容完整度</h4>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 90%;"></div>
+                                        </div>
+                                        <p>简历内容较为完整，建议适当补充项目成果</p>
+                                    </div>
+                                    <div class="analysis-item">
+                                        <h4>专业匹配度</h4>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 75%;"></div>
+                                        </div>
+                                        <p>与目标岗位相关性较强，可强化核心技能展示</p>
+                                    </div>
+                                    <div class="analysis-item">
+                                        <h4>表达清晰度</h4>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 80%;"></div>
+                                        </div>
+                                        <p>表达基本清晰，部分描述可更具体量化</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 一键优化面板 -->
+                            <div class="tool-panel" id="optimize-panel">
+                                <h3>一键优化简历</h3>
+                                <p class="optimize-tip">AI将根据行业标准和岗位要求自动优化您的简历内容</p>
+                                
+                                <div class="optimize-options">
+                                    <div class="optimize-option">
+                                        <input type="checkbox" id="opt-professional" checked>
+                                        <label for="opt-professional">专业化表达</label>
+                                    </div>
+                                    <div class="optimize-option">
+                                        <input type="checkbox" id="opt-keywords" checked>
+                                        <label for="opt-keywords">添加行业关键词</label>
+                                    </div>
+                                    <div class="optimize-option">
+                                        <input type="checkbox" id="opt-quantify" checked>
+                                        <label for="opt-quantify">量化成果描述</label>
+                                    </div>
+                                    <div class="optimize-option">
+                                        <input type="checkbox" id="opt-grammar">
+                                        <label for="opt-grammar">语法与拼写检查</label>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn primary optimize-btn">开始优化</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 底部手写输入区 -->
+                <div class="handwriting-container">
+                    <div class="handwriting-module">
+                        <div class="handwriting-title">手写输入</div>
+                        <textarea id="handwritingInput" placeholder="请输入您想要修改的内容或添加的描述..."></textarea>
+                        <button class="btn primary" id="handwritingBtn">应用修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑模态框 -->
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">添加教育经历</h2>
+                <button class="close-btn" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- 动态填充内容 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="modal-cancel">取消</button>
+                <button class="btn primary" id="modal-save">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI优化模态框 -->
+    <div class="modal" id="ai-edit-modal">
+        <div class="modal-content wider-modal">
+            <div class="modal-header">
+                <h2>AI文本优化</h2>
+                <button class="close-btn" id="ai-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="ai-edit-comparison">
+                    <div class="original-text">
+                        <h3>原文</h3>
+                        <div id="original-content" class="content-box"></div>
+                    </div>
+                    <div class="optimized-text">
+                        <h3>优化后</h3>
+                        <div id="optimized-content" class="content-box"></div>
+                    </div>
+                </div>
+                <div class="ai-edit-options">
+                    <input type="text" id="ai-edit-instruction" placeholder="调整指示，例如：'更加简洁'、'增加专业术语'">
+                    <button id="ai-regenerate" class="btn">重新生成</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="ai-modal-cancel">取消</button>
+                <button class="btn primary" id="ai-modal-apply">应用修改</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/edit.js"></script>
+</body>
+</html> 

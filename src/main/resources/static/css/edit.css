@@ -1,0 +1,899 @@
+/* 编辑页面样式 */
+body {
+    font-family: "Microsoft YaHei", "SimSun", sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 编辑器头部 */
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px 15px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.editor-header h1 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.template-selector {
+    display: flex;
+    align-items: center;
+}
+
+.template-selector span {
+    margin-right: 10px;
+}
+
+.template-selector select {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f5f5f5;
+    color: #333;
+    cursor: pointer;
+    font-size: 10px;
+    transition: all 0.2s;
+}
+
+.btn:hover {
+    background: #e9e9e9;
+}
+
+.btn.primary {
+    background: #1a73e8;
+    color: white;
+    border-color: #1a73e8;
+}
+
+.btn.primary:hover {
+    background: #0d66da;
+}
+
+/* 编辑器容器 - 新布局 */
+.editor-container {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 50px); /* 减去头部高度 */
+    position: relative;
+    padding: 0;
+}
+
+/* 简历预览面板 - 固定宽度居中 */
+.preview-panel {
+    width: 800px;
+    margin: 0 auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 简历预览容器 */
+.resume-preview {
+    flex: 1;
+    overflow-y: auto;
+    padding: 5px;
+    background-color: #f8f9fa;
+}
+
+.resume-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 30px;
+    background: #fff;
+    font-size: 13px;
+    line-height: 1.4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 右侧浮动边栏容器 */
+.right-sidebar {
+    position: fixed;
+    right: 20px;
+    top: 60px;
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 80px);
+    justify-content: space-between;
+    z-index: 100;
+}
+
+/* 工具容器 */
+.tools-container {
+    flex: 1;
+    max-height: 80%;
+    overflow: hidden;
+}
+
+/* 右侧工具栏 */
+.floating-toolbar {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.toolbar-header {
+    padding: 12px 15px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.toolbar-btn-group {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.toolbar-btn {
+    flex: 1;
+    padding: 12px 8px;
+    text-align: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: #555;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.toolbar-btn i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #e9e9e9;
+    color: #333;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.toolbar-btn.active {
+    color: #1a73e8;
+    background-color: #f0f7ff;
+    border-bottom: 2px solid #1a73e8;
+}
+
+.toolbar-btn.active i {
+    background-color: #1a73e8;
+    color: white;
+}
+
+.toolbar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.tool-panel {
+    display: none;
+}
+
+.tool-panel.active {
+    display: block;
+}
+
+.tool-panel h3 {
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+/* 手写输入容器 */
+.handwriting-container {
+    margin-top: 10px;
+    height: 150px;
+}
+
+/* 手写输入模块 */
+.handwriting-module {
+    /* width: 100%; */
+    height: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.handwriting-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+#handwritingInput {
+    flex: 1;
+    /* width: 100%; */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    /* padding: 8px; */
+    font-size: 13px;
+    resize: none;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+}
+
+#handwritingInput:focus {
+    border-color: #4a89dc;
+    background-color: #f8f9ff;
+    outline: none;
+}
+
+#handwritingBtn {
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+/* 模板选择 */
+.template-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.template-item {
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.template-item:hover {
+    background-color: #f0f7ff;
+}
+
+.template-item.active {
+    background-color: #f0f7ff;
+    border: 1px solid #1a73e8;
+}
+
+.template-preview {
+    width: 100%;
+    height: 80px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.template-item span {
+    font-size: 12px;
+}
+
+/* 颜色选择 */
+.color-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.color-option {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+}
+
+.color-option.active {
+    border-color: #333;
+}
+
+/* 分析面板 */
+.score-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #f0f7ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    border: 4px solid #1a73e8;
+}
+
+.score {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a73e8;
+}
+
+.max {
+    font-size: 12px;
+    color: #666;
+}
+
+.analysis-results {
+    margin-top: 20px;
+}
+
+.analysis-item {
+    margin-bottom: 15px;
+}
+
+.analysis-item h4 {
+    font-size: 13px;
+    margin: 0 0 8px 0;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress {
+    height: 100%;
+    background-color: #1a73e8;
+    border-radius: 3px;
+}
+
+.analysis-item p {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+}
+
+/* 优化面板 */
+.optimize-tip {
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.optimize-options {
+    margin-bottom: 20px;
+}
+
+.optimize-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.optimize-option input {
+    margin-right: 10px;
+}
+
+.optimize-option label {
+    font-size: 14px;
+    color: #333;
+}
+
+.optimize-btn {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* 简历内容样式 */
+.resume-header {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+/* 添加头像和基本信息的并列布局 */
+.resume-header-flex {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.avatar-container {
+    flex-shrink: 0;
+}
+
+.avatar-wrapper {
+    width: 100px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #eee;
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.avatar-container:hover .avatar-overlay {
+    opacity: 1;
+}
+
+.avatar-edit-icon {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.basic-info-container {
+    flex: 1;
+}
+
+.resume-name {
+    font-size: 24px;
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.resume-info, .resume-contact {
+    font-size: 13px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 15px 0 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.resume-section {
+    margin-bottom: 5px;
+}
+
+/* 求职意向 */
+.job-intention {
+    font-size: 13px;
+    color: #666;
+}
+
+/* 教育经历 */
+.education-item {
+    margin-bottom: 10px;
+}
+
+.edu-main {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.edu-detail {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* 工作经历 */
+.work-item {
+    margin-bottom: 15px;
+}
+
+.work-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.work-description {
+    font-size: 12px;
+    color: #333;
+}
+
+.work-description p {
+    margin: 5px 0;
+}
+
+/* 项目经历 */
+.project-item {
+    margin-bottom: 15px;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.project-description {
+    font-size: 12px;
+    color: #333;
+}
+
+.project-description p {
+    margin: 5px 0;
+}
+
+/* 校内经历 */
+.campus-item {
+    margin-bottom: 15px;
+}
+
+.campus-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.campus-description {
+    font-size: 12px;
+    color: #333;
+}
+
+.campus-description p {
+    margin: 5px 0;
+}
+
+/* 荣誉奖项 */
+.award-item {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+/* 个人技能 */
+.skill-item {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+/* 可编辑区域 */
+.editable-section {
+    padding: 2px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.editable-section:hover {
+    background-color: #f0f7ff;
+}
+
+/* 模态框 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 50px auto;
+    padding: 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    animation: modalopen 0.3s;
+}
+
+/* 头像上传相关样式 */
+.avatar-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.avatar-preview {
+    width: 150px;
+    height: 180px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 2px solid #eee;
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-upload-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wider-modal .modal-content {
+    max-width: 800px;
+}
+
+.modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* 模态框表单样式 */
+.modal-form {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    gap: 40px; /* 两个表单项之间的间距 */
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 15px;
+}
+
+.form-row .form-group {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+@keyframes modalopen {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/* AI编辑比较视图 */
+.ai-edit-comparison {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.original-text, .optimized-text {
+    flex: 1;
+}
+
+.original-text h3, .optimized-text h3 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.content-box {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    height: 200px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.optimized-text .content-box {
+    background: #f5f8ff;
+    border-color: #d0e0ff;
+}
+
+.ai-edit-options {
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.ai-edit-options input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    background-color: #fcfcfc;
+    margin-bottom: 15px;
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+    .preview-panel {
+        width: 700px;
+    }
+    
+    .right-sidebar {
+        right: 10px;
+        width: 240px;
+    }
+}
+
+@media (max-width: 992px) {
+    .editor-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .preview-panel {
+        width: 100%;
+        max-width: 800px;
+        height: 60vh;
+    }
+
+    .right-sidebar {
+        position: static;
+        width: 100%;
+        flex-direction: row;
+        gap: 20px;
+        margin-top: 20px;
+        height: auto;
+    }
+
+    .tools-container, .handwriting-container {
+        flex: 1;
+    }
+
+    .handwriting-container {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .right-sidebar {
+        flex-direction: column;
+    }
+
+    .ai-edit-comparison {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 30px auto;
+    }
+} 

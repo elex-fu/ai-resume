@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历详情 - AI简历生成器</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="resumePO-header">
+            <h1>简历详情</h1>
+            <div class="button-group">
+                <button class="btn" id="editResume">编辑简历</button>
+                <button class="btn primary" id="downloadResume">下载简历</button>
+            </div>
+        </div>
+
+        <div class="resumePO-content">
+            <div class="section">
+                <h2>基本信息</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>姓名</label>
+                        <span id="name"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>年龄</label>
+                        <span id="age"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>电话</label>
+                        <span id="phone"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>邮箱</label>
+                        <span id="email"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>教育经历</h2>
+                <div id="educationList"></div>
+            </div>
+
+            <div class="section">
+                <h2>工作经验</h2>
+                <div id="experienceList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 加载简历数据
+        async function loadResume() {
+            const resumeId = new URLSearchParams(window.location.search).get('id');
+            if (!resumeId) {
+                alert('未找到简历ID');
+                window.location.href = '/';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/resumePO/${resumeId}`);
+                const resumePO = await response.json();
+                displayResume(resumePO);
+            } catch (error) {
+                console.error('加载简历失败:', error);
+                alert('加载简历失败，请重试');
+            }
+        }
+
+        // 显示简历数据
+        function displayResume(resumePO) {
+            // 显示基本信息
+            document.getElementById('name').textContent = resumePO.name || '-';
+            document.getElementById('age').textContent = resumePO.age || '-';
+            document.getElementById('phone').textContent = resumePO.phone || '-';
+            document.getElementById('email').textContent = resumePO.email || '-';
+
+            // 显示教育经历
+            const educationList = document.getElementById('educationList');
+            educationList.innerHTML = resumePO.education?.map(edu => `
+                <div class="education-item">
+                    <h3>${edu.school}</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>专业</label>
+                            <span>${edu.major}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>学历</label>
+                            <span>${edu.degree}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>在校时间</label>
+                            <span>${edu.period}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('') || '<p>暂无教育经历</p>';
+
+            // 显示工作经验
+            const experienceList = document.getElementById('experienceList');
+            experienceList.innerHTML = resumePO.experience?.map(exp => `
+                <div class="experience-item">
+                    <h3>${exp.company}</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>职位</label>
+                            <span>${exp.position}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>工作时间</label>
+                            <span>${exp.period}</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <label>工作描述</label>
+                        <p>${exp.description}</p>
+                    </div>
+                </div>
+            `).join('') || '<p>暂无工作经验</p>';
+        }
+
+        // 编辑简历
+        document.getElementById('editResume').addEventListener('click', () => {
+            const resumeId = new URLSearchParams(window.location.search).get('id');
+            window.location.href = `/edit.html?id=${resumeId}`;
+        });
+
+        // 下载简历
+        document.getElementById('downloadResume').addEventListener('click', async () => {
+            const resumeId = new URLSearchParams(window.location.search).get('id');
+            try {
+                const response = await fetch(`/api/resumePO/${resumeId}/download`);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '简历.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (error) {
+                console.error('下载简历失败:', error);
+                alert('下载失败，请重试');
+            }
+        });
+
+        // 页面加载时加载简历数据
+        document.addEventListener('DOMContentLoaded', loadResume);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI简历生成器 - 一键生成专业简历</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/" class="nav-logo">
+                    <span class="heart-logo">❤️</span>
+                    <span>AI简历生成器</span>
+                </a>
+                <div class="nav-links">
+                    <a href="#support">使用帮助</a>
+                    <a href="#features">功能特点</a>
+                    <a href="#learn">学习资源</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="nav-buttons">
+                    <a href="#" class="nav-btn signin">登录</a>
+                    <a href="#" class="nav-btn signup">注册</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <h1 class="main-title">AI生成专业简历</h1>
+
+        <div class="input-container">
+            <div class="input-wrapper">
+                <textarea class="main-input" placeholder="请输入你的简历内容或经历描述..."></textarea>
+                <div class="input-actions">
+                    <div class="action-left">
+                        <button class="action-btn" data-tooltip="上传简历，支持pdf、word格式">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                <path d="M8 2v8M5 5l3-3 3 3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 14h12" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span>上传简历</span>
+                        </button>
+                    </div>
+                    <button class="action-btn primary" data-tooltip="AI生成简历">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                            <path d="M1 8l14-7-7 14-2-5-5-2z" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        <span>生成简历</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-templates">
+            <button class="template-btn" data-template="backend" data-description="适合后端开发工程师的简历模板，包含技术栈、项目经验等">后端开发</button>
+            <button class="template-btn" data-template="sales" data-description="适合销售人员的简历模板，包含销售业绩、客户开发等">销售</button>
+            <button class="template-btn" data-template="admin" data-description="适合行政管理人员的简历模板，包含管理经验、组织能力等">行政</button>
+            <button class="template-btn" data-template="finance" data-description="适合财务人员的简历模板，包含财务分析、预算管理等">财务</button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html> 
