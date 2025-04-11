@@ -1,0 +1,24 @@
+{
+  "loginData": {
+    "success": true,
+    "token": "mock-jwt-token-12345",
+    "user": {
+      "id": 1,
+      "username": "testuser",
+      "email": "test@example.com",
+      "role": "user",
+      "lastLogin": "2023-07-15T14:30:00Z"
+    }
+  },
+  "registerData": {
+    "success": true,
+    "message": "注册成功",
+    "user": {
+      "id": 2,
+      "username": "newuser",
+      "email": "new@example.com",
+      "role": "user",
+      "createdAt": "2023-07-15T16:45:00Z"
+    }
+  }
+} 

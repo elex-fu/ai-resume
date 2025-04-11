@@ -1,0 +1,16 @@
+{
+  "uploadData": {
+    "success": true,
+    "fileId": "mock-file-12345",
+    "filename": "uploaded-resume.pdf",
+    "url": "/files/mock-file-12345.pdf",
+    "size": 1024567,
+    "uploadDate": "2023-07-15T17:30:00Z"
+  },
+  "generateData": {
+    "success": true,
+    "resumeId": 3,
+    "message": "简历生成成功",
+    "previewUrl": "/resume/preview/3"
+  }
+} 

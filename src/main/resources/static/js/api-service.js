@@ -3,13 +3,192 @@
  * 封装所有前端与后端API的交互
  */
 
+// 导入Mock API配置
+import MockAPI from './mock-api.js';
+
 // API基础URL
 const API_BASE_URL = '/api';
+
+// API配置
+const API_CONFIG = {
+    // 是否开启mock数据模式（设为true则使用模拟数据，false则请求真实后端）
+    useMock: MockAPI.config.enabled,
+    
+    // API映射表，用于配置接口路径和对应的mock数据
+    apiMap: {
+        // 简历相关接口
+        'resume/get': {
+            url: '/resume/:id',
+            method: 'GET',
+            mockFile: '/mock/resume-mock-data.json',
+            mockKey: 'resumeData'
+        },
+        'resume/create': {
+            url: '/resume',
+            method: 'POST',
+            mockFile: '/mock/resume-mock-data.json',
+            mockKey: 'resumeData'
+        },
+        'resume/update': {
+            url: '/resume/:id',
+            method: 'PUT',
+            mockFile: '/mock/resume-mock-data.json',
+            mockKey: 'resumeData'
+        },
+        'resume/delete': {
+            url: '/resume/:id',
+            method: 'DELETE',
+            mockFile: '/mock/resume-mock-data.json',
+            mockKey: 'resumeData'
+        },
+        'resume/download': {
+            url: '/resume/:id/download',
+            method: 'GET',
+            mockFile: '/mock/resume-mock-data.json',
+            mockKey: 'resumeData',
+            responseType: 'blob'
+        },
+        'resume/upload': {
+            url: '/resume/upload',
+            method: 'POST',
+            mockFile: '/mock/upload-mock-data.json',
+            mockKey: 'uploadData'
+        },
+        'resume/generate': {
+            url: '/resume/generate',
+            method: 'POST',
+            mockFile: '/mock/upload-mock-data.json',
+            mockKey: 'generateData'
+        },
+        
+        // 用户认证相关接口
+        'auth/login': {
+            url: '/auth/login',
+            method: 'POST',
+            mockFile: '/mock/auth-mock-data.json',
+            mockKey: 'loginData'
+        },
+        'auth/register': {
+            url: '/auth/register',
+            method: 'POST',
+            mockFile: '/mock/auth-mock-data.json',
+            mockKey: 'registerData'
+        }
+        // 可以在此继续添加更多API
+    }
+};
 
 // 错误处理函数
 const handleApiError = (error) => {
     console.error('API请求错误:', error);
     throw error;
+};
+
+/**
+ * 通用API请求函数
+ * @param {string} apiKey - API映射表中的键名
+ * @param {Object} params - 请求参数，包含路径参数、查询参数和请求体
+ * @returns {Promise<any>} 请求结果
+ */
+const apiRequest = async (apiKey, params = {}) => {
+    // 获取API配置
+    const apiConfig = API_CONFIG.apiMap[apiKey];
+    if (!apiConfig) {
+        throw new Error(`未找到API配置: ${apiKey}`);
+    }
+    
+    // 如果启用了mock并且有mock配置，则返回mock数据
+    if (API_CONFIG.useMock && apiConfig.mockFile) {
+        return getMockData(apiConfig.mockFile, apiConfig.mockKey, apiConfig.responseType);
+    }
+    
+    // 处理URL中的路径参数 (如 /resource/:id)
+    let url = apiConfig.url;
+    if (params.pathParams) {
+        Object.keys(params.pathParams).forEach(key => {
+            url = url.replace(`:${key}`, params.pathParams[key]);
+        });
+    }
+    
+    // 处理查询参数
+    if (params.queryParams) {
+        const queryString = new URLSearchParams(params.queryParams).toString();
+        if (queryString) {
+            url += `?${queryString}`;
+        }
+    }
+    
+    // 构建请求选项
+    const requestOptions = {
+        method: apiConfig.method,
+        headers: {
+            'Content-Type': 'application/json',
+            ...params.headers
+        }
+    };
+    
+    // 添加请求体
+    if (params.body && apiConfig.method !== 'GET' && apiConfig.method !== 'HEAD') {
+        if (params.body instanceof FormData) {
+            // 如果是FormData，则不设置Content-Type，让浏览器自动处理
+            delete requestOptions.headers['Content-Type'];
+            requestOptions.body = params.body;
+        } else {
+            requestOptions.body = JSON.stringify(params.body);
+        }
+    }
+    
+    // 发送请求
+    try {
+        const response = await fetch(`${API_BASE_URL}${url}`, requestOptions);
+        
+        if (!response.ok) {
+            throw new Error(`请求失败: ${response.status} ${response.statusText}`);
+        }
+        
+        // 根据响应类型返回不同格式
+        if (params.responseType === 'blob') {
+            return response.blob();
+        } else if (params.responseType === 'text') {
+            return response.text();
+        } else {
+            return response.json();
+        }
+    } catch (error) {
+        return handleApiError(error);
+    }
+};
+
+/**
+ * 获取模拟数据
+ * @param {string} mockFile - 模拟数据文件名
+ * @param {string|null} mockKey - 数据对象中的键名
+ * @param {string|null} responseType - 响应类型，如'blob'或'text'
+ * @returns {Promise<any>} 模拟数据
+ */
+const getMockData = async (mockFile, mockKey = null, responseType = null) => {
+    try {
+        // 如果需要blob数据（如PDF下载）
+        if (responseType === 'blob') {
+            return await MockAPI.createBinaryResponse('application/pdf');
+        }
+        
+        // 否则返回JSON数据
+        const response = await fetch(`${mockFile}`);
+        if (!response.ok) {
+            throw new Error(`获取模拟数据失败: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const result = mockKey ? data[mockKey] : data;
+        
+        // 添加延迟以模拟网络请求
+        const mockResponse = await MockAPI.createResponse(result);
+        return mockResponse.data;
+    } catch (error) {
+        console.error('获取模拟数据失败:', error);
+        throw error;
+    }
 };
 
 // API服务对象
@@ -24,35 +203,9 @@ const ApiService = {
          * @returns {Promise<Object>} 简历数据
          */
         getResumeById: async (id) => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/resume/${id}`);
-                if (!response.ok) {
-                    throw new Error('获取简历数据失败');
-                }
-                return await response.json();
-            } catch (error) {
-                console.warn('从API获取简历失败，将使用本地模拟数据:', error.message);
-                // 从本地模拟数据获取
-                return ApiService.resume.getMockResumeData();
-            }
-        },
-
-        /**
-         * 获取本地模拟简历数据
-         * @returns {Promise<Object>} 本地模拟简历数据
-         */
-        getMockResumeData: async () => {
-            try {
-                const response = await fetch('/js/resume-mock-data.json');
-                if (!response.ok) {
-                    throw new Error('获取模拟数据失败');
-                }
-                const data = await response.json();
-                return data.resumeData;
-            } catch (error) {
-                console.error('获取模拟数据失败:', error);
-                throw error;
-            }
+            return apiRequest('resume/get', {
+                pathParams: { id }
+            });
         },
 
         /**
@@ -61,23 +214,9 @@ const ApiService = {
          * @returns {Promise<Object>} 创建的简历
          */
         createResume: async (resumeData) => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/resume`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(resumeData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error('创建简历失败');
-                }
-                
-                return await response.json();
-            } catch (error) {
-                return handleApiError(error);
-            }
+            return apiRequest('resume/create', {
+                body: resumeData
+            });
         },
 
         /**
@@ -87,23 +226,10 @@ const ApiService = {
          * @returns {Promise<Object>} 更新后的简历
          */
         updateResume: async (id, resumeData) => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/resume/${id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(resumeData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error('更新简历失败');
-                }
-                
-                return await response.json();
-            } catch (error) {
-                return handleApiError(error);
-            }
+            return apiRequest('resume/update', {
+                pathParams: { id },
+                body: resumeData
+            });
         },
 
         /**
@@ -112,17 +238,9 @@ const ApiService = {
          * @returns {Promise<void>}
          */
         deleteResume: async (id) => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/resume/${id}`, {
-                    method: 'DELETE'
-                });
-                
-                if (!response.ok) {
-                    throw new Error('删除简历失败');
-                }
-            } catch (error) {
-                return handleApiError(error);
-            }
+            return apiRequest('resume/delete', {
+                pathParams: { id }
+            });
         },
 
         /**
@@ -131,17 +249,10 @@ const ApiService = {
          * @returns {Promise<Blob>} PDF文件Blob对象
          */
         generatePDF: async (id) => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/resume/${id}/download`);
-                
-                if (!response.ok) {
-                    throw new Error('生成PDF失败');
-                }
-                
-                return await response.blob();
-            } catch (error) {
-                return handleApiError(error);
-            }
+            return apiRequest('resume/download', {
+                pathParams: { id },
+                responseType: 'blob'
+            });
         },
 
         /**
@@ -150,23 +261,12 @@ const ApiService = {
          * @returns {Promise<Object>} 上传结果
          */
         uploadResume: async (file) => {
-            try {
-                const formData = new FormData();
-                formData.append('file', file);
-                
-                const response = await fetch(`${API_BASE_URL}/resume/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error('上传简历失败');
-                }
-                
-                return await response.json();
-            } catch (error) {
-                return handleApiError(error);
-            }
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            return apiRequest('resume/upload', {
+                body: formData
+            });
         },
 
         /**
@@ -176,28 +276,17 @@ const ApiService = {
          * @returns {Promise<Object>} 生成的简历
          */
         generateResume: async (content, file = null) => {
-            try {
-                const formData = new FormData();
-                if (content) {
-                    formData.append('content', content);
-                }
-                if (file) {
-                    formData.append('file', file);
-                }
-                
-                const response = await fetch(`${API_BASE_URL}/resume/generate`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error('生成简历失败');
-                }
-                
-                return await response.json();
-            } catch (error) {
-                return handleApiError(error);
+            const formData = new FormData();
+            if (content) {
+                formData.append('content', content);
             }
+            if (file) {
+                formData.append('file', file);
+            }
+            
+            return apiRequest('resume/generate', {
+                body: formData
+            });
         }
     },
 
@@ -212,23 +301,9 @@ const ApiService = {
          * @returns {Promise<Object>} 登录结果
          */
         login: async (username, password) => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-                
-                if (!response.ok) {
-                    throw new Error('登录失败');
-                }
-                
-                return await response.json();
-            } catch (error) {
-                return handleApiError(error);
-            }
+            return apiRequest('auth/login', {
+                body: { username, password }
+            });
         },
 
         /**
@@ -237,23 +312,12 @@ const ApiService = {
          * @returns {Promise<Object>} 注册结果
          */
         register: async (userData) => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/auth/register`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(userData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error('注册失败');
-                }
-                
-                return await response.json();
-            } catch (error) {
-                return handleApiError(error);
-            }
+            return apiRequest('auth/register', {
+                body: userData
+            });
         }
     }
-}; 
+};
+
+// 导出API服务
+export default ApiService; 

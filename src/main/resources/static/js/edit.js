@@ -1,3 +1,6 @@
+// 导入API服务
+import ApiService from './api-service.js';
+
 // DOM加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化应用
@@ -2005,35 +2008,232 @@ function initActionButtons() {
 }
 
 // 保存简历
-function saveResume() {
+async function saveResume() {
     console.log('保存简历');
     
-    // 显示加载状态
-    showLoading('正在保存...');
-    
-    // 模拟API调用
-    setTimeout(() => {
+    try {
+        // 显示加载状态
+        showLoading('正在保存...');
+        
+        // 收集当前简历数据
+        const resumeData = collectResumeData();
+        
+        // 从URL获取简历ID
+        const urlParams = new URLSearchParams(window.location.search);
+        const resumeId = urlParams.get('id') || 1;
+        
+        // 调用API保存简历
+        await ApiService.resume.updateResume(resumeId, resumeData);
+        
+        // 隐藏加载状态
         hideLoading();
         showToast('简历已保存');
-    }, 800);
+    } catch (error) {
+        console.error('保存简历失败:', error);
+        hideLoading();
+        showToast('保存失败，请重试');
+    }
+}
+
+// 收集当前简历数据
+function collectResumeData() {
+    // 基本信息
+    const name = document.getElementById('previewName').textContent;
+    const basicInfo = document.getElementById('previewBasicInfo').textContent;
+    const contactInfo = document.getElementById('previewContact').textContent;
+    
+    // 解析基本信息
+    const basicInfoParts = basicInfo.split('|').map(item => item.trim());
+    const gender = basicInfoParts[0];
+    const age = basicInfoParts[1];
+    const educationLevel = basicInfoParts[2];
+    const experience = basicInfoParts[3];
+    const status = basicInfoParts[4];
+    
+    // 解析联系信息
+    const phone = contactInfo.includes('联系电话') ? 
+        contactInfo.split('|')[0].replace('联系电话：', '').trim() : '';
+    const email = contactInfo.includes('邮箱') ? 
+        contactInfo.split('|')[1].replace('邮箱：', '').trim() : '';
+    
+    // 获取头像
+    const avatar = document.getElementById('userAvatar').src;
+    
+    // 求职意向
+    const position = document.getElementById('previewPosition').textContent;
+    const city = document.getElementById('previewCity').textContent;
+    const salary = document.getElementById('previewSalary').textContent;
+    const entryTime = document.getElementById('previewEntryTime').textContent;
+    
+    // 收集教育经历
+    const educationItems = document.querySelectorAll('#previewEducationList .education-item');
+    const education = Array.from(educationItems).map(item => {
+        const schoolMajor = item.querySelector('.edu-main span:nth-child(1)').textContent;
+        const parts = schoolMajor.split('·');
+        return {
+            school: parts[0],
+            major: parts.length > 1 ? parts[1] : '',
+            degree: item.querySelector('.edu-main span:nth-child(2)').textContent,
+            eduTime: item.querySelector('.edu-main span:nth-child(3)').textContent,
+            gpa: item.querySelector('.edu-detail span:nth-child(2)').textContent,
+            rank: item.querySelector('.edu-detail span:nth-child(4)').textContent
+        };
+    });
+    
+    // 收集工作经历
+    const workItems = document.querySelectorAll('#previewWorkList .work-item');
+    const work = Array.from(workItems).map(item => {
+        const roleText = item.querySelector('.work-header span:nth-child(2)').textContent;
+        const roleParts = roleText.split(' ');
+        return {
+            company: item.querySelector('.work-header span:nth-child(1)').textContent,
+            department: roleParts.length > 1 ? roleParts[0] : '',
+            position: roleParts.length > 1 ? roleParts[1] : roleText,
+            workTime: item.querySelector('.work-header span:nth-child(3)').textContent,
+            description: item.querySelector('.work-description p').textContent
+        };
+    });
+    
+    // 收集项目经历
+    const projectItems = document.querySelectorAll('#previewProjectList .project-item');
+    const project = Array.from(projectItems).map(item => {
+        const descriptionParagraphs = item.querySelectorAll('.project-description p');
+        let description = '';
+        if (descriptionParagraphs.length > 0) {
+            description = Array.from(descriptionParagraphs)
+                .map(p => p.textContent)
+                .join('\n');
+        }
+        
+        return {
+            projectName: item.querySelector('.project-header span:nth-child(1)').textContent,
+            projectRole: item.querySelector('.project-header span:nth-child(2)').textContent,
+            projectTime: item.querySelector('.project-header span:nth-child(3)').textContent,
+            description: description
+        };
+    });
+    
+    // 收集校内经历
+    const campusItems = document.querySelectorAll('#previewCampusList .campus-item');
+    const campus = Array.from(campusItems).map(item => {
+        const descriptionParagraphs = item.querySelectorAll('.campus-description p');
+        let description = '';
+        if (descriptionParagraphs.length > 0) {
+            description = Array.from(descriptionParagraphs)
+                .map(p => p.textContent)
+                .join('\n');
+        }
+        
+        return {
+            campusOrg: item.querySelector('.campus-header span:nth-child(1)').textContent,
+            campusRole: item.querySelector('.campus-header span:nth-child(2)').textContent,
+            campusTime: item.querySelector('.campus-header span:nth-child(3)').textContent,
+            description: description
+        };
+    });
+    
+    // 收集荣誉奖项
+    const awardItems = document.querySelectorAll('#previewAwardsList .award-item');
+    const awards = Array.from(awardItems).map(item => {
+        const awardText = item.querySelector('span').textContent;
+        const dateMatch = awardText.match(/^(\d{4}\.\d+)\s+(.+)$/);
+        
+        if (dateMatch) {
+            return {
+                awardDate: dateMatch[1],
+                awardName: dateMatch[2]
+            };
+        } else {
+            return {
+                awardName: awardText,
+                awardDate: ''
+            };
+        }
+    });
+    
+    // 收集个人技能
+    const skillItems = document.querySelectorAll('#previewSkillsList .skill-item');
+    const skills = Array.from(skillItems).map(item => {
+        const skillText = item.querySelector('span').textContent;
+        const parts = skillText.split(':');
+        
+        return {
+            skillName: parts[0].trim(),
+            skillDetail: parts.length > 1 ? parts[1].trim() : ''
+        };
+    });
+    
+    // 构建最终简历数据对象
+    return {
+        basic: {
+            name,
+            gender,
+            age,
+            educationLevel,
+            experience,
+            status,
+            phone,
+            email
+        },
+        avatar,
+        intention: {
+            position,
+            city,
+            salary,
+            entryTime
+        },
+        education,
+        work,
+        project,
+        campus,
+        awards,
+        skills,
+        template: {
+            current: 'standard', // 当前使用的模板
+            color: '#1a73e8'  // 主题颜色
+        }
+    };
 }
 
 // 导出简历为PDF
-function exportResumePDF() {
+async function exportResumePDF() {
     console.log('导出PDF');
     
-    // 显示加载状态
-    showLoading('正在生成PDF...');
-    
-    // 模拟API调用
-    setTimeout(() => {
+    try {
+        // 显示加载状态
+        showLoading('正在生成PDF...');
+        
+        // 从URL获取简历ID
+        const urlParams = new URLSearchParams(window.location.search);
+        const resumeId = urlParams.get('id') || 1;
+        
+        // 调用API生成PDF
+        const pdfBlob = await ApiService.resume.generatePDF(resumeId);
+        
+        // 创建下载链接
+        const downloadLink = document.createElement('a');
+        const url = URL.createObjectURL(pdfBlob);
+        downloadLink.href = url;
+        downloadLink.download = `简历_${new Date().getTime()}.pdf`;
+        
+        // 点击下载
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        
+        // 清理
+        setTimeout(() => {
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(url);
+        }, 100);
+        
+        // 隐藏加载状态
         hideLoading();
         showToast('PDF已生成，正在下载...');
-        
-        // 模拟下载
-        // 在实际应用中，这里应该是一个真实的下载链接
-        console.log('下载PDF文件');
-    }, 1500);
+    } catch (error) {
+        console.error('生成PDF失败:', error);
+        hideLoading();
+        showToast('生成PDF失败，请重试');
+    }
 }
 
 // 显示加载状态
