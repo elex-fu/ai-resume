@@ -531,14 +531,38 @@ body {
 
 /* 教育经历 */
 .education-item {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .edu-main {
     display: flex;
-    justify-content: space-between;
     font-weight: bold;
     font-size: 13px;
+}
+
+.edu-main span:nth-child(1) {
+    flex: 0 0 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+.edu-main span:nth-child(2) {
+    flex: 0 0 35%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.edu-main span:nth-child(3) {
+    flex: 0 0 25%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
 }
 
 .edu-detail {
@@ -554,15 +578,39 @@ body {
 
 .work-header {
     display: flex;
-    justify-content: space-between;
     font-weight: bold;
     font-size: 13px;
     margin-bottom: 5px;
 }
 
+.work-header span:nth-child(1) {
+    flex: 0 0 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+.work-header span:nth-child(2) {
+    flex: 0 0 35%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.work-header span:nth-child(3) {
+    flex: 0 0 25%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+}
+
 .work-description {
     font-size: 12px;
-    color: #333;
+    color: #666;
 }
 
 .work-description p {
@@ -576,15 +624,39 @@ body {
 
 .project-header {
     display: flex;
-    justify-content: space-between;
     font-weight: bold;
     font-size: 13px;
     margin-bottom: 5px;
 }
 
+.project-header span:nth-child(1) {
+    flex: 0 0 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+.project-header span:nth-child(2) {
+    flex: 0 0 35%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.project-header span:nth-child(3) {
+    flex: 0 0 25%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+}
+
 .project-description {
     font-size: 12px;
-    color: #333;
+    color: #666;
 }
 
 .project-description p {
@@ -598,15 +670,39 @@ body {
 
 .campus-header {
     display: flex;
-    justify-content: space-between;
     font-weight: bold;
     font-size: 13px;
     margin-bottom: 5px;
 }
 
+.campus-header span:nth-child(1) {
+    flex: 0 0 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+.campus-header span:nth-child(2) {
+    flex: 0 0 35%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.campus-header span:nth-child(3) {
+    flex: 0 0 25%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+}
+
 .campus-description {
     font-size: 12px;
-    color: #333;
+    color: #666;
 }
 
 .campus-description p {
@@ -664,6 +760,7 @@ body {
     max-width: 600px;
     position: relative;
     animation: modalopen 0.3s;
+    overflow: hidden;
 }
 
 /* 头像上传相关样式 */
@@ -705,6 +802,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #f8f9fa;
 }
 
 .modal-header h2 {
@@ -731,28 +829,38 @@ body {
     padding: 20px;
     max-height: 70vh;
     overflow-y: auto;
+    overflow-x: hidden; /* 防止水平滚动 */
+    box-sizing: border-box;
 }
 
 /* 模态框表单样式 */
 .modal-form {
     width: 100%;
     box-sizing: border-box;
+    padding: 0;
+    margin: 0 auto; /* 居中对齐 */
 }
 
+/* 表单行布局 */
 .form-row {
     display: flex;
-    justify-content: space-between;
+    gap: 40px; /* 设置两列之间的间隔为40px */
     margin-bottom: 15px;
-    gap: 40px; /* 两个表单项之间的间距 */
-}
-
-.form-group {
-    flex: 1;
-    margin-bottom: 15px;
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .form-row .form-group {
-    margin-bottom: 0;
+    flex: 1;
+    margin: 0;
+    min-width: 0; /* 防止内容溢出 */
+}
+
+/* 普通表单组 - 一行一列布局 */
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
 }
 
 .form-group label {
@@ -760,6 +868,7 @@ body {
     margin-bottom: 5px;
     font-size: 14px;
     color: #555;
+    white-space: nowrap; /* 防止标签换行 */
 }
 
 .form-group input, .form-group textarea, .form-group select {
@@ -768,6 +877,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+    box-sizing: border-box; /* 确保边框和内边距计入宽度 */
 }
 
 .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
@@ -896,4 +1006,93 @@ body {
         width: 95%;
         margin: 30px auto;
     }
+}
+
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* 确保文本区域不会导致水平滚动 */
+.form-group textarea {
+    box-sizing: border-box;
+    max-width: 100%;
+    resize: vertical;
+    width: 100%;
+}
+
+/* 通用的经历项样式 */
+.education-item,
+.work-item,
+.project-item,
+.campus-item {
+    margin-bottom: 15px;
+}
+
+/* 通用的经历项头部样式 */
+.edu-main,
+.work-header,
+.project-header,
+.campus-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+/* 设置三列宽度 */
+.edu-main span,
+.work-header span,
+.project-header span,
+.campus-header span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 第一列 */
+.edu-main span:nth-child(1),
+.work-header span:nth-child(1),
+.project-header span:nth-child(1),
+.campus-header span:nth-child(1) {
+    flex: 0 0 40%;
+    padding-right: 10px;
+}
+
+/* 第二列 */
+.edu-main span:nth-child(2),
+.work-header span:nth-child(2),
+.project-header span:nth-child(2),
+.campus-header span:nth-child(2) {
+    flex: 0 0 35%;
+    padding-right: 10px;
+    text-align: left;
+}
+
+/* 第三列 */
+.edu-main span:nth-child(3),
+.work-header span:nth-child(3),
+.project-header span:nth-child(3),
+.campus-header span:nth-child(3) {
+    flex: 0 0 25%;
+    text-align: right;
+}
+
+/* 通用的经历项描述样式 */
+.edu-detail,
+.work-description,
+.project-description,
+.campus-description {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.work-description p,
+.project-description p,
+.campus-description p {
+    margin: 5px 0;
 } 

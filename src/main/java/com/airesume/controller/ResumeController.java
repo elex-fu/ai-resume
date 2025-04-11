@@ -1,8 +1,11 @@
 package com.airesume.controller;
 
+import com.airesume.factory.ResumeVOFactory;
 import com.airesume.model.ResumePO;
 import com.airesume.service.ResumeService;
 import com.airesume.service.UserService;
+import com.airesume.vo.ResumeVO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,31 +34,41 @@ public class ResumeController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<ResumePO> createResume(@RequestBody ResumePO resumePO) {
+    public ResponseEntity<ResumeVO> createResume(@RequestBody ResumeVO resumeVO) {
         // 暂时不使用用户认证，后续可以添加
-        return ResponseEntity.ok(resumeService.saveResume(resumePO));
+        ResumePO resumePO = ResumeVOFactory.createResumePO(resumeVO);
+        resumePO = resumeService.saveResume(resumePO);
+        ResumeVO respResume = ResumeVOFactory.createResumeVO(resumePO);
+        return ResponseEntity.ok(respResume);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResumePO> updateResume(@PathVariable Long id,
+    public ResponseEntity<ResumeVO> updateResume(@PathVariable Long id,
                                                  @RequestBody ResumePO resumePO) {
         // 暂时不使用用户认证，后续可以添加
         ResumePO existingResumePO = resumeService.getResumeById(id);
         resumePO.setId(id);
-        return ResponseEntity.ok(resumeService.saveResume(resumePO));
+
+        existingResumePO = resumeService.saveResume(resumePO);
+        ResumeVO respResume = ResumeVOFactory.createResumeVO(existingResumePO);
+        return ResponseEntity.ok(respResume);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResumePO> getResume(@PathVariable Long id) {
+    public ResponseEntity<ResumeVO> getResume(@PathVariable Long id) {
         // 暂时不使用用户认证，后续可以添加
         ResumePO resumePO = resumeService.getResumeById(id);
-        return ResponseEntity.ok(resumePO);
+
+        ResumeVO respResume = ResumeVOFactory.createResumeVO(resumePO);
+        return ResponseEntity.ok(respResume);
     }
 
     @GetMapping
-    public ResponseEntity<List<ResumePO>> getUserResumes() {
+    public ResponseEntity<List<ResumeVO>> getUserResumes() {
         // 暂时不使用用户认证，后续可以添加
-        return ResponseEntity.ok(resumeService.getAllResumes());
+        List<ResumePO> resumePOs = resumeService.getAllResumes();
+        List<ResumeVO> resumeList = ResumeVOFactory.createResumeVOList(resumePOs);
+        return ResponseEntity.ok(resumeList);
     }
 
     @DeleteMapping("/{id}")

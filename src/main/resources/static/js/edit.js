@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 初始化应用
 function initApp() {
+    // 从URL获取简历ID
+    const urlParams = new URLSearchParams(window.location.search);
+    const resumeId = urlParams.get('id') || 1; // 默认使用ID为1的简历
+    
+    // 从API获取简历数据
+    loadResumeData(resumeId);
+    
     // 初始化工具栏功能
     initToolbar();
     
@@ -32,6 +39,692 @@ function initApp() {
     
     // 监听窗口大小变化
     window.addEventListener('resize', adjustLayout);
+}
+
+// 加载简历数据
+async function loadResumeData(resumeId) {
+    try {
+        // 显示加载状态
+        showLoading('正在加载简历数据...');
+        
+        // 调用API服务获取简历数据
+        const resumeData = await ApiService.resume.getResumeById(resumeId);
+        
+        // 渲染简历预览
+        renderResumePreview(resumeData);
+        
+        // 隐藏加载状态
+        hideLoading();
+    } catch (error) {
+        console.error('加载简历数据失败:', error);
+        hideLoading();
+        showToast('加载简历数据失败，请重试');
+    }
+}
+
+// 渲染简历预览
+function renderResumePreview(resumeData) {
+    if (!resumeData) return;
+    
+    // 渲染基本信息
+    renderBasicInfo(resumeData.basic);
+    
+    // 渲染头像
+    if (resumeData.avatar) {
+        document.getElementById('userAvatar').src = resumeData.avatar;
+    }
+    
+    // 渲染求职意向
+    renderJobIntention(resumeData.intention);
+    
+    // 渲染教育经历
+    renderEducation(resumeData.education);
+    
+    // 渲染工作经验
+    renderWorkExperience(resumeData.work);
+    
+    // 渲染项目经验
+    renderProjectExperience(resumeData.project);
+    
+    // 渲染校园经历
+    renderCampusExperience(resumeData.campus);
+    
+    // 渲染获奖情况
+    renderAwards(resumeData.awards);
+    
+    // 渲染技能
+    renderSkills(resumeData.skills);
+    
+    // 渲染分析数据
+    if (resumeData.analysis) {
+        updateAnalysisData(resumeData.analysis);
+    }
+    
+    // 应用模板
+    if (resumeData.template) {
+        applyTemplate(resumeData.template.current);
+        applyColor(resumeData.template.color);
+    }
+}
+
+// 渲染基本信息
+function renderBasicInfo(basicInfo) {
+    if (!basicInfo) return;
+    
+    document.getElementById('previewName').textContent = basicInfo.name || '';
+    
+    // 格式化基本信息显示
+    const basicInfoText = `${basicInfo.gender || ''} | ${basicInfo.age || ''} | ${basicInfo.educationLevel || ''} | ${basicInfo.experience || ''} | ${basicInfo.status || ''}`;
+    document.getElementById('previewBasicInfo').textContent = basicInfoText;
+    
+    // 格式化联系方式
+    const contactText = `联系电话：${basicInfo.phone || ''} | 邮箱：${basicInfo.email || ''}`;
+    document.getElementById('previewContact').textContent = contactText;
+}
+
+// 渲染求职意向
+function renderJobIntention(intention) {
+    if (!intention) return;
+    
+    document.getElementById('previewPosition').textContent = intention.position || '';
+    document.getElementById('previewCity').textContent = intention.city || '';
+    document.getElementById('previewSalary').textContent = intention.salary || '';
+    document.getElementById('previewEntryTime').textContent = intention.entryTime || '';
+}
+
+// 渲染教育经历
+function renderEducation(educationList) {
+    if (!educationList || !educationList.length) return;
+    
+    const container = document.getElementById('previewEducationList');
+    container.innerHTML = '';
+    
+    educationList.forEach(edu => {
+        const educationItem = document.createElement('div');
+        educationItem.className = 'education-item';
+        educationItem.innerHTML = `
+            <div class="edu-main">
+                <span>${edu.school || ''}·${edu.major || ''}</span>
+                <span>${edu.degree || ''}</span>
+                <span>${edu.eduTime || ''}</span>
+            </div>
+            <div class="edu-detail">
+                <span>绩点: </span>
+                <span>${edu.gpa || ''}</span>
+                <span>成绩排名: </span>
+                <span>${edu.rank || ''}</span>
+            </div>
+        `;
+        container.appendChild(educationItem);
+    });
+}
+
+// 渲染工作经验
+function renderWorkExperience(workList) {
+    if (!workList || !workList.length) return;
+    
+    const container = document.getElementById('previewWorkList');
+    container.innerHTML = '';
+    
+    workList.forEach(work => {
+        const workItem = document.createElement('div');
+        workItem.className = 'work-item';
+        workItem.innerHTML = `
+            <div class="work-header">
+                <span>${work.company || ''}</span>
+                <span>${work.department || ''} ${work.position || ''}</span>
+                <span>${work.workTime || ''}</span>
+            </div>
+            <div class="work-description">
+                <p>${work.description || ''}</p>
+            </div>
+        `;
+        container.appendChild(workItem);
+    });
+}
+
+// 渲染项目经验
+function renderProjectExperience(projectList) {
+    if (!projectList || !projectList.length) return;
+    
+    const container = document.getElementById('previewProjectList');
+    container.innerHTML = '';
+    
+    projectList.forEach(project => {
+        const projectItem = document.createElement('div');
+        projectItem.className = 'project-item';
+        projectItem.innerHTML = `
+            <div class="project-header">
+                <span>${project.projectName || ''}</span>
+                <span>${project.projectRole || ''}</span>
+                <span>${project.projectTime || ''}</span>
+            </div>
+            <div class="project-description">
+                <p>${project.description || ''}</p>
+            </div>
+        `;
+        container.appendChild(projectItem);
+    });
+}
+
+// 渲染校园经历
+function renderCampusExperience(campusList) {
+    if (!campusList || !campusList.length) return;
+    
+    const container = document.getElementById('previewCampusList');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    campusList.forEach(campus => {
+        const campusItem = document.createElement('div');
+        campusItem.className = 'campus-item';
+        campusItem.innerHTML = `
+            <div class="campus-header">
+                <span>${campus.campusOrg || ''}</span>
+                <span>${campus.campusRole || ''}</span>
+                <span>${campus.campusTime || ''}</span>
+            </div>
+            <div class="campus-description">
+                <p>${campus.description || ''}</p>
+            </div>
+        `;
+        container.appendChild(campusItem);
+    });
+}
+
+// 渲染获奖情况
+function renderAwards(awardsList) {
+    if (!awardsList || !awardsList.length) return;
+    
+    const container = document.getElementById('previewAwardsList');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    awardsList.forEach(award => {
+        const awardItem = document.createElement('div');
+        awardItem.className = 'award-item';
+        awardItem.innerHTML = `
+            <div class="award-header">
+                <span>${award.awardName || ''}</span>
+                <span>${award.awardDate || ''}</span>
+            </div>
+        `;
+        container.appendChild(awardItem);
+    });
+}
+
+// 渲染技能
+function renderSkills(skillsList) {
+    if (!skillsList || !skillsList.length) return;
+    
+    const container = document.getElementById('previewSkillsList');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    skillsList.forEach(skill => {
+        const skillItem = document.createElement('div');
+        skillItem.className = 'skill-item';
+        skillItem.innerHTML = `
+            <div class="skill-name">${skill.skillName || ''}</div>
+            <div class="skill-detail">${skill.skillDetail || ''}</div>
+        `;
+        container.appendChild(skillItem);
+    });
+}
+
+// 从预览区获取现有数据以填充模态框
+function fillModalWithExistingData(sectionType) {
+    let modalContent = '';
+    let title = '';
+    let saveCallback;
+    
+    switch (sectionType) {
+        case 'basic':
+            const name = document.getElementById('previewName').textContent;
+            const basicInfoText = document.getElementById('previewBasicInfo').textContent;
+            const contactText = document.getElementById('previewContact').textContent;
+            
+            // 解析基本信息
+            const genderMatch = basicInfoText.match(/(.+?)\s*\|/);
+            const ageMatch = basicInfoText.match(/\|\s*(.+?岁)/);
+            const educationMatch = basicInfoText.match(/\|\s*(.+?)\s*\|.*\|/);
+            const experienceMatch = basicInfoText.match(/\|.+?\|.+?\|\s*(.+?)\s*\|/);
+            const statusMatch = basicInfoText.match(/\|([^|]+)$/);
+            
+            // 解析联系方式
+            const phoneMatch = contactText.match(/联系电话：\s*(.+?)\s*\|/);
+            const emailMatch = contactText.match(/邮箱：\s*(.+)/);
+            
+            const gender = genderMatch ? genderMatch[1].trim() : '';
+            const age = ageMatch ? ageMatch[1].trim() : '';
+            const education = educationMatch ? educationMatch[1].trim() : '';
+            const experience = experienceMatch ? experienceMatch[1].trim() : '';
+            const status = statusMatch ? statusMatch[1].trim() : '';
+            const phone = phoneMatch ? phoneMatch[1].trim() : '';
+            const email = emailMatch ? emailMatch[1].trim() : '';
+            
+            modalContent = `
+                <div class="modal-form">
+                    <div class="form-group">
+                        <label for="modal-name">姓名</label>
+                        <input type="text" id="modal-name" value="${name}">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-gender">性别</label>
+                            <input type="text" id="modal-gender" value="${gender}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-age">年龄</label>
+                            <input type="text" id="modal-age" value="${age}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-education">学历</label>
+                            <input type="text" id="modal-education" value="${education}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-experience">工作经验</label>
+                            <input type="text" id="modal-experience" value="${experience}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-status">在职状态</label>
+                            <input type="text" id="modal-status" value="${status}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-political">政治面貌</label>
+                            <input type="text" id="modal-political" value="群众">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-phone">联系电话</label>
+                            <input type="text" id="modal-phone" value="${phone}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-email">邮箱</label>
+                            <input type="text" id="modal-email" value="${email}">
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            title = '编辑基本信息';
+            saveCallback = saveBasicInfo;
+            break;
+            
+        case 'jobIntention': 
+            const position = document.getElementById('previewPosition').textContent;
+            const city = document.getElementById('previewCity').textContent;
+            const salary = document.getElementById('previewSalary').textContent;
+            const entryTime = document.getElementById('previewEntryTime').textContent;
+            
+            modalContent = `
+                <div class="modal-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-position">求职岗位</label>
+                            <input type="text" id="modal-position" value="${position}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-city">意向城市</label>
+                            <input type="text" id="modal-city" value="${city}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-salary">期望薪资</label>
+                            <input type="text" id="modal-salary" value="${salary}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-entry-time">到岗时间</label>
+                            <input type="text" id="modal-entry-time" value="${entryTime}">
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            title = '编辑求职意向';
+            saveCallback = saveJobIntention;
+            break;
+            
+        case 'education':
+            // 获取教育经历列表的第一项作为示例
+            const educationItem = document.querySelector('.education-item');
+            
+            if (!educationItem) {
+                // 如果没有教育经历项，则创建新的
+                modalContent = getNewEducationTemplate();
+                title = '添加教育经历';
+                saveCallback = addNewEducation;
+                break;
+            }
+            
+            const school = educationItem.querySelector('#previewSchool')?.textContent || '';
+            const degree = educationItem.querySelector('#previewDegree')?.textContent || '';
+            const eduTime = educationItem.querySelector('#previewEduTime')?.textContent || '';
+            const gpa = educationItem.querySelector('#previewGPA')?.textContent || '';
+            const rank = educationItem.querySelector('#previewRank')?.textContent || '';
+            
+            modalContent = `
+                <div class="modal-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-school">学校和专业</label>
+                            <input type="text" id="modal-school" value="${school}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-degree">学历</label>
+                            <input type="text" id="modal-degree" value="${degree}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-edu-time">就读时间</label>
+                            <input type="text" id="modal-edu-time" value="${eduTime}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-gpa">绩点</label>
+                            <input type="text" id="modal-gpa" value="${gpa}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-rank">排名</label>
+                            <input type="text" id="modal-rank" value="${rank}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-major">主修课程</label>
+                            <input type="text" id="modal-major" value="计算机科学">
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            title = '编辑教育经历';
+            saveCallback = updateEducation;
+            break;
+            
+        case 'work':
+            // 获取工作经历列表的第一项作为示例
+            const workItem = document.querySelector('.work-item');
+            
+            if (!workItem) {
+                // 如果没有工作经历项，则创建新的
+                modalContent = getNewWorkTemplate();
+                title = '添加工作经历';
+                saveCallback = addNewWork;
+                break;
+            }
+            
+            const company = workItem.querySelector('#previewCompany')?.textContent || '';
+            const workPosition = workItem.querySelector('#previewRole')?.textContent || '';
+            const workTime = workItem.querySelector('#previewWorkTime')?.textContent || '';
+            const workDescription = workItem.querySelector('#previewWorkDescription')?.textContent || '';
+            
+            modalContent = `
+                <div class="modal-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-company">公司名称</label>
+                            <input type="text" id="modal-company" value="${company}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-position">岗位名称</label>
+                            <input type="text" id="modal-position" value="${workPosition}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-work-time">工作时间</label>
+                            <input type="text" id="modal-work-time" value="${workTime}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-department">所在部门</label>
+                            <input type="text" id="modal-department" value="技术部">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-description">工作描述</label>
+                        <textarea id="modal-description" rows="5">${workDescription}</textarea>
+                    </div>
+                </div>
+            `;
+            
+            title = '编辑工作经历';
+            saveCallback = updateWork;
+            break;
+            
+        case 'project':
+            // 获取项目经历列表的第一项作为示例
+            const projectItem = document.querySelector('.project-item');
+            
+            if (!projectItem) {
+                // 如果没有项目经历项，则创建新的
+                modalContent = getNewProjectTemplate();
+                title = '添加项目经历';
+                saveCallback = addNewProject;
+                break;
+            }
+            
+            const projectName = projectItem.querySelector('#previewProjectName')?.textContent || '';
+            const projectRole = projectItem.querySelector('#previewProjectRole')?.textContent || '';
+            const projectTime = projectItem.querySelector('#previewProjectTime')?.textContent || '';
+            const projectDescription = projectItem.querySelector('.project-description')?.textContent || '';
+            
+            modalContent = `
+                <div class="modal-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-project-name">项目名称</label>
+                            <input type="text" id="modal-project-name" value="${projectName}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-project-role">项目角色</label>
+                            <input type="text" id="modal-project-role" value="${projectRole}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-project-time">项目时间</label>
+                            <input type="text" id="modal-project-time" value="${projectTime}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-project-link">项目链接</label>
+                            <input type="text" id="modal-project-link" value="https://example.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-project-description">项目描述</label>
+                        <textarea id="modal-project-description" rows="5">${projectDescription}</textarea>
+                    </div>
+                </div>
+            `;
+            
+            title = '编辑项目经历';
+            saveCallback = updateProject;
+            break;
+            
+        case 'campus':
+            // 获取校园经历列表的第一项作为示例
+            const campusItem = document.querySelector('.campus-item');
+            
+            if (!campusItem) {
+                // 如果没有校园经历项，则创建新的
+                modalContent = getNewCampusTemplate();
+                title = '添加校园经历';
+                saveCallback = addNewCampus;
+                break;
+            }
+            
+            const campusOrg = campusItem.querySelector('#previewCampusOrg')?.textContent || '';
+            const campusRole = campusItem.querySelector('#previewCampusRole')?.textContent || '';
+            const campusTime = campusItem.querySelector('#previewCampusTime')?.textContent || '';
+            const campusDescription = campusItem.querySelector('.campus-description')?.textContent || '';
+            
+            modalContent = `
+                <div class="modal-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-campus-org">组织名称</label>
+                            <input type="text" id="modal-campus-org" value="${campusOrg}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-campus-role">担任职务</label>
+                            <input type="text" id="modal-campus-role" value="${campusRole}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modal-campus-time">活动时间</label>
+                            <input type="text" id="modal-campus-time" value="${campusTime}">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-campus-type">组织类型</label>
+                            <select id="modal-campus-type">
+                                <option value="学生会">学生会</option>
+                                <option value="社团">社团</option>
+                                <option value="志愿者">志愿者</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-campus-description">活动描述</label>
+                        <textarea id="modal-campus-description" rows="5">${campusDescription}</textarea>
+                    </div>
+                </div>
+            `;
+            
+            title = '编辑校园经历';
+            saveCallback = updateCampus;
+            break;
+            
+        case 'awards':
+            // 获取奖项列表
+            const awardItems = document.querySelectorAll('.award-item');
+            let awardsHtml = '';
+            
+            awardItems.forEach((item, index) => {
+                awardsHtml += `
+                    <div class="award-entry" data-index="${index}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="modal-award-name-${index}">奖项名称</label>
+                                <input type="text" id="modal-award-name-${index}" value="${item.textContent.trim()}">
+                            </div>
+                            <div class="form-group">
+                                <label for="modal-award-date-${index}">获奖日期</label>
+                                <input type="text" id="modal-award-date-${index}" value="2021.10">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // 如果没有奖项，添加一个空的
+            if (awardsHtml === '') {
+                awardsHtml = `
+                    <div class="award-entry" data-index="0">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="modal-award-name-0">奖项名称</label>
+                                <input type="text" id="modal-award-name-0" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="modal-award-date-0">获奖日期</label>
+                                <input type="text" id="modal-award-date-0" value="">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            modalContent = `
+                <div class="modal-form">
+                    <div id="awards-container">
+                        ${awardsHtml}
+                    </div>
+                    <button type="button" class="btn" id="add-award-btn">添加奖项</button>
+                </div>
+            `;
+            
+            title = '编辑荣誉奖项';
+            saveCallback = updateAwards;
+            break;
+            
+        case 'skills':
+            // 获取技能列表
+            const skillItems = document.querySelectorAll('.skill-item');
+            let skillsHtml = '';
+            
+            skillItems.forEach((item, index) => {
+                const skillNameMatch = item.textContent.match(/(.+?):/);
+                const skillDetailMatch = item.textContent.match(/:\s*(.+)/);
+                
+                const skillName = skillNameMatch ? skillNameMatch[1].trim() : '';
+                const skillDetail = skillDetailMatch ? skillDetailMatch[1].trim() : '';
+                
+                skillsHtml += `
+                    <div class="skill-entry" data-index="${index}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="modal-skill-name-${index}">技能类别</label>
+                                <input type="text" id="modal-skill-name-${index}" value="${skillName}">
+                            </div>
+                            <div class="form-group">
+                                <label for="modal-skill-detail-${index}">技能描述</label>
+                                <input type="text" id="modal-skill-detail-${index}" value="${skillDetail}">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // 如果没有技能，添加一个空的
+            if (skillsHtml === '') {
+                skillsHtml = `
+                    <div class="skill-entry" data-index="0">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="modal-skill-name-0">技能类别</label>
+                                <input type="text" id="modal-skill-name-0" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="modal-skill-detail-0">技能描述</label>
+                                <input type="text" id="modal-skill-detail-0" value="">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            modalContent = `
+                <div class="modal-form">
+                    <div id="skills-container">
+                        ${skillsHtml}
+                    </div>
+                    <button type="button" class="btn" id="add-skill-btn">添加技能</button>
+                </div>
+            `;
+            
+            title = '编辑个人技能';
+            saveCallback = updateSkills;
+            break;
+            
+        default:
+            console.log(`未处理的区域类型: ${sectionType}`);
+            return;
+    }
+    
+    // 打开编辑模态框
+    openModal(title, modalContent, saveCallback);
 }
 
 // 初始化工具栏功能
@@ -208,18 +901,39 @@ function initModal() {
         
         // 确保模态框内容适应屏幕
         const modalContent = modal.querySelector('.modal-content');
+        const modalBody = modal.querySelector('.modal-body');
         modalContent.style.maxHeight = (window.innerHeight * 0.9) + 'px';
         
-        // 如果内容包含textarea，增加其自适应高度功能
-        const textareas = modalContent.querySelectorAll('textarea');
-        textareas.forEach(textarea => {
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
+        // 调整模态框内容宽度，确保不会超出视口
+        setTimeout(() => {
+            const formGroups = modalBody.querySelectorAll('.form-group');
+            const modalBodyWidth = modalBody.clientWidth;
+            
+            // 确保表单项宽度适当，不会导致水平滚动
+            formGroups.forEach(group => {
+                const input = group.querySelector('input, textarea, select');
+                if (input) {
+                    input.style.boxSizing = 'border-box';
+                    input.style.width = '100%';
+                }
             });
-            // 触发一次以适应初始内容
-            textarea.dispatchEvent(new Event('input'));
-        });
+            
+            // 检查并调整文本区域的宽度
+            const textareas = modalBody.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.style.boxSizing = 'border-box';
+                textarea.style.width = '100%';
+                
+                // 调整文本区域高度以适应内容
+                textarea.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = (this.scrollHeight) + 'px';
+                });
+                
+                // 触发一次以适应初始内容
+                textarea.dispatchEvent(new Event('input'));
+            });
+        }, 10);
     };
     
     // 关闭按钮事件
@@ -398,13 +1112,12 @@ function initEditableContentListeners() {
             
             // 对于头像，使用特定的处理逻辑
             if (sectionType === 'avatar') {
-                openAvatarModal();
+                document.getElementById('avatar-upload').click();
                 return;
             }
             
-            // 对于其他部分，打开编辑模态框
-            console.log(`编辑 ${sectionType} 部分`);
-            openEditModal(sectionType, this);
+            // 根据区域类型打开对应的编辑模态框
+            fillModalWithExistingData(sectionType);
         });
     });
 }
@@ -1691,16 +2404,4 @@ function closeAvatarModal() {
     if (modal) {
         modal.classList.remove('show');
     }
-}
-
-// 打开编辑模态框并填充现有数据
-function fillModalWithExistingData(sectionType) {
-    // 如果是头像部分，不执行常规编辑模态框操作
-    if (sectionType === 'avatar') {
-        return;
-    }
-    
-    // 其他部分的处理逻辑...
-    
-    // ... existing code ...
 }
