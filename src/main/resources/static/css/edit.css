@@ -1006,6 +1006,18 @@ body {
         width: 95%;
         margin: 30px auto;
     }
+
+    .preview-panel {
+        padding: 10px;
+    }
+    
+    .resume-preview {
+        padding: 10px;
+    }
+    
+    .resume-container {
+        padding: 10px;
+    }
 }
 
 @media (max-width: 600px) {

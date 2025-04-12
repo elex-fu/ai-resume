@@ -1,0 +1,290 @@
+/* 标准模板样式 */
+@page {
+    size: A4;
+    margin: 1cm;
+}
+
+.standard-resume {
+    font-family: "微软雅黑", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #333;
+    max-width: 210mm; /* A4宽度 */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    position: relative;
+}
+
+/* 简历头部 */
+.standard-header {
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.standard-header-flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 头像容器 */
+.standard-avatar-container {
+    flex: 0 0 100px;
+    margin-right: 20px;
+}
+
+.standard-avatar-wrapper {
+    width: 100px;
+    height: 120px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.standard-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 基本信息容器 */
+.standard-basic-info-container {
+    flex: 1;
+}
+
+.standard-resume-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 10px;
+    color: #1a73e8;
+}
+
+.standard-resume-info, 
+.standard-resume-contact {
+    margin: 5px 0;
+    color: #666;
+}
+
+/* 简历章节 */
+.standard-section {
+    margin-bottom: 20px;
+}
+
+.standard-section-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1a73e8;
+    margin: 0 0 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+/* 求职意向 */
+.standard-job-intention {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* 教育经历 */
+.standard-education-item {
+    margin-bottom: 15px;
+}
+
+.standard-edu-main {
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.standard-edu-main span:nth-child(1) {
+    flex: 0 0 40%;
+    padding-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standard-edu-main span:nth-child(2) {
+    flex: 0 0 35%;
+    padding-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standard-edu-main span:nth-child(3) {
+    flex: 0 0 25%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.standard-edu-detail {
+    color: #666;
+    font-size: 12px;
+}
+
+/* 工作经历 */
+.standard-work-item {
+    margin-bottom: 15px;
+}
+
+.standard-work-header {
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.standard-work-header span:nth-child(1) {
+    flex: 0 0 40%;
+    padding-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standard-work-header span:nth-child(2) {
+    flex: 0 0 35%;
+    padding-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standard-work-header span:nth-child(3) {
+    flex: 0 0 25%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.standard-work-description {
+    color: #666;
+    font-size: 12px;
+}
+
+.standard-work-description p {
+    margin: 5px 0;
+}
+
+/* 项目经历 */
+.standard-project-item {
+    margin-bottom: 15px;
+}
+
+.standard-project-header {
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.standard-project-header span:nth-child(1) {
+    flex: 0 0 40%;
+    padding-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standard-project-header span:nth-child(2) {
+    flex: 0 0 35%;
+    padding-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standard-project-header span:nth-child(3) {
+    flex: 0 0 25%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.standard-project-description {
+    color: #666;
+    font-size: 12px;
+}
+
+.standard-project-description p {
+    margin: 5px 0;
+}
+
+/* 校内经历 */
+.standard-campus-item {
+    margin-bottom: 15px;
+}
+
+.standard-campus-header {
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.standard-campus-header span:nth-child(1) {
+    flex: 0 0 40%;
+    padding-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standard-campus-header span:nth-child(2) {
+    flex: 0 0 35%;
+    padding-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standard-campus-header span:nth-child(3) {
+    flex: 0 0 25%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.standard-campus-description {
+    color: #666;
+    font-size: 12px;
+}
+
+.standard-campus-description p {
+    margin: 5px 0;
+}
+
+/* 荣誉奖项 */
+.standard-award-item {
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 12px;
+}
+
+/* 个人技能 */
+.standard-skill-item {
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 12px;
+}
+
+/* 打印样式优化 */
+@media print {
+    .standard-resume {
+        padding: 0;
+        box-shadow: none;
+    }
+    
+    .standard-resume-name {
+        color: #000;
+    }
+    
+    .standard-section-title {
+        color: #000;
+    }
+} 

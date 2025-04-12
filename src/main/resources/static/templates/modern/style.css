@@ -1,0 +1,308 @@
+/* 现代模板样式 */
+@page {
+    size: A4;
+    margin: 1cm;
+}
+
+.modern-resume {
+    font-family: "微软雅黑", "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #333;
+    max-width: 210mm; /* A4宽度 */
+    margin: 0 auto;
+    padding: 25px;
+    background-color: #fff;
+    position: relative;
+}
+
+/* 现代简历头部 */
+.modern-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #3498db;
+}
+
+.modern-header-content {
+    flex: 1;
+}
+
+.modern-name {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 5px;
+    color: #2c3e50;
+    letter-spacing: 1px;
+}
+
+.modern-title {
+    font-size: 18px;
+    color: #3498db;
+    margin: 0 0 15px;
+    font-weight: 500;
+}
+
+.modern-contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.modern-contact-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.modern-icon {
+    margin-right: 8px;
+    font-style: normal;
+}
+
+.modern-avatar {
+    width: 120px;
+    height: 140px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #fff;
+    margin-left: 20px;
+    flex-shrink: 0;
+}
+
+.modern-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 节标题样式 */
+.modern-section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 15px;
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.modern-section-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #3498db;
+}
+
+.modern-subsection-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #2c3e50;
+    margin: 0 0 12px;
+}
+
+/* 个人简介 */
+.modern-summary-section {
+    margin-bottom: 25px;
+}
+
+.modern-summary {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* 求职意向 */
+.modern-intention-section {
+    margin-bottom: 25px;
+}
+
+.modern-intention-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.modern-intention-item {
+    background-color: #f8f9fa;
+    padding: 12px 15px;
+    border-radius: 5px;
+}
+
+.modern-intention-label {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+
+.modern-intention-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+/* 时间线样式 */
+.modern-timeline {
+    position: relative;
+    margin-left: 20px;
+    margin-bottom: 25px;
+}
+
+.modern-timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    background-color: #ecf0f1;
+}
+
+.modern-timeline-item {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 20px;
+}
+
+.modern-timeline-marker {
+    position: absolute;
+    top: 6px;
+    left: -8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #3498db;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px #3498db;
+    z-index: 1;
+}
+
+.modern-timeline-content {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.modern-timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
+
+.modern-timeline-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.modern-timeline-period {
+    font-size: 13px;
+    color: #3498db;
+    font-weight: 500;
+}
+
+.modern-timeline-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+}
+
+.modern-timeline-description {
+    font-size: 13px;
+    color: #555;
+}
+
+.modern-timeline-description p {
+    margin: 5px 0;
+}
+
+/* 技能与证书 */
+.modern-skills-section {
+    margin-bottom: 25px;
+}
+
+.modern-skills-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 25px;
+}
+
+/* 技能列表 */
+.modern-skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modern-skill-item {
+    margin-bottom: 5px;
+}
+
+.modern-skill-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.modern-skill-level {
+    width: 100%;
+}
+
+.modern-skill-bar {
+    height: 8px;
+    background-color: #ecf0f1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.modern-skill-progress {
+    height: 100%;
+    background-color: #3498db;
+    width: 85%; /* 默认值，会被JS动态替换 */
+}
+
+/* 奖项列表 */
+.modern-awards-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.modern-award-item {
+    display: flex;
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+
+.modern-award-date {
+    flex: 0 0 80px;
+    font-weight: 500;
+    color: #3498db;
+}
+
+.modern-award-name {
+    color: #555;
+}
+
+/* 打印样式优化 */
+@media print {
+    .modern-resume {
+        padding: 0;
+        box-shadow: none;
+    }
+    
+    .modern-timeline-content {
+        box-shadow: none;
+    }
+} 

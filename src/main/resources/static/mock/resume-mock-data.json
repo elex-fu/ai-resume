@@ -1,109 +1,112 @@
 {
-  "resumeData": {
-    "id": 1,
-    "basic": {
-      "name": "张三@",
-      "gender": "男",
-      "age": "24岁",
-      "political": "群众",
-      "location": "广州",
-      "educationLevel": "本科",
-      "experience": "1年工作经验",
-      "status": "在职",
-      "email": "example@email.com",
-      "phone": "188****8888"
+  "basic": {
+    "name": "张三",
+    "position": "高级软件工程师",
+    "gender": "男",
+    "age": "28岁",
+    "educationLevel": "硕士",
+    "experience": "5年",
+    "status": "在职",
+    "phone": "13800138000",
+    "email": "zhangsan@example.com",
+    "location": "北京"
+  },
+  "avatar": "/images/default-avatar.png",
+  "intention": {
+    "position": "高级软件工程师",
+    "city": "北京",
+    "salary": "25-35k",
+    "entryTime": "随时到岗"
+  },
+  "summary": "5年软件开发经验，精通Java、Python等编程语言，熟悉微服务架构和云原生技术。",
+  "education": [
+    {
+      "school": "清华大学",
+      "major": "计算机科学与技术",
+      "degree": "硕士",
+      "startDate": "2015.09",
+      "endDate": "2018.07",
+      "description": "主修课程：数据结构、算法分析、计算机网络、操作系统等"
     },
-    "avatar": "/images/default-avatar.png",
-    "intention": {
-      "position": "产品经理",
-      "city": "广东广州",
-      "salary": "11-13k",
-      "entryTime": "随时到岗"
-    },
-    "education": [
-      {
-        "school": "腾讯大学",
-        "degree": "本科",
-        "eduTime": "2014.9 - 2018.6",
-        "gpa": "3.8/4.0",
-        "rank": "前30%",
-        "major": "计算机"
-      }
-    ],
-    "work": [
-      {
-        "company": "腾讯科技广州有限公司",
-        "position": "产品实习生",
-        "department": "QQ邮箱产品部",
-        "workTime": "2018.9 - 2020.3",
-        "description": "负责版本上线后的推广工作，通过微博、博客和论坛等渠道将新功能触达用户"
-      }
-    ],
-    "project": [
-      {
-        "projectName": "腾讯大学 最亮的明天暖灯行动",
-        "projectRole": "项目负责人",
-        "projectTime": "2014.9 - 2014.11",
-        "projectLink": "https://example.com/project",
-        "description": "1、引导用户删除旧邮件，倡导资源节约和合理利用，将节约下来的运营成本投入公益项目，帮助贫困山区的教室改善照明环境\n2、项目获得校级优秀志愿服务奖"
-      }
-    ],
-    "campus": [
-      {
-        "campusOrg": "腾讯大学学生会",
-        "campusRole": "主席",
-        "campusTime": "2015.9 - 2016.9",
-        "campusType": "学生组织",
-        "description": "1、全面负责学生会日常工作，管理协调各部门活动\n2、组织策划多项校园活动，提升校园文化氛围\n3、代表学生与学校沟通，解决学生关心的问题"
-      }
-    ],
-    "awards": [
-      {
-        "awardName": "腾讯大学优秀学生干部",
-        "awardDate": "2016.6"
-      },
-      {
-        "awardName": "腾讯大学三好学生",
-        "awardDate": "2015.6"
-      }
-    ],
-    "skills": [
-      {
-        "skillName": "产品分析",
-        "skillDetail": "熟练使用数据分析工具，能够通过用户反馈和数据指标分析产品问题"
-      },
-      {
-        "skillName": "原型设计",
-        "skillDetail": "熟练使用Axure、Sketch等原型设计工具，能够快速输出产品原型"
-      },
-      {
-        "skillName": "沟通协作",
-        "skillDetail": "良好的团队沟通能力，能够有效协调各方资源推动项目进展"
-      }
-    ],
-    "analysis": {
-      "score": 85,
-      "items": [
-        {
-          "title": "简历完整度",
-          "score": 90,
-          "advice": "简历基本信息完整，建议补充更多项目量化成果"
-        },
-        {
-          "title": "职位匹配度",
-          "score": 85,
-          "advice": "与目标职位匹配度较高，可进一步突出核心能力"
-        },
-        {
-          "title": "表达清晰度",
-          "score": 80,
-          "advice": "表达较为清晰，部分描述可更加简洁直观"
-        }
-      ]
-    },
-    "template": {
-      "current": "standard",
-      "color": "#1a73e8"
+    {
+      "school": "北京大学",
+      "major": "软件工程",
+      "degree": "学士",
+      "startDate": "2011.09",
+      "endDate": "2015.07",
+      "description": "主修课程：软件工程、数据库系统、编译原理等"
     }
-  }
+  ],
+  "work": [
+    {
+      "company": "阿里巴巴",
+      "department": "技术部",
+      "position": "高级软件工程师",
+      "startDate": "2018.07",
+      "endDate": "至今",
+      "description": "负责核心业务系统的开发和维护，主导多个重要项目的技术方案设计和实现。"
+    },
+    {
+      "company": "腾讯",
+      "department": "研发中心",
+      "position": "软件工程师",
+      "startDate": "2016.07",
+      "endDate": "2018.06",
+      "description": "参与社交平台后端开发，负责用户系统模块的设计和实现。"
+    }
+  ],
+  "project": [
+    {
+      "name": "电商平台重构",
+      "role": "技术负责人",
+      "startDate": "2020.03",
+      "endDate": "2021.06",
+      "description": "主导电商平台微服务架构重构，提升系统性能和可扩展性。"
+    },
+    {
+      "name": "智能客服系统",
+      "role": "核心开发",
+      "startDate": "2019.01",
+      "endDate": "2020.02",
+      "description": "开发基于机器学习的智能客服系统，提升客户服务效率。"
+    }
+  ],
+  "campus": [
+    {
+      "organization": "学生会",
+      "position": "技术部部长",
+      "startDate": "2014.09",
+      "endDate": "2015.07",
+      "description": "组织多次技术分享会，负责学生会网站开发和维护。"
+    }
+  ],
+  "awards": [
+    {
+      "name": "优秀毕业生",
+      "date": "2018.07",
+      "description": "清华大学计算机学院"
+    },
+    {
+      "name": "ACM竞赛一等奖",
+      "date": "2017.05",
+      "description": "全国大学生程序设计竞赛"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Java",
+      "level": "精通",
+      "description": "熟悉Spring、MyBatis等框架"
+    },
+    {
+      "name": "Python",
+      "level": "熟练",
+      "description": "熟悉Django、Flask等框架"
+    },
+    {
+      "name": "数据库",
+      "level": "熟练",
+      "description": "MySQL、Redis、MongoDB"
+    }
+  ]
 }

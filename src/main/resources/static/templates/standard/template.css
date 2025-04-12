@@ -1,0 +1,277 @@
+/* 基础布局样式 */
+.resume-preview {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.resume-container {
+    width: 800px;
+    min-height: 1000px;
+    background-color: #ffffff;
+    color: #333333;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 40px;
+}
+
+/* 简历头部样式 */
+.resume-header {
+    margin-bottom: 30px;
+}
+
+.resume-header-flex {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.avatar-container {
+    flex-shrink: 0;
+}
+
+.avatar-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #e0e0e0;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.basic-info-container {
+    flex-grow: 1;
+}
+
+.resume-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0 0 15px 0;
+    color: #333333;
+}
+
+.resume-info {
+    font-size: 16px;
+    color: #666666;
+    margin: 0 0 8px 0;
+}
+
+.resume-contact {
+    font-size: 16px;
+    color: #666666;
+    margin: 0;
+}
+
+/* 通用部分样式 */
+.resume-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333333;
+    margin: 0 0 20px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+/* 求职意向样式 */
+.job-intention {
+    padding: 15px 0;
+}
+
+.intention-item {
+    font-size: 16px;
+    color: #444444;
+    margin: 8px 0;
+}
+
+/* 教育经历样式 */
+.education-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.education-item {
+    padding: 15px 0;
+}
+
+.edu-main {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.edu-detail {
+    font-size: 16px;
+    color: #666666;
+}
+
+/* 工作经历样式 */
+.work-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.work-item {
+    padding: 15px 0;
+}
+
+.work-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.work-description {
+    font-size: 16px;
+    color: #666666;
+    line-height: 1.6;
+    margin: 8px 0;
+}
+
+/* 项目经历样式 */
+.project-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.project-item {
+    padding: 15px 0;
+}
+
+.project-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.project-description {
+    font-size: 16px;
+    color: #666666;
+    line-height: 1.6;
+    margin: 8px 0;
+}
+
+/* 校内经历样式 */
+.campus-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.campus-item {
+    padding: 15px 0;
+}
+
+.campus-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.campus-description {
+    font-size: 16px;
+    color: #666666;
+    line-height: 1.6;
+    margin: 8px 0;
+}
+
+/* 荣誉奖项样式 */
+.awards-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.award-item {
+    font-size: 16px;
+    color: #666666;
+    margin: 8px 0;
+}
+
+/* 个人技能样式 */
+.skills-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.skill-item {
+    font-size: 16px;
+    color: #666666;
+    margin: 8px 0;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    .resume-preview {
+        padding: 10px;
+    }
+    
+    .resume-container {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .resume-header-flex {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .avatar-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .resume-name {
+        font-size: 24px;
+    }
+    
+    .resume-info,
+    .resume-contact {
+        font-size: 14px;
+    }
+    
+    .section-title {
+        font-size: 18px;
+    }
+    
+    .intention-item,
+    .edu-main,
+    .work-header,
+    .project-header,
+    .campus-header {
+        font-size: 16px;
+    }
+    
+    .edu-detail,
+    .work-description,
+    .project-description,
+    .campus-description,
+    .award-item,
+    .skill-item {
+        font-size: 14px;
+    }
+} 

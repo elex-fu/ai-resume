@@ -43,7 +43,7 @@ public class ResumeDataServiceImpl implements ResumeDataService {
      */
     private void loadMockData() {
         try {
-            ClassPathResource resource = new ClassPathResource("static/js/resume-mock-data.json");
+            ClassPathResource resource = new ClassPathResource("static/mock/resume-mock-data.json");
             InputStream is = resource.getInputStream();
             ResumeVO[] resumeVOs = objectMapper.readValue(is, ResumeVO[].class);
             

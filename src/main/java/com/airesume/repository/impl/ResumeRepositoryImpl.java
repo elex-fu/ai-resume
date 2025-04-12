@@ -46,7 +46,7 @@ public class ResumeRepositoryImpl implements ResumeRepository {
     private void loadMockData() throws IOException {
         try {
             // 从静态资源目录加载mock数据文件
-            ClassPathResource resource = new ClassPathResource("static/js/resume-mock-data.json");
+            ClassPathResource resource = new ClassPathResource("static/mock/resume-mock-data.json");
             InputStream is = resource.getInputStream();
             
             // 解析JSON

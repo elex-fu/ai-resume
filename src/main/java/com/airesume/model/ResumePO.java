@@ -20,6 +20,7 @@ public class ResumePO {
     private String email;
 
     private String education;
+    
     private String experience;
 
     private UserPO userPO;

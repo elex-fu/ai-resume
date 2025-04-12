@@ -1,0 +1,36 @@
+{
+  "templates": [
+    {
+      "id": "standard",
+      "name": "标准模板",
+      "description": "简洁大方的标准简历模板",
+      "htmlPath": "/templates/standard/template.html",
+      "cssPath": "/templates/standard/template.css",
+      "primaryColor": "#2196F3"
+    },
+    {
+      "id": "modern",
+      "name": "现代模板",
+      "description": "时尚现代的简历模板",
+      "htmlPath": "/templates/modern/template.html",
+      "cssPath": "/templates/modern/template.css",
+      "primaryColor": "#4CAF50"
+    },
+    {
+      "id": "classic",
+      "name": "经典模板",
+      "description": "传统经典的简历模板",
+      "htmlPath": "/templates/classic/template.html",
+      "cssPath": "/templates/classic/template.css",
+      "primaryColor": "#9C27B0"
+    },
+    {
+      "id": "creative",
+      "name": "创意模板",
+      "description": "富有创意的简历模板",
+      "htmlPath": "/templates/creative/template.html",
+      "cssPath": "/templates/creative/template.css",
+      "primaryColor": "#FF9800"
+    }
+  ]
+} 
