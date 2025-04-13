@@ -21,7 +21,7 @@ export const API_CONFIG = {
             url: '/resume/:id',
             method: 'GET',
             mockFile: '/mock/resume-mock-data.json',
-            mockKey: 'resumeData'
+            mockKey: null
         },
         'resume/create': {
             url: '/resume',
@@ -167,6 +167,7 @@ const apiRequest = async (apiKey, params = {}) => {
  * @returns {Promise<any>} 模拟数据
  */
 const getMockData = async (mockFile, mockKey = null, responseType = null) => {
+    console.log('获取模拟数据:', mockFile, mockKey, responseType);
     try {
         // 如果需要blob数据（如PDF下载）
         if (responseType === 'blob') {
@@ -180,7 +181,19 @@ const getMockData = async (mockFile, mockKey = null, responseType = null) => {
         }
         
         const data = await response.json();
-        const result = mockKey ? data[mockKey] : data;
+        console.log(`getMockData mockFile= ${mockFile}, 获取到的数据:`, data);
+        
+        // 如果mockKey为null，直接返回整个数据
+        if (mockKey === null) {
+            return data;
+        }
+        
+        // 否则尝试从数据中获取mockKey对应的值
+        const result = data[mockKey];
+        if (result === undefined) {
+            console.warn(`未找到mockKey "${mockKey}" 对应的数据，返回整个数据对象`);
+            return data;
+        }
         
         // 添加延迟以模拟网络请求
         const mockResponse = await MockAPI.createResponse(result);

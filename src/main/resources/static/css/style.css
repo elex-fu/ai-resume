@@ -812,12 +812,12 @@ body {
 }
 
 /* 简历预览区域样式 */
-.resume-preview {
+/* .resume-preview {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
     background-color: #fff;
-}
+} */
 
 /* 模态框样式 */
 .modal {

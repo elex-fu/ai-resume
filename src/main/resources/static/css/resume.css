@@ -37,68 +37,141 @@ body {
     border-bottom: 1px solid #eee;
 }
 
-.basic-info {
-    flex: 1;
+.resume-header-flex {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    width: 100%;
+}
+
+.avatar-container {
+    flex-shrink: 0;
+}
+
+.avatar-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #e0e0e0;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.basic-info-container {
+    flex-grow: 1;
 }
 
 .resume-name {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin: 0 0 15px 0;
+    color: #333;
 }
 
-.info-item {
+.resume-info, .resume-contact {
     margin: 8px 0;
     color: #666;
-}
-
-.photo-area {
-    width: 120px;
-    height: 150px;
-    border: 1px dashed #ddd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 .section {
-    margin: 30px 0;
+    margin-bottom: 30px;
 }
 
 .section-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 20px;
-    padding-left: 10px;
-    border-left: 4px solid #1a73e8;
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1a73e8;
 }
 
-.education-item, .project-item {
-    margin-bottom: 25px;
+.job-intention {
+    padding: 15px 0;
 }
 
-.education-item h3, .project-item h3 {
-    color: #1a73e8;
-    font-size: 16px;
-    margin-bottom: 8px;
-}
-
-.project-time {
+.intention-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
     color: #666;
     font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.project-item ul {
-    padding-left: 20px;
-}
-
-.project-item li {
-    color: #444;
-    margin: 8px 0;
     line-height: 1.6;
+}
+
+.intention-item span {
+    white-space: nowrap;
+}
+
+.education-item, .project-item, .campus-item {
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+.education-item:last-child, .project-item:last-child, .campus-item:last-child {
+    margin-bottom: 0;
+}
+
+.edu-main, .project-header, .campus-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.edu-detail, .project-description, .campus-description {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.edu-detail span {
+    margin-right: 15px;
+}
+
+.project-description p, .campus-description p {
+    margin: 8px 0;
+}
+
+.awards-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.award-item {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 8px 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.skills-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skill-item {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 5px 15px;
+    background-color: #f8f9fa;
+    border-radius: 15px;
 }
 
 .input-area {
@@ -184,5 +257,304 @@ textarea {
     
     .preview-container, .input-container {
         width: 100%;
+    }
+}
+
+/* 简历预览容器 */
+.resume-preview {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* 简历内容容器 */
+.resume-container {
+    width: 800px;
+    min-height: 1000px;
+    margin: 0 auto;
+    padding: 40px;
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 简历各部分通用样式 */
+.resume-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.resume-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 0 0 15px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1a73e8;
+}
+
+/* 基本信息样式 */
+.resume-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.resume-header-flex {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.avatar-container {
+    flex-shrink: 0;
+}
+
+.avatar-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #e0e0e0;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.basic-info-container {
+    flex-grow: 1;
+}
+
+.resume-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 12px 0;
+    color: #333;
+}
+
+.resume-info, .resume-contact {
+    margin: 6px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* 求职意向样式 */
+.intention-items {
+    margin: 8px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.intention-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.intention-item span {
+    white-space: nowrap;
+}
+
+/* 教育经历样式 */
+.education-items {
+    margin: 10px 0;
+}
+
+.education-item {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.education-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.edu-school {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.edu-school span:first-child {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.edu-school span:last-child {
+    color: #666;
+    font-weight: normal;
+}
+
+.edu-major {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.edu-major span {
+    color: #666;
+}
+
+.edu-detail {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* 工作经历样式 */
+.work-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.work-item {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.work-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.work-description {
+    color: #666;
+    font-size: 13px;
+}
+
+.work-description p {
+    margin: 5px 0;
+}
+
+/* 项目经历样式 */
+.project-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.project-item {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.project-description {
+    color: #666;
+    font-size: 13px;
+}
+
+.project-description p {
+    margin: 5px 0;
+}
+
+/* 校内经历样式 */
+.campus-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.campus-item {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.campus-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.campus-description {
+    color: #666;
+    font-size: 13px;
+}
+
+.campus-description p {
+    margin: 5px 0;
+}
+
+/* 奖项和技能样式 */
+.awards-items, .skills-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.award-item {
+    padding: 8px 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    color: #666;
+    font-size: 13px;
+}
+
+.skill-item {
+    padding: 5px 15px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    color: #666;
+    font-size: 13px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .resume-container {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .resume-header-flex {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .intention-item {
+        flex: 1 1 100%;
     }
 } 

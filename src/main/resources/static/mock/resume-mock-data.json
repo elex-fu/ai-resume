@@ -1,6 +1,7 @@
 {
   "basic": {
     "name": "张三#",
+    "avatar": "/images/default-avatar.png",
     "position": "产品经理",
     "gender": "男",
     "age": "24岁",
@@ -11,8 +12,7 @@
     "email": "example@email.com",
     "location": "广东广州"
   },
-  "avatar": "/images/default-avatar.png",
-  "intention": {
+    "intention": {
     "position": "产品经理",
     "city": "广东广州",
     "salary": "11-13k",
@@ -26,7 +26,9 @@
       "degree": "本科",
       "startDate": "2014.9",
       "endDate": "2018.6",
-      "description": "绩点: 3.8/4.0 成绩排名: 前30%"
+      "description": "绩点: 3.8/4.0 成绩排名: 前30%",
+      "gpa": "3.8/4.0",
+      "rank": "前30%"
     }
   ],
   "work": [

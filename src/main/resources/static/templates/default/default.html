@@ -1,0 +1,106 @@
+<div class="default-resume-container">
+    <!-- 基本信息 -->
+    <div class="default-basic-info">
+        <div class="default-avatar-container">
+            <img data-bind="basic.avatar" alt="头像" class="default-avatar-img">
+        </div>
+        <div class="default-basic-info-container">
+            <h1 class="default-resume-name" data-bind="basic.name"></h1>
+            <p class="default-resume-info">
+                <span data-bind="basic.gender"></span> | 
+                <span data-bind="basic.age"></span> | 
+                <span data-bind="basic.education"></span> | 
+                <span data-bind="basic.experience"></span> | 
+                <span data-bind="basic.status"></span>
+            </p>
+            <p class="default-resume-contact">
+                <span>联系电话：</span><span data-bind="basic.phone"></span> | 
+                <span>邮箱：</span><span data-bind="basic.email"></span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 求职意向 -->
+    <div class="default-resume-section">
+        <h2 class="default-section-title">求职意向</h2>
+        <div class="default-job-intention">
+            <div class="default-intention-item">
+                <span>求职岗位: </span>
+                <span data-bind="intention.position"></span> | 
+                <span>意向城市: </span>
+                <span data-bind="intention.city"></span> | 
+                <span>期望薪资: </span>
+                <span data-bind="intention.salary"></span> | 
+                <span>到岗时间: </span>
+                <span data-bind="intention.entryTime"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 教育经历 -->
+    <div class="default-resume-section">
+        <h2 class="default-section-title">教育经历</h2>
+        <div class="default-education-items" data-bind="education.map(item => `
+            <div class='default-education-item'>
+                <div class='default-edu-main'>
+                    <span>${item.school}</span>
+                    <span>${item.major}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='default-edu-detail'>
+                    <span>学位: ${item.degree}</span>
+                    <span>绩点: ${item.gpa}</span>
+                    <span>排名: ${item.rank}</span>
+                </div>
+                <div class='default-edu-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 工作经历 -->
+    <div class="default-resume-section">
+        <h2 class="default-section-title">工作经历</h2>
+        <div class="default-work-items" data-bind="work.map(item => `
+            <div class='default-work-item'>
+                <div class='default-work-header'>
+                    <span>${item.company}</span>
+                    <span>${item.position}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='default-work-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 项目经历 -->
+    <div class="default-resume-section">
+        <h2 class="default-section-title">项目经历</h2>
+        <div class="default-project-items" data-bind="project.map(item => `
+            <div class='default-project-item'>
+                <div class='default-project-header'>
+                    <span>${item.name}</span>
+                    <span>${item.role}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='default-project-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 技能特长 -->
+    <div class="default-resume-section">
+        <h2 class="default-section-title">技能特长</h2>
+        <div class="default-skills-items" data-bind="skills.map(item => `
+            <div class='default-skill-item'>
+                <span>${item.name}</span>
+                <div class='default-skill-progress' style='width: ${item.level}%'></div>
+            </div>
+        `)"></div>
+    </div>
+</div>

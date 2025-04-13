@@ -9,7 +9,7 @@ export const MOCK_CONFIG = {
     enabled: true,
     
     // 模拟数据延迟（毫秒）- 模拟网络延迟
-    delay: 300,
+    delay: 30,
     
     // 模拟文件存储路径
     basePath: '/mock/',

@@ -1,0 +1,240 @@
+/* 默认模板样式 */
+.default-resume-container {
+    /* width: 800px; */
+    min-height: 1000px;
+    /* margin: 0 auto; */
+    padding: 40px;
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 基本信息 */
+.default-basic-info {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.default-avatar-container {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+.default-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.default-basic-info-container {
+    flex: 1;
+}
+
+.default-resume-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.default-resume-info {
+    margin: 5px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.default-resume-contact {
+    margin: 5px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* 通用部分标题 */
+.default-section-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 15px 0 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.default-resume-section {
+    margin-bottom: 20px;
+}
+
+/* 求职意向 */
+.default-job-intention {
+    font-size: 13px;
+    color: #666;
+}
+
+.default-intention-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* 教育经历 */
+.default-education-item {
+    margin-bottom: 15px;
+}
+
+.default-edu-main {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.default-edu-main span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.default-edu-main span:nth-child(1) {
+    flex: 0 0 40%;
+    padding-right: 10px;
+}
+
+.default-edu-main span:nth-child(2) {
+    flex: 0 0 35%;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.default-edu-main span:nth-child(3) {
+    flex: 0 0 25%;
+    text-align: right;
+}
+
+.default-edu-detail {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.default-edu-description {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* 工作经历 */
+.default-work-item {
+    margin-bottom: 15px;
+}
+
+.default-work-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.default-work-header span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.default-work-header span:nth-child(1) {
+    flex: 0 0 40%;
+    padding-right: 10px;
+}
+
+.default-work-header span:nth-child(2) {
+    flex: 0 0 35%;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.default-work-header span:nth-child(3) {
+    flex: 0 0 25%;
+    text-align: right;
+}
+
+.default-work-description {
+    font-size: 12px;
+    color: #666;
+}
+
+.default-work-description p {
+    margin: 5px 0;
+}
+
+/* 项目经历 */
+.default-project-item {
+    margin-bottom: 15px;
+}
+
+.default-project-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.default-project-header span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.default-project-header span:nth-child(1) {
+    flex: 0 0 40%;
+    padding-right: 10px;
+}
+
+.default-project-header span:nth-child(2) {
+    flex: 0 0 35%;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.default-project-header span:nth-child(3) {
+    flex: 0 0 25%;
+    text-align: right;
+}
+
+.default-project-description {
+    font-size: 12px;
+    color: #666;
+}
+
+.default-project-description p {
+    margin: 5px 0;
+}
+
+/* 技能特长 */
+.default-skills-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.default-skill-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+
+.default-skill-progress {
+    height: 2px;
+    background-color: #202124;
+    border-radius: 1px;
+}

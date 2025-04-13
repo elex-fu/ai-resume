@@ -15,17 +15,24 @@ export class TemplateManager {
             templatesDataUrl: '/templates/templates.json', // 模板元数据文件
             defaultTemplate: null,              // 默认不选中模板
             defaultColor: '#1a73e8',            // 默认主题颜色
-            mockDataPath: '/mock/resume-mock-data.json',
-            useMockData: true,                  // 默认使用mock数据
             isTemplateEnabled: false,           // 默认不启用模板
+            resumeData: null,                   // 简历数据
             ...options
+        };
+
+        // 添加样式管理相关配置
+        this.styleConfig = {
+            preventStyleOverride: options.preventStyleOverride || true,
+            styleVariables: options.styleVariables || {},
+            styleCache: new Map(),
+            currentStyleSheet: null
         };
 
         // 状态变量
         this.templates = [];                    // 存储所有模板信息
         this.currentTemplate = null;            // 当前选中的模板
         this.currentColor = this.options.defaultColor; // 当前主题颜色
-        this.resumeData = null;                 // 简历数据
+        this.resumeData = this.options.resumeData;     // 简历数据
         this.previewContainer = document.querySelector(this.options.previewContainer);
         this.isUsingTemplate = false;           // 默认不使用模板
 
@@ -44,12 +51,27 @@ export class TemplateManager {
             // 初始化事件监听
             this.initEventListeners();
             
-            // 初始化时使用默认编辑页风格
-            this.resetToDefaultStyle();
+            // 如果指定了默认模板，则应用它
+            if (this.options.defaultTemplate) {
+                console.log('正在应用默认模板:', this.options.defaultTemplate);
+                await this.setTemplate(this.options.defaultTemplate);
+            } else {
+                // 否则使用默认样式
+                this.resetToDefaultStyle();
+            }
+            
+            // 初始化样式管理
+            this.initStyleManagement();
+            
+            // 如果有简历数据，立即渲染
+            if (this.resumeData) {
+                await this.renderResumeData(this.resumeData);
+            }
             
             console.log('模板管理器初始化完成');
         } catch (error) {
             console.error('模板管理器初始化失败:', error);
+            throw error;
         }
     }
 
@@ -240,6 +262,11 @@ export class TemplateManager {
             // 设置模板主题色
             this.setColor(template.primaryColor);
             
+            // 如果有简历数据，重新渲染
+            if (this.resumeData) {
+                this.renderResumeData(this.resumeData);
+            }
+            
             console.log(`模板应用完成: ${template.name}`);
             return template;
         } catch (error) {
@@ -264,113 +291,53 @@ export class TemplateManager {
                 }
             }
             
-            // 保存原始结构
-            const originalClasses = Array.from(this.previewContainer.classList);
+            // 清空预览容器的内容
+            this.previewContainer.innerHTML = '';
             
-            // 保持resume-preview类，添加模板特定类
-            this.previewContainer.classList.add(template.id);
+            // 移除所有模板相关的类名
+            const classNames = Array.from(this.previewContainer.classList);
+            classNames.forEach(className => {
+                if (className.startsWith('template-') || this.templates.some(t => t.id === className)) {
+                    this.previewContainer.classList.remove(className);
+                }
+            });
             
-            // 处理CSS样式
-            const existingStyleEl = document.getElementById('template-style');
-            if (existingStyleEl) {
-                existingStyleEl.remove();
+            // 添加当前模板的类名
+            this.previewContainer.classList.add('resume-preview');
+            this.previewContainer.classList.add(`template-${template.id}`);
+            
+            // 加载并应用模板样式
+            await this.loadTemplateStyle(template);
+            
+            // 从templates.json获取模板文件路径
+            const templateConfig = this.templates.find(t => t.id === template.id);
+            if (!templateConfig) {
+                throw new Error(`未找到模板配置: ${template.id}`);
             }
-            
-            const styleEl = document.createElement('style');
-            styleEl.id = 'template-style';
-            
-            // 保持必要容器尺寸的CSS
-            const containerSizeCSS = `
-                /* 保持原始容器尺寸 */
-                .preview-panel {
-                    width: 800px !important;
-                    margin: 0 auto !important;
-                    height: 100% !important;
-                    overflow: hidden !important;
-                    display: flex !important;
-                    flex-direction: column !important;
+
+            // 加载模板HTML
+            try {
+                const htmlUrl = new URL(`${this.options.templatesPath}/${template.id}/${templateConfig.templateFile}`, window.location.origin);
+                const htmlResponse = await fetch(htmlUrl.toString());
+                
+                if (!htmlResponse.ok) {
+                    throw new Error(`加载模板HTML失败: ${htmlResponse.status}`);
                 }
                 
-                .resume-preview {
-                    flex: 1 !important;
-                    overflow-y: auto !important;
-                    padding: 5px !important;
-                }
+                const htmlContent = await htmlResponse.text();
+                this.previewContainer.innerHTML = htmlContent;
                 
-                .resume-container {
-                    max-width: 100% !important;
-                    margin: 0 auto !important;
-                }
-            `;
-            
-            if (this.options.useMockData) {
-                // 应用模板基本样式 + 容器尺寸保持
-                styleEl.textContent = `
-                    ${containerSizeCSS}
-                    
-                    /* ${template.name}模板样式 */
-                    .${template.id} .resume-name {
-                        color: ${template.primaryColor};
-                        font-weight: bold;
-                    }
-                    
-                    .${template.id} .section-title {
-                        color: ${template.primaryColor};
-                        border-bottom: 2px solid ${template.primaryColor};
-                        padding-bottom: 5px;
-                    }
-                    
-                    /* 其他模板特定样式 */
-                    .${template.id} .resume-header-flex {
-                        display: flex;
-                        align-items: center;
-                    }
+                console.log(`模板 ${template.name} 加载完成`);
+            } catch (htmlError) {
+                console.error('加载模板HTML失败:', htmlError);
+                this.previewContainer.innerHTML = `
+                    <div class="default-template">
+                        <h1>${template.name}</h1>
+                        <p>模板加载失败，使用默认布局</p>
+                        <div class="content-placeholder"></div>
+                    </div>
                 `;
-            } else {
-                // 对于外部CSS文件，加载并与容器尺寸CSS结合
-                try {
-                    const cssResponse = await fetch(`${this.options.templatesPath}/${template.id}/style.css`);
-                    if (!cssResponse.ok) {
-                        throw new Error(`加载模板CSS失败: ${cssResponse.status}`);
-                    }
-                    
-                    // 获取模板CSS
-                    let cssContent = await cssResponse.text();
-                    
-                    // 组合CSS
-                    styleEl.textContent = containerSizeCSS + cssContent;
-                } catch (cssError) {
-                    console.error('加载模板CSS失败，使用基本样式', cssError);
-                    
-                    // 使用基本样式
-                    styleEl.textContent = `
-                        ${containerSizeCSS}
-                        
-                        /* ${template.name}基本样式 */
-                        .${template.id} .resume-name {
-                            color: ${template.primaryColor};
-                        }
-                        
-                        .${template.id} .section-title {
-                            color: ${template.primaryColor};
-                            border-bottom: 2px solid ${template.primaryColor};
-                        }
-                    `;
-                }
             }
-            
-            // 添加样式到页面
-            document.head.appendChild(styleEl);
-            
-            // 备份当前简历数据
-            const currentResumeData = window.resumeData;
-            
-            // 如果window.resumeData已存在，使用它来重新渲染内容
-            if (currentResumeData && typeof window.renderResumePreview === 'function') {
-                window.renderResumePreview(currentResumeData);
-            }
-            
-            console.log(`模板 ${template.name} 加载完成`);
         } catch (error) {
             console.error('加载模板文件失败:', error);
             throw error;
@@ -416,76 +383,231 @@ export class TemplateManager {
     }
 
     /**
-     * 渲染简历数据到当前模板
+     * 渲染简历数据到模板
      * @param {Object} data - 简历数据
      */
     renderResumeData(data) {
-        if (!data) return;
-        
+        if (!this.previewContainer) {
+            console.error('预览容器不存在');
+            return;
+        }
+
+        // 保存数据到实例
         this.resumeData = data;
-        console.log('渲染简历数据:', data);
-        
-        if (!this.previewContainer) return;
-        
+        // console.log('开始渲染简历数据:', data);
+
         try {
-            // 填充单个数据字段
-            const fillField = (fieldName, value) => {
-                const elements = this.previewContainer.querySelectorAll(`[data-field="${fieldName}"]`);
-                elements.forEach(el => {
-                    if (el.tagName === 'IMG') {
-                        el.src = value || el.src;
-                    } else {
-                        el.textContent = value || '';
+            // 获取所有带有data-bind属性的元素
+            const elements = this.previewContainer.querySelectorAll('[data-bind]');
+            
+            elements.forEach(element => {
+                try {
+                    const bindExpression = element.getAttribute('data-bind');
+                    if (!bindExpression) return;
+
+                    // console.log('处理绑定表达式:', bindExpression);
+
+                    // 处理数组映射表达式
+                    if (bindExpression.includes('map(')) {
+                        this.handleArrayMapping(element, bindExpression, data);
+                        return;
                     }
-                });
-            };
-            
-            // 处理基本信息
-            if (data.basic) {
-                fillField('name', data.basic.name);
-                fillField('title', data.basic.position || '求职者');
-                fillField('phone', data.basic.phone);
-                fillField('email', data.basic.email);
-                fillField('location', data.basic.location);
-                
-                // 组合基本信息文本
-                const basicInfo = `${data.basic.gender || ''} | ${data.basic.age || ''} | ${data.basic.educationLevel || ''} | ${data.basic.experience || ''} | ${data.basic.status || ''}`;
-                fillField('basicInfo', basicInfo);
-                
-                // 组合联系信息文本
-                const contact = `联系电话：${data.basic.phone || ''} | 邮箱：${data.basic.email || ''}`;
-                fillField('contact', contact);
-            }
-            
-            // 处理头像
-            if (data.avatar) {
-                fillField('avatar', data.avatar);
-            }
-            
-            // 处理求职意向
-            if (data.intention) {
-                fillField('position', data.intention.position);
-                fillField('city', data.intention.city);
-                fillField('salary', data.intention.salary);
-                fillField('entryTime', data.intention.entryTime);
-            }
-            
-            // 处理个人简介
-            if (data.summary) {
-                fillField('summary', data.summary);
-            }
-            
-            // 处理列表类数据（教育经历、工作经历等）
-            this.renderListData('education', data.education);
-            this.renderListData('work', data.work);
-            this.renderListData('project', data.project);
-            this.renderListData('campus', data.campus);
-            this.renderListData('skills', data.skills);
-            this.renderListData('awards', data.awards);
-            
-            console.log('简历数据渲染完成');
+
+                    // 处理普通表达式
+                    const value = this.getNestedValue(data, bindExpression);
+
+                    // 如果value没有值，打印日志
+                    if (!value) {
+                        console.warn(`字段 ${bindExpression} 没有值:`, data);
+                    }
+                    this.updateElementValue(element, value);
+                } catch (elementError) {
+                    console.error(`处理元素绑定失败: ${elementError.message}`, element);
+                }
+            });
         } catch (error) {
             console.error('渲染简历数据失败:', error);
+        }
+    }
+
+    /**
+     * 处理数组映射表达式
+     * @private
+     */
+    handleArrayMapping(element, expression, data) {
+        try {
+            // 提取数组路径和模板
+            const matches = expression.match(/([a-zA-Z]+)\.map\((.*)\)/s);
+            if (!matches) {
+                console.warn('处理数组映射失败:', expression);
+                return;
+            }
+
+            const [_, arrayPath, template] = matches;
+            // console.log(`处理数组映射: ${arrayPath}`, template);
+            
+            // 获取数组数据
+            const array = this.getNestedValue(data, arrayPath) || [];
+            // console.log(`数组数据:`, array);
+            
+            if (!Array.isArray(array)) {
+                console.warn(`${arrayPath} 不是一个数组`);
+                return;
+            }
+
+            // 清空容器
+            element.innerHTML = '';
+
+            // 映射数组
+            array.forEach((item, index) => {
+                try {
+                    // 处理模板字符串
+                    let html = template
+                        .replace(/&gt;/g, '>')
+                        .replace(/&lt;/g, '<')
+                        .replace(/&amp;/g, '&')
+                        .trim();
+
+                    // 替换模板中的变量
+                    const itemHtml = html.replace(/\${(.*?)}/g, (match, expr) => {
+                        try {
+                            // 处理特殊字段
+                            if (expr.includes('time') && item.startDate && item.endDate) {
+                                return `${item.startDate} - ${item.endDate}`;
+                            }
+                            
+                            // 处理普通字段
+                            const field = expr.trim().replace('item.', '');
+                            const value = item[field];
+                            //字段value没有值时打印日志
+                            if (!value) {
+                                console.log(`字段 ${field} 没有值:`, item);
+                            }
+                            return value || '';
+                        } catch (exprError) {
+                            console.warn(`表达式求值失败: ${expr}`, exprError);
+                            return '';
+                        }
+                    });
+
+                    // 如果itemHtml没有值，打印日志
+                    if (!itemHtml) {
+                        console.warn('itemHtml没有值:', item);
+                    }
+
+                    // 创建新的元素并添加到容器
+                    const div = document.createElement('div');
+                    div.innerHTML = itemHtml;
+                    const newElement = div.firstElementChild;
+                    
+                    if (newElement) {
+                        element.appendChild(newElement);
+                    }
+                } catch (itemError) {
+                    console.error(`处理数组项失败: ${itemError.message}`, item);
+                }
+            });
+
+            // 如果没有数据，显示提示信息
+            if (array.length === 0) {
+                const emptyMessage = this.getEmptyMessage(arrayPath);
+                if (emptyMessage) {
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'empty-message';
+                    emptyDiv.textContent = emptyMessage;
+                    element.appendChild(emptyDiv);
+                }
+            }
+        } catch (error) {
+            console.error('处理数组映射失败:', error);
+        }
+    }
+
+    /**
+     * 获取空数据提示信息
+     * @private
+     */
+    getEmptyMessage(arrayPath) {
+        const messages = {
+            'education': '暂无教育经历',
+            'work': '暂无工作经历',
+            'project': '暂无项目经历',
+            'campus': '暂无校园经历',
+            'awards': '暂无获奖经历',
+            'skills': '暂无技能特长'
+        };
+        return messages[arrayPath] || '暂无数据';
+    }
+
+    /**
+     * 安全地获取嵌套对象的值
+     * @private
+     */
+    getNestedValue(obj, path) {
+        try {
+            return path.split('.').reduce((current, part) => {
+                if (current === null || current === undefined) return undefined;
+                return current[part];
+            }, obj);
+        } catch (error) {
+            console.warn(`获取路径 ${path} 的值失败:`, error);
+            return undefined;
+        }
+    }
+
+    /**
+     * 计算表达式的值
+     * @private
+     */
+    evaluateExpression(expression, context) {
+        try {
+            // 处理特殊情况：avatar路径
+            if (expression.includes('avatar')) {
+                return context.basic?.avatar || '/images/default-avatar.png';
+            }
+
+            // 创建一个安全的执行环境
+            const safeContext = { ...context };
+            const func = new Function('context', `
+                with (context) {
+                    try {
+                        return ${expression};
+                    } catch (error) {
+                        return '';
+                    }
+                }
+            `);
+
+            return func(safeContext) || '';
+        } catch (error) {
+            console.warn(`表达式求值失败: ${expression}`, error);
+            return '';
+        }
+    }
+
+    /**
+     * 更新元素的值
+     * @private
+     */
+    updateElementValue(element, value) {
+        try {
+            if (element.tagName === 'IMG') {
+                // 处理图片元素
+                if (value) {
+                    element.src = value;
+                    element.onerror = () => {
+                        element.src = '/images/default-avatar.png';
+                    };
+                }
+            } else if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                // 处理输入元素
+                element.value = value || '';
+            } else {
+                // 处理其他元素
+                element.textContent = value || '';
+            }
+        } catch (error) {
+            console.error(`更新元素值失败: ${error.message}`, element);
         }
     }
 
@@ -662,45 +784,6 @@ export class TemplateManager {
      */
     async getTemplates() {
         try {
-            if (this.options.useMockData) {
-                // 使用mock数据
-                this.templates = [
-                    {
-                        id: 'standard',
-                        name: '标准模板',
-                        description: '简洁大方的标准简历模板',
-                        htmlPath: '/templates/standard/template.html',
-                        cssPath: '/templates/standard/template.css',
-                        primaryColor: '#2196F3'
-                    },
-                    {
-                        id: 'modern',
-                        name: '现代模板',
-                        description: '时尚现代的简历模板',
-                        htmlPath: '/templates/modern/template.html',
-                        cssPath: '/templates/modern/template.css',
-                        primaryColor: '#4CAF50'
-                    },
-                    {
-                        id: 'classic',
-                        name: '经典模板',
-                        description: '传统经典的简历模板',
-                        htmlPath: '/templates/classic/template.html',
-                        cssPath: '/templates/classic/template.css',
-                        primaryColor: '#9C27B0'
-                    },
-                    {
-                        id: 'creative',
-                        name: '创意模板',
-                        description: '富有创意的简历模板',
-                        htmlPath: '/templates/creative/template.html',
-                        cssPath: '/templates/creative/template.css',
-                        primaryColor: '#FF9800'
-                    }
-                ];
-                return this.templates;
-            }
-
             const response = await fetch(this.options.templatesDataUrl);
             if (!response.ok) {
                 throw new Error(`加载模板数据失败: ${response.status}`);
@@ -714,5 +797,235 @@ export class TemplateManager {
             console.error('获取模板列表失败:', error);
             return [];
         }
+    }
+
+    /**
+     * 获取当前选中的模板
+     * @returns {Object|null} 当前模板对象，如果没有选中模板则返回null
+     */
+    getCurrentTemplate() {
+        return this.currentTemplate;
+    }
+
+    /**
+     * 加载模板
+     * @param {Object} template - 模板对象
+     */
+    async loadTemplate(template) {
+        try {
+            if (!template) {
+                throw new Error('模板对象不能为空');
+            }
+
+            console.log(`开始加载模板: ${template.name}`);
+            
+            // 保存当前模板
+            this.currentTemplate = template;
+            
+            // 加载模板文件
+            await this.loadTemplateFiles(template);
+            
+            // 如果有简历数据，重新渲染
+            if (this.resumeData) {
+                this.renderResumeData(this.resumeData);
+            }
+            
+            console.log(`模板加载完成: ${template.name}`);
+            return template;
+        } catch (error) {
+            console.error('加载模板失败:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * 初始化样式管理
+     */
+    initStyleManagement() {
+        if (this.styleConfig.preventStyleOverride) {
+            this.protectStyles();
+        }
+        
+        // 初始化样式变量
+        this.initStyleVariables();
+    }
+    
+    /**
+     * 保护现有样式不被覆盖
+     */
+    protectStyles() {
+        const styleElements = document.querySelectorAll('style, link[rel="stylesheet"]');
+        styleElements.forEach(style => {
+            if (!style.hasAttribute('data-protected')) {
+                style.setAttribute('data-protected', 'true');
+            }
+        });
+    }
+    
+    /**
+     * 初始化样式变量
+     */
+    initStyleVariables() {
+        const styleEl = document.createElement('style');
+        styleEl.id = 'template-variables';
+        document.head.appendChild(styleEl);
+        
+        this.updateStyleVariables();
+    }
+    
+    /**
+     * 更新样式变量
+     * @param {Object} variables - 新的样式变量
+     */
+    updateStyleVariables(variables = {}) {
+        this.styleConfig.styleVariables = {
+            ...this.styleConfig.styleVariables,
+            ...variables
+        };
+        
+        const styleEl = document.getElementById('template-variables');
+        if (styleEl) {
+            const cssVariables = Object.entries(this.styleConfig.styleVariables)
+                .map(([key, value]) => `--${key}: ${value};`)
+                .join('\n');
+            
+            styleEl.textContent = `:root { ${cssVariables} }`;
+        }
+    }
+    
+    /**
+     * 加载模板样式
+     * @param {Object} template - 模板对象
+     */
+    async loadTemplateStyle(template) {
+        try {
+            // 移除所有模板相关的样式表
+            this.removeAllTemplateStyles();
+            
+            // 检查缓存
+            if (this.styleConfig.styleCache.has(template.id)) {
+                console.log(`使用缓存的样式: ${template.id}`);
+                const cachedStyle = this.styleConfig.styleCache.get(template.id);
+                await this.applyTemplateStyle(template.id, cachedStyle);
+                return cachedStyle;
+            }
+            
+            // 从templates.json获取样式文件路径
+            const templateConfig = this.templates.find(t => t.id === template.id);
+            if (!templateConfig) {
+                throw new Error(`未找到模板配置: ${template.id}`);
+            }
+            
+            // 构建样式URL
+            const cssUrl = new URL(`${this.options.templatesPath}/${template.id}/${templateConfig.styleFile}`, window.location.origin);
+            console.log(`正在加载样式: ${cssUrl.toString()}`);
+            
+            const response = await fetch(cssUrl.toString());
+            
+            if (!response.ok) {
+                throw new Error(`加载模板样式失败: ${response.status}`);
+            }
+            
+            const cssContent = await response.text();
+            
+            // 缓存样式
+            this.styleConfig.styleCache.set(template.id, cssContent);
+            
+            // 应用样式
+            await this.applyTemplateStyle(template.id, cssContent);
+            
+            console.log(`样式加载成功: ${template.id}`);
+            return cssContent;
+        } catch (error) {
+            console.error('加载模板样式失败:', error);
+            // 使用默认样式
+            await this.applyDefaultStyle();
+            return null;
+        }
+    }
+    
+    /**
+     * 移除所有模板相关的样式表
+     */
+    removeAllTemplateStyles() {
+        // 移除所有模板样式表
+        document.querySelectorAll('style[id^="template-style-"]').forEach(style => {
+            style.remove();
+        });
+        
+        // 移除主题样式表
+        const themeStyle = document.getElementById('theme-color-style');
+        if (themeStyle) {
+            themeStyle.remove();
+        }
+        
+        // 清除当前样式表引用
+        this.styleConfig.currentStyleSheet = null;
+    }
+    
+    /**
+     * 应用模板样式
+     * @param {string} templateId - 模板ID
+     * @param {string} cssContent - CSS内容
+     */
+    async applyTemplateStyle(templateId, cssContent) {
+        return new Promise((resolve) => {
+            // 等待DOM加载完成
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    this._applyStyle(templateId, cssContent);
+                    resolve();
+                });
+            } else {
+                this._applyStyle(templateId, cssContent);
+                resolve();
+            }
+        });
+    }
+    
+    /**
+     * 实际应用样式的内部方法
+     * @private
+     */
+    _applyStyle(templateId, cssContent) {
+        // 创建新的样式表
+        const styleEl = document.createElement('style');
+        styleEl.id = `template-style-${templateId}`;
+        styleEl.textContent = cssContent;
+        
+        // 确保样式表被正确添加到head中
+        if (!document.head) {
+            console.error('document.head不存在');
+            return;
+        }
+        
+        document.head.appendChild(styleEl);
+        this.styleConfig.currentStyleSheet = styleEl;
+        
+        console.log(`样式应用成功: ${templateId}`);
+    }
+    
+    /**
+     * 应用默认样式
+     */
+    async applyDefaultStyle() {
+        const defaultStyle = `
+            .resume-preview {
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+        `;
+        
+        await this.applyTemplateStyle('default', defaultStyle);
+        console.log('默认样式应用成功');
+    }
+    
+    /**
+     * 清除样式缓存
+     */
+    clearStyleCache() {
+        this.styleConfig.styleCache.clear();
     }
 }
