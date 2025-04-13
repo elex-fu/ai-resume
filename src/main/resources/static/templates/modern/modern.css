@@ -1,0 +1,271 @@
+/* 现代模板样式 */
+.modern-resume-container {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 0;
+    margin: 0 auto;
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.5;
+    box-sizing: border-box;
+    position: relative;
+    font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    overflow: visible;
+}
+
+/* 基本信息 */
+.modern-basic-info {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #4CAF50;
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.modern-avatar-container {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+    border: 3px solid #4CAF50;
+    border-radius: 60px;
+    overflow: hidden;
+}
+
+.modern-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modern-basic-info-container {
+    flex: 1;
+}
+
+.modern-resume-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0 0 15px 0;
+    color: #4CAF50;
+}
+
+.modern-resume-info,
+.modern-resume-contact {
+    margin: 8px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.modern-resume-info span:not(:last-child)::after {
+    content: " | ";
+    color: #4CAF50;
+    margin: 0 5px;
+}
+
+/* 通用部分标题 */
+.modern-section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 25px 0 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #4CAF50;
+    color: #4CAF50;
+    position: relative;
+}
+
+.modern-section-title::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: #81C784;
+}
+
+/* 通用部分样式 */
+.modern-resume-section {
+    padding: 0 40px;
+    margin-bottom: 35px;
+    position: relative;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+/* 求职意向 */
+.modern-job-intention {
+    font-size: 14px;
+    color: #666;
+    background: #F1F8E9;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.modern-intention-item span {
+    color: #4CAF50;
+}
+
+/* 教育经历 */
+.modern-education-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 3px solid #4CAF50;
+    background: #F9F9F9;
+}
+
+.modern-edu-main {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.modern-edu-main span {
+    flex: 1;
+    padding-right: 15px;
+}
+
+.modern-edu-detail {
+    font-size: 13px;
+    color: #666;
+    margin: 8px 0;
+}
+
+.modern-edu-detail span {
+    margin-right: 15px;
+}
+
+.modern-edu-description {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* 工作经历 */
+.modern-work-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 3px solid #4CAF50;
+    background: #F9F9F9;
+}
+
+.modern-work-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.modern-work-header span {
+    flex: 1;
+    padding-right: 15px;
+}
+
+.modern-work-description {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* 项目经历 */
+.modern-project-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 3px solid #4CAF50;
+    background: #F9F9F9;
+}
+
+.modern-project-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.modern-project-header span {
+    flex: 1;
+    padding-right: 15px;
+}
+
+.modern-project-description {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* 技能特长 */
+.modern-skills-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 15px;
+    background: #F9F9F9;
+}
+
+.modern-skill-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modern-skill-item span {
+    font-size: 13px;
+    color: #333;
+}
+
+.modern-skill-progress {
+    height: 6px;
+    background-color: #4CAF50;
+    border-radius: 3px;
+    position: relative;
+}
+
+.modern-skill-progress::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #E8F5E9;
+    border-radius: 3px;
+    z-index: -1;
+}
+
+/* 打印样式优化 */
+@media print {
+    .modern-resume-container {
+        margin: 0;
+    }
+
+    .modern-education-item,
+    .modern-work-item,
+    .modern-project-item {
+        box-shadow: none;
+        border: 1px solid #eee;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .modern-resume-section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    @page {
+        margin: 0;
+        size: A4;
+    }
+
+    /* 设置分页间距 */
+    .modern-resume-section {
+        margin-top: 20px;
+    }
+} 

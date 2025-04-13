@@ -894,6 +894,76 @@ export class TemplateManager {
     }
     
     /**
+     * 应用模板样式
+     * @param {string} templateId - 模板ID
+     * @param {string} cssContent - CSS内容
+     */
+    async applyTemplateStyle(templateId, cssContent) {
+        return new Promise((resolve) => {
+            // 等待DOM加载完成
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    this._applyStyle(templateId, cssContent);
+                    resolve();
+                });
+            } else {
+                this._applyStyle(templateId, cssContent);
+                resolve();
+            }
+        });
+    }
+
+    /**
+     * 实际应用样式的内部方法
+     * @private
+     */
+    _applyStyle(templateId, cssContent) {
+        // 先检查并移除已存在的同id样式表
+        const existingStyle = document.getElementById(`template-style-${templateId}`);
+        if (existingStyle) {
+            existingStyle.remove();
+        }
+
+        // 创建新的样式表
+        const styleEl = document.createElement('style');
+        styleEl.id = `template-style-${templateId}`;
+        styleEl.setAttribute('data-protected', 'true');
+        styleEl.textContent = cssContent;
+        
+        // 确保样式表被正确添加到head中
+        if (!document.head) {
+            console.error('document.head不存在');
+            return;
+        }
+        
+        document.head.appendChild(styleEl);
+        this.styleConfig.currentStyleSheet = styleEl;
+        
+        console.log(`样式应用成功: ${templateId}`);
+    }
+
+    /**
+     * 移除所有模板相关的样式表
+     */
+    removeAllTemplateStyles() {
+        // 移除所有模板样式表
+        const templateStyles = document.querySelectorAll('style[id^="template-style-"]');
+        templateStyles.forEach(style => {
+            console.log(`移除样式表: ${style.id}`);
+            style.remove();
+        });
+        
+        // 移除主题样式表
+        const themeStyle = document.getElementById('theme-color-style');
+        if (themeStyle) {
+            themeStyle.remove();
+        }
+        
+        // 清除当前样式表引用
+        this.styleConfig.currentStyleSheet = null;
+    }
+
+    /**
      * 加载模板样式
      * @param {Object} template - 模板对象
      */
@@ -942,67 +1012,6 @@ export class TemplateManager {
             await this.applyDefaultStyle();
             return null;
         }
-    }
-    
-    /**
-     * 移除所有模板相关的样式表
-     */
-    removeAllTemplateStyles() {
-        // 移除所有模板样式表
-        document.querySelectorAll('style[id^="template-style-"]').forEach(style => {
-            style.remove();
-        });
-        
-        // 移除主题样式表
-        const themeStyle = document.getElementById('theme-color-style');
-        if (themeStyle) {
-            themeStyle.remove();
-        }
-        
-        // 清除当前样式表引用
-        this.styleConfig.currentStyleSheet = null;
-    }
-    
-    /**
-     * 应用模板样式
-     * @param {string} templateId - 模板ID
-     * @param {string} cssContent - CSS内容
-     */
-    async applyTemplateStyle(templateId, cssContent) {
-        return new Promise((resolve) => {
-            // 等待DOM加载完成
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => {
-                    this._applyStyle(templateId, cssContent);
-                    resolve();
-                });
-            } else {
-                this._applyStyle(templateId, cssContent);
-                resolve();
-            }
-        });
-    }
-    
-    /**
-     * 实际应用样式的内部方法
-     * @private
-     */
-    _applyStyle(templateId, cssContent) {
-        // 创建新的样式表
-        const styleEl = document.createElement('style');
-        styleEl.id = `template-style-${templateId}`;
-        styleEl.textContent = cssContent;
-        
-        // 确保样式表被正确添加到head中
-        if (!document.head) {
-            console.error('document.head不存在');
-            return;
-        }
-        
-        document.head.appendChild(styleEl);
-        this.styleConfig.currentStyleSheet = styleEl;
-        
-        console.log(`样式应用成功: ${templateId}`);
     }
     
     /**

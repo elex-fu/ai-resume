@@ -1,0 +1,303 @@
+/* 创意模板样式 */
+.creative-resume-container {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 0;
+    margin: 0 auto;
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.5;
+    box-sizing: border-box;
+    position: relative;
+    font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    overflow: visible;
+}
+
+.creative-resume-page {
+    width: 100%;
+    min-height: 297mm;
+    background: #fff;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    break-after: page; /* 强制分页 */
+    page-break-after: always; /* 兼容旧浏览器 */
+}
+
+.creative-resume-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+}
+
+/* 基本信息 */
+.creative-basic-info {
+    position: relative;
+    padding: 40px 40px 30px;
+    margin-bottom: 40px;
+    color: #fff;
+    min-height: 300px;
+}
+
+.creative-header-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(135deg, #FF9800, #F57C00);
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    z-index: 0;
+}
+
+.creative-avatar-container {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    margin: 0 auto 20px;
+    z-index: 1;
+}
+
+.creative-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.creative-basic-info-container {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.creative-resume-name {
+    font-size: 36px;
+    font-weight: 600;
+    margin: 0 0 15px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.creative-resume-info,
+.creative-resume-contact {
+    margin: 8px 0;
+    font-size: 15px;
+    line-height: 1.8;
+    opacity: 0.9;
+}
+
+.creative-resume-info span:not(:last-child)::after {
+    content: "•";
+    margin: 0 8px;
+    opacity: 0.8;
+}
+
+/* 通用部分样式 */
+.creative-resume-section {
+    padding: 0 40px;
+    margin-bottom: 35px;
+    position: relative;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.creative-section-icon {
+    font-size: 24px;
+    position: absolute;
+    left: 40px;
+    top: 0;
+}
+
+.creative-section-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #FF9800;
+    margin: 0 0 20px 35px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #FFE0B2;
+}
+
+/* 求职意向 */
+.creative-job-intention {
+    background: #FFF3E0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.creative-intention-item {
+    color: #333;
+    text-align: center;
+    font-size: 15px;
+}
+
+.creative-intention-item span {
+    color: #F57C00;
+}
+
+/* 教育经历 */
+.creative-education-item {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.creative-education-item:hover {
+    transform: translateY(-2px);
+}
+
+.creative-edu-main {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.creative-edu-detail {
+    color: #666;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.creative-edu-detail span {
+    margin-right: 20px;
+    color: #F57C00;
+}
+
+.creative-edu-description {
+    color: #555;
+    line-height: 1.8;
+}
+
+/* 工作经历 */
+.creative-work-item {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #FF9800;
+}
+
+.creative-work-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.creative-work-description {
+    color: #555;
+    line-height: 1.8;
+}
+
+/* 项目经历 */
+.creative-project-item {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.creative-project-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #FF9800, #F57C00);
+}
+
+.creative-project-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.creative-project-description {
+    color: #555;
+    line-height: 1.8;
+}
+
+/* 技能特长 */
+.creative-skills-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+    background: #FFF3E0;
+    border-radius: 8px;
+}
+
+.creative-skill-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.creative-skill-item span {
+    font-size: 14px;
+    color: #333;
+    width: 100px;
+    font-weight: 500;
+}
+
+.creative-skill-bar {
+    flex: 1;
+    height: 8px;
+    background: #FFE0B2;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.creative-skill-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #FF9800, #F57C00);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* 打印样式优化 */
+@media print {
+    .creative-resume-container {
+        margin: 0;
+    }
+
+    .creative-education-item,
+    .creative-work-item,
+    .creative-project-item {
+        box-shadow: none;
+        border: 1px solid #eee;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .creative-resume-section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    @page {
+        margin: 0;
+        size: A4;
+    }
+
+    /* 设置分页间距 */
+    .creative-resume-section {
+        margin-top: 20px;
+    }
+} 

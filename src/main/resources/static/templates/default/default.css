@@ -1,13 +1,16 @@
 /* 默认模板样式 */
 .default-resume-container {
-    /* width: 800px; */
-    min-height: 1000px;
-    /* margin: 0 auto; */
-    padding: 40px;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 10px;
+    margin: 0 auto;
     background: #fff;
     font-size: 14px;
     line-height: 1.5;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    position: relative;
+    font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    overflow: visible;
 }
 
 /* 基本信息 */
@@ -68,8 +71,13 @@
     color: #333;
 }
 
+/* 通用部分样式 */
 .default-resume-section {
-    margin-bottom: 20px;
+    /* padding: 0 40px; */
+    margin-bottom: 35px;
+    position: relative;
+    break-inside: avoid;
+    page-break-inside: avoid;
 }
 
 /* 求职意向 */
@@ -237,4 +245,36 @@
     height: 2px;
     background-color: #202124;
     border-radius: 1px;
+}
+
+/* 打印样式优化 */
+@media print {
+    .default-resume-container {
+        margin: 0;
+        padding: 30px 40px;
+    }
+
+    .default-education-item,
+    .default-work-item,
+    .default-project-item {
+        box-shadow: none;
+        border: 1px solid #eee;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .default-resume-section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    @page {
+        margin: 0;
+        size: A4;
+    }
+
+    /* 设置分页间距 */
+    .default-resume-section {
+        margin-top: 20px;
+    }
 }

@@ -1,0 +1,110 @@
+<div class="creative-resume-container">
+    <!-- 基本信息 -->
+    <div class="creative-basic-info">
+        <div class="creative-header-bg"></div>
+        <div class="creative-avatar-container">
+            <img data-bind="basic.avatar" alt="头像" class="creative-avatar-img">
+        </div>
+        <div class="creative-basic-info-container">
+            <h1 class="creative-resume-name" data-bind="basic.name"></h1>
+            <p class="creative-resume-info">
+                <span data-bind="basic.gender"></span>
+                <span data-bind="basic.age"></span>
+                <span data-bind="basic.education"></span>
+                <span data-bind="basic.experience"></span>
+                <span data-bind="basic.status"></span>
+            </p>
+            <p class="creative-resume-contact">
+                <span>联系电话：</span><span data-bind="basic.phone"></span>
+                <span>邮箱：</span><span data-bind="basic.email"></span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 求职意向 -->
+    <div class="creative-resume-section">
+        <i class="creative-section-icon">✦</i>
+        <h2 class="creative-section-title">求职意向</h2>
+        <div class="creative-job-intention">
+            <div class="creative-intention-item">
+                <span>求职岗位: </span><span data-bind="intention.position"></span>
+                <span>意向城市: </span><span data-bind="intention.city"></span>
+                <span>期望薪资: </span><span data-bind="intention.salary"></span>
+                <span>到岗时间: </span><span data-bind="intention.entryTime"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 教育经历 -->
+    <div class="creative-resume-section">
+        <i class="creative-section-icon">✦</i>
+        <h2 class="creative-section-title">教育经历</h2>
+        <div class="creative-education-items" data-bind="education.map(item => `
+            <div class='creative-education-item'>
+                <div class='creative-edu-main'>
+                    <span>${item.school}</span>
+                    <span>${item.major}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='creative-edu-detail'>
+                    <span>学位: ${item.degree}</span>
+                    <span>绩点: ${item.gpa}</span>
+                    <span>排名: ${item.rank}</span>
+                </div>
+                <div class='creative-edu-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 工作经历 -->
+    <div class="creative-resume-section">
+        <i class="creative-section-icon">✦</i>
+        <h2 class="creative-section-title">工作经历</h2>
+        <div class="creative-work-items" data-bind="work.map(item => `
+            <div class='creative-work-item'>
+                <div class='creative-work-header'>
+                    <span>${item.company}</span>
+                    <span>${item.position}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='creative-work-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 项目经历 -->
+    <div class="creative-resume-section">
+        <i class="creative-section-icon">✦</i>
+        <h2 class="creative-section-title">项目经历</h2>
+        <div class="creative-project-items" data-bind="project.map(item => `
+            <div class='creative-project-item'>
+                <div class='creative-project-header'>
+                    <span>${item.name}</span>
+                    <span>${item.role}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='creative-project-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 技能特长 -->
+    <div class="creative-resume-section">
+        <i class="creative-section-icon">✦</i>
+        <h2 class="creative-section-title">技能特长</h2>
+        <div class="creative-skills-items" data-bind="skills.map(item => `
+            <div class='creative-skill-item'>
+                <span>${item.name}</span>
+                <div class='creative-skill-bar'>
+                    <div class='creative-skill-progress' style='width: ${item.level}%'></div>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+</div> 

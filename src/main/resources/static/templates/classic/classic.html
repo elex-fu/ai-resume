@@ -1,0 +1,106 @@
+<div class="classic-resume-container">
+    <!-- 基本信息 -->
+    <div class="classic-basic-info">
+        <div class="classic-avatar-container">
+            <img data-bind="basic.avatar" alt="头像" class="classic-avatar-img">
+        </div>
+        <div class="classic-basic-info-container">
+            <h1 class="classic-resume-name" data-bind="basic.name"></h1>
+            <p class="classic-resume-info">
+                <span data-bind="basic.gender"></span>
+                <span data-bind="basic.age"></span>
+                <span data-bind="basic.education"></span>
+                <span data-bind="basic.experience"></span>
+                <span data-bind="basic.status"></span>
+            </p>
+            <p class="classic-resume-contact">
+                <span data-bind="basic.phone"></span>
+                <span data-bind="basic.email"></span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 求职意向 -->
+    <div class="classic-resume-section">
+        <h2 class="classic-section-title">求职意向</h2>
+        <div class="classic-job-intention">
+            <div class="classic-intention-item">
+                <span>求职岗位: </span>
+                <span data-bind="intention.position"></span> | 
+                <span>意向城市: </span>
+                <span data-bind="intention.city"></span> | 
+                <span>期望薪资: </span>
+                <span data-bind="intention.salary"></span> | 
+                <span>到岗时间: </span>
+                <span data-bind="intention.entryTime"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 教育经历 -->
+    <div class="classic-resume-section">
+        <h2 class="classic-section-title">教育经历</h2>
+        <div class="classic-education-items" data-bind="education.map(item => `
+            <div class='classic-education-item'>
+                <div class='classic-edu-main'>
+                    <span>${item.school}</span>
+                    <span>${item.major}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='classic-edu-detail'>
+                    <span>学位: ${item.degree}</span>
+                    <span>绩点: ${item.gpa}</span>
+                    <span>排名: ${item.rank}</span>
+                </div>
+                <div class='classic-edu-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 工作经历 -->
+    <div class="classic-resume-section">
+        <h2 class="classic-section-title">工作经历</h2>
+        <div class="classic-work-items" data-bind="work.map(item => `
+            <div class='classic-work-item'>
+                <div class='classic-work-header'>
+                    <span>${item.company}</span>
+                    <span>${item.position}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='classic-work-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 项目经历 -->
+    <div class="classic-resume-section">
+        <h2 class="classic-section-title">项目经历</h2>
+        <div class="classic-project-items" data-bind="project.map(item => `
+            <div class='classic-project-item'>
+                <div class='classic-project-header'>
+                    <span>${item.name}</span>
+                    <span>${item.role}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='classic-project-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 技能特长 -->
+    <div class="classic-resume-section">
+        <h2 class="classic-section-title">技能特长</h2>
+        <div class="classic-skills-items" data-bind="skills.map(item => `
+            <div class='classic-skill-item'>
+                <span>${item.name}</span>
+                <div class='classic-skill-progress' style='width: ${item.level}%'></div>
+            </div>
+        `)"></div>
+    </div>
+</div> 

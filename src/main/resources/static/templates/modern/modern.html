@@ -1,0 +1,106 @@
+<div class="modern-resume-container">
+    <!-- 基本信息 -->
+    <div class="modern-basic-info">
+        <div class="modern-avatar-container">
+            <img data-bind="basic.avatar" alt="头像" class="modern-avatar-img">
+        </div>
+        <div class="modern-basic-info-container">
+            <h1 class="modern-resume-name" data-bind="basic.name"></h1>
+            <p class="modern-resume-info">
+                <span data-bind="basic.gender"></span>
+                <span data-bind="basic.age"></span>
+                <span data-bind="basic.education"></span>
+                <span data-bind="basic.experience"></span>
+                <span data-bind="basic.status"></span>
+            </p>
+            <p class="modern-resume-contact">
+                <span data-bind="basic.phone"></span>
+                <span data-bind="basic.email"></span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 求职意向 -->
+    <div class="modern-resume-section">
+        <h2 class="modern-section-title">求职意向</h2>
+        <div class="modern-job-intention">
+            <div class="modern-intention-item">
+                <span>求职岗位: </span>
+                <span data-bind="intention.position"></span> | 
+                <span>意向城市: </span>
+                <span data-bind="intention.city"></span> | 
+                <span>期望薪资: </span>
+                <span data-bind="intention.salary"></span> | 
+                <span>到岗时间: </span>
+                <span data-bind="intention.entryTime"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 教育经历 -->
+    <div class="modern-resume-section">
+        <h2 class="modern-section-title">教育经历</h2>
+        <div class="modern-education-items" data-bind="education.map(item => `
+            <div class='modern-education-item'>
+                <div class='modern-edu-main'>
+                    <span>${item.school}</span>
+                    <span>${item.major}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='modern-edu-detail'>
+                    <span>学位: ${item.degree}</span>
+                    <span>绩点: ${item.gpa}</span>
+                    <span>排名: ${item.rank}</span>
+                </div>
+                <div class='modern-edu-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 工作经历 -->
+    <div class="modern-resume-section">
+        <h2 class="modern-section-title">工作经历</h2>
+        <div class="modern-work-items" data-bind="work.map(item => `
+            <div class='modern-work-item'>
+                <div class='modern-work-header'>
+                    <span>${item.company}</span>
+                    <span>${item.position}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='modern-work-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 项目经历 -->
+    <div class="modern-resume-section">
+        <h2 class="modern-section-title">项目经历</h2>
+        <div class="modern-project-items" data-bind="project.map(item => `
+            <div class='modern-project-item'>
+                <div class='modern-project-header'>
+                    <span>${item.name}</span>
+                    <span>${item.role}</span>
+                    <span>${item.time}</span>
+                </div>
+                <div class='modern-project-description'>
+                    <p>${item.description}</p>
+                </div>
+            </div>
+        `)"></div>
+    </div>
+
+    <!-- 技能特长 -->
+    <div class="modern-resume-section">
+        <h2 class="modern-section-title">技能特长</h2>
+        <div class="modern-skills-items" data-bind="skills.map(item => `
+            <div class='modern-skill-item'>
+                <span>${item.name}</span>
+                <div class='modern-skill-progress' style='width: ${item.level}%'></div>
+            </div>
+        `)"></div>
+    </div>
+</div> 
