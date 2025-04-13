@@ -10,7 +10,7 @@ import MockAPI from './mock-api.js';
 const API_BASE_URL = '/api';
 
 // API配置
-const API_CONFIG = {
+export const API_CONFIG = {
     // 是否开启mock数据模式（设为true则使用模拟数据，false则请求真实后端）
     useMock: MockAPI.config.enabled,
     

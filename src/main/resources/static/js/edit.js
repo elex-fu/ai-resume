@@ -153,112 +153,101 @@ async function loadResumeData(resumeId) {
 
 // 渲染简历预览
 function renderResumePreview(resumeData) {
-    if (!resumeData) {
-        console.log('没有简历数据，跳过渲染');
-        return;
-    }
-    
     const previewContainer = document.getElementById('resumePreview');
-    if (!previewContainer) {
-        console.log('找不到预览容器，跳过渲染');
-        return;
-    }
     
-    // 清空预览区域
+    // 保存原有的样式
+    const originalStyles = {
+        classes: previewContainer.className,
+        style: previewContainer.getAttribute('style')
+    };
+    
+    // 清空内容前保存容器引用
+    const resumeContainer = previewContainer.querySelector('.resume-container') || document.createElement('div');
+    resumeContainer.className = 'resume-container';
+    
+    // 清空内容但保持容器结构
     previewContainer.innerHTML = '';
+    previewContainer.appendChild(resumeContainer);
+    
+    // 恢复原有样式
+    previewContainer.className = originalStyles.classes;
+    if (originalStyles.style) {
+        previewContainer.setAttribute('style', originalStyles.style);
+    }
     
     try {
-        // 根据数据渲染各部分内容
-        if (resumeData.basic) renderBasicInfo(resumeData.basic);
-        if (resumeData.intention) renderJobIntention(resumeData.intention);
-        if (resumeData.education && resumeData.education.length) renderEducation(resumeData.education);
-        if (resumeData.work && resumeData.work.length) renderWorkExperience(resumeData.work);
-        if (resumeData.project && resumeData.project.length) renderProjectExperience(resumeData.project);
-        if (resumeData.campus && resumeData.campus.length) renderCampusExperience(resumeData.campus);
-        if (resumeData.awards && resumeData.awards.length) renderAwards(resumeData.awards);
-        if (resumeData.skills && resumeData.skills.length) renderSkills(resumeData.skills);
-        
-        console.log('简历预览渲染完成');
+        // 渲染各个部分
+        renderBasicInfo(resumeData.basicInfo);
+        renderJobIntention(resumeData.jobIntention);
+        renderEducation(resumeData.education);
+        renderWorkExperience(resumeData.workExperience);
+        renderProjectExperience(resumeData.projectExperience);
+        renderCampusExperience(resumeData.campusExperience);
+        renderAwards(resumeData.awards);
+        renderSkills(resumeData.skills);
     } catch (error) {
-        console.error('渲染简历预览失败:', error);
+        console.error('简历渲染失败:', error);
     }
 }
 
-// 渲染基本信息
+// 修改基本信息渲染函数
 function renderBasicInfo(basicInfo) {
-    if (!basicInfo) return;
+    const resumeContainer = document.querySelector('.resume-container');
     
-    // 创建基本信息区域
-    const previewContainer = document.getElementById('resumePreview');
-    if (!previewContainer) return;
+    const headerSection = document.createElement('div');
+    headerSection.className = 'resume-header';
     
-    const basicInfoSection = document.createElement('div');
-    basicInfoSection.className = 'resume-section basic-info';
+    const headerFlex = document.createElement('div');
+    headerFlex.className = 'resume-header-flex';
     
-    // 头像和姓名
-    const header = document.createElement('div');
-    header.className = 'resume-header';
+    // 头像容器
+    const avatarContainer = document.createElement('div');
+    avatarContainer.className = 'avatar-container editable-section';
+    avatarContainer.setAttribute('data-section', 'avatar');
     
-    // 添加头像
-    const avatar = document.createElement('div');
-    avatar.className = 'resume-avatar';
-    avatar.id = 'userAvatar';
-    if (basicInfo.avatar) {
-        const avatarImg = document.createElement('img');
-        avatarImg.src = basicInfo.avatar;
-        avatar.appendChild(avatarImg);
-    }
+    const avatarWrapper = document.createElement('div');
+    avatarWrapper.className = 'avatar-wrapper';
     
-    // 添加姓名和职位
-    const nameTitle = document.createElement('div');
-    nameTitle.className = 'name-title';
+    const avatarImg = document.createElement('img');
+    avatarImg.id = 'userAvatar';
+    avatarImg.src = basicInfo.avatar || '/images/default-avatar.png';
+    avatarImg.alt = '用户头像';
+    avatarImg.className = 'avatar-img';
+    
+    const avatarOverlay = document.createElement('div');
+    avatarOverlay.className = 'avatar-overlay';
+    avatarOverlay.innerHTML = '<i class="avatar-edit-icon">+</i>';
+    
+    avatarWrapper.appendChild(avatarImg);
+    avatarWrapper.appendChild(avatarOverlay);
+    avatarContainer.appendChild(avatarWrapper);
+    
+    // 基本信息容器
+    const basicInfoContainer = document.createElement('div');
+    basicInfoContainer.className = 'basic-info-container editable-section';
+    basicInfoContainer.setAttribute('data-section', 'basic');
     
     const name = document.createElement('h1');
     name.className = 'resume-name';
     name.textContent = basicInfo.name || '姓名';
     
-    const title = document.createElement('p');
-    title.className = 'resume-title';
-    title.textContent = basicInfo.position || '求职意向';
+    const info = document.createElement('p');
+    info.className = 'resume-info';
+    info.textContent = `${basicInfo.gender || '性别'} | ${basicInfo.age || '年龄'}岁 | ${basicInfo.education || '学历'} | ${basicInfo.experience || '工作经验'} | ${basicInfo.status || '在职状态'}`;
     
-    nameTitle.appendChild(name);
-    nameTitle.appendChild(title);
-    
-    header.appendChild(avatar);
-    header.appendChild(nameTitle);
-    
-    // 联系信息
-    const contact = document.createElement('div');
+    const contact = document.createElement('p');
     contact.className = 'resume-contact';
+    contact.textContent = `联系电话：${basicInfo.phone || ''} | 邮箱：${basicInfo.email || ''}`;
     
-    const contactList = document.createElement('ul');
+    basicInfoContainer.appendChild(name);
+    basicInfoContainer.appendChild(info);
+    basicInfoContainer.appendChild(contact);
     
-    if (basicInfo.phone) {
-        const phoneItem = document.createElement('li');
-        phoneItem.innerHTML = `<i class="icon-phone"></i>${basicInfo.phone}`;
-        contactList.appendChild(phoneItem);
-    }
+    headerFlex.appendChild(avatarContainer);
+    headerFlex.appendChild(basicInfoContainer);
+    headerSection.appendChild(headerFlex);
     
-    if (basicInfo.email) {
-        const emailItem = document.createElement('li');
-        emailItem.innerHTML = `<i class="icon-email"></i>${basicInfo.email}`;
-        contactList.appendChild(emailItem);
-    }
-    
-    if (basicInfo.location) {
-        const locationItem = document.createElement('li');
-        locationItem.innerHTML = `<i class="icon-location"></i>${basicInfo.location}`;
-        contactList.appendChild(locationItem);
-    }
-    
-    contact.appendChild(contactList);
-    
-    // 将所有元素添加到基本信息区域
-    basicInfoSection.appendChild(header);
-    basicInfoSection.appendChild(contact);
-    
-    // 添加到预览容器
-    previewContainer.appendChild(basicInfoSection);
+    resumeContainer.appendChild(headerSection);
 }
 
 // 渲染求职意向
