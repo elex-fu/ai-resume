@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景 -->
+    <rect width="800" height="600" fill="#f8f9fa"/>
+    
+    <!-- 标题 -->
+    <text x="400" y="50" font-family="Arial" font-size="24" text-anchor="middle" fill="#333">向量数据库读写流程</text>
+    
+    <!-- 左侧：写入流程 -->
+    <g transform="translate(50, 100)">
+        <!-- 写入流程标题 -->
+        <text x="0" y="-20" font-family="Arial" font-size="18" fill="#333">写入流程</text>
+        
+        <!-- 数据源 -->
+        <rect x="0" y="0" width="120" height="60" rx="5" fill="#e3f2fd" stroke="#2196f3"/>
+        <text x="60" y="35" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">MySQL数据库</text>
+        
+        <!-- 箭头 -->
+        <path d="M120,30 L150,30" stroke="#2196f3" stroke-width="2" fill="none"/>
+        <polygon points="150,30 145,25 145,35" fill="#2196f3"/>
+        
+        <!-- 文本预处理 -->
+        <rect x="150" y="0" width="120" height="60" rx="5" fill="#e3f2fd" stroke="#2196f3"/>
+        <text x="210" y="35" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">文本预处理</text>
+        
+        <!-- 箭头 -->
+        <path d="M270,30 L300,30" stroke="#2196f3" stroke-width="2" fill="none"/>
+        <polygon points="300,30 295,25 295,35" fill="#2196f3"/>
+        
+        <!-- 文本分块 -->
+        <rect x="300" y="0" width="120" height="60" rx="5" fill="#e3f2fd" stroke="#2196f3"/>
+        <text x="360" y="35" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">文本分块</text>
+        
+        <!-- 箭头 -->
+        <path d="M420,30 L450,30" stroke="#2196f3" stroke-width="2" fill="none"/>
+        <polygon points="450,30 445,25 445,35" fill="#2196f3"/>
+        
+        <!-- 向量化 -->
+        <rect x="450" y="0" width="120" height="60" rx="5" fill="#e3f2fd" stroke="#2196f3"/>
+        <text x="510" y="35" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">向量化</text>
+        
+        <!-- 箭头 -->
+        <path d="M570,30 L600,30" stroke="#2196f3" stroke-width="2" fill="none"/>
+        <polygon points="600,30 595,25 595,35" fill="#2196f3"/>
+    </g>
+    
+    <!-- 中间：向量数据库 -->
+    <g transform="translate(600, 200)">
+        <rect x="0" y="0" width="120" height="60" rx="5" fill="#ffecb3" stroke="#ffa000"/>
+        <text x="60" y="35" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">向量数据库</text>
+    </g>
+    
+    <!-- 右侧：读取流程 -->
+    <g transform="translate(50, 400)">
+        <!-- 读取流程标题 -->
+        <text x="0" y="-20" font-family="Arial" font-size="18" fill="#333">读取流程</text>
+        
+        <!-- 用户问题 -->
+        <rect x="0" y="0" width="120" height="60" rx="5" fill="#e8f5e9" stroke="#4caf50"/>
+        <text x="60" y="35" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">用户问题</text>
+        
+        <!-- 箭头 -->
+        <path d="M120,30 L150,30" stroke="#4caf50" stroke-width="2" fill="none"/>
+        <polygon points="150,30 145,25 145,35" fill="#4caf50"/>
+        
+        <!-- 问题向量化 -->
+        <rect x="150" y="0" width="120" height="60" rx="5" fill="#e8f5e9" stroke="#4caf50"/>
+        <text x="210" y="35" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">问题向量化</text>
+        
+        <!-- 箭头 -->
+        <path d="M270,30 L300,30" stroke="#4caf50" stroke-width="2" fill="none"/>
+        <polygon points="300,30 295,25 295,35" fill="#4caf50"/>
+        
+        <!-- 向量检索 -->
+        <rect x="300" y="0" width="120" height="60" rx="5" fill="#e8f5e9" stroke="#4caf50"/>
+        <text x="360" y="35" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">向量检索</text>
+        
+        <!-- 箭头 -->
+        <path d="M420,30 L450,30" stroke="#4caf50" stroke-width="2" fill="none"/>
+        <polygon points="450,30 445,25 445,35" fill="#4caf50"/>
+        
+        <!-- 大模型处理 -->
+        <rect x="450" y="0" width="120" height="60" rx="5" fill="#e8f5e9" stroke="#4caf50"/>
+        <text x="510" y="35" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">大模型处理</text>
+        
+        <!-- 箭头 -->
+        <path d="M570,30 L600,30" stroke="#4caf50" stroke-width="2" fill="none"/>
+        <polygon points="600,30 595,25 595,35" fill="#4caf50"/>
+        
+        <!-- 生成回答 -->
+        <rect x="600" y="0" width="120" height="60" rx="5" fill="#e8f5e9" stroke="#4caf50"/>
+        <text x="660" y="35" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">生成回答</text>
+    </g>
+    
+    <!-- 连接线 -->
+    <path d="M660,160 L660,230" stroke="#666" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+    <path d="M660,370 L660,430" stroke="#666" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+    
+    <!-- 说明文字 -->
+    <g transform="translate(50, 500)">
+        <text x="0" y="0" font-family="Arial" font-size="14" fill="#666">写入流程：从MySQL数据库提取数据，经过预处理、分块、向量化后存入向量数据库</text>
+        <text x="0" y="30" font-family="Arial" font-size="14" fill="#666">读取流程：用户问题向量化后，在向量数据库中检索相关内容，由大模型生成回答</text>
+    </g>
+</svg> 

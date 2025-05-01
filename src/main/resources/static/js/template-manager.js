@@ -3,6 +3,8 @@
  * 负责简历模板的加载、渲染和切换功能
  */
 
+import { editModal } from './edit-modal.js';
+
 // 模板管理器类
 export class TemplateManager {
     constructor(options = {}) {
@@ -26,6 +28,15 @@ export class TemplateManager {
             styleVariables: options.styleVariables || {},
             styleCache: new Map(),
             currentStyleSheet: null
+        };
+
+        // 添加编辑功能相关配置
+        this.editConfig = {
+            editableFields: ['company', 'role', 'workTime', 'description', 
+                           'projectName', 'projectRole', 'projectTime',
+                           'school', 'major', 'educationTime',
+                           'skillName', 'skillDetail', 'skillLevel'],
+            editableClass: 'editable-field'
         };
 
         // 状态变量
@@ -308,6 +319,9 @@ export class TemplateManager {
             
             // 加载并应用模板样式
             await this.loadTemplateStyle(template);
+            
+            // 初始化编辑功能
+            this.initEditFunctionality();
             
             // 从templates.json获取模板文件路径
             const templateConfig = this.templates.find(t => t.id === template.id);
@@ -1036,5 +1050,64 @@ export class TemplateManager {
      */
     clearStyleCache() {
         this.styleConfig.styleCache.clear();
+    }
+
+    /**
+     * 初始化编辑功能
+     */
+    initEditFunctionality() {
+        // 添加可编辑字段的样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .editable-field {
+                position: relative;
+                transition: background-color 0.2s;
+                padding: 4px 8px;
+                border-radius: 4px;
+            }
+            
+            .editable-field:hover {
+                background-color: rgba(26, 115, 232, 0.1);
+            }
+            
+            .editable-field::after {
+                content: '✎';
+                position: absolute;
+                right: 5px;
+                top: 50%;
+                transform: translateY(-50%);
+                opacity: 0;
+                transition: opacity 0.2s;
+                color: #1a73e8;
+                font-size: 12px;
+            }
+            
+            .editable-field:hover::after {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 为所有可编辑字段添加点击事件
+        this.editConfig.editableFields.forEach(field => {
+            const elements = this.previewContainer.querySelectorAll(`[data-field="${field}"]`);
+            elements.forEach(element => {
+                // 确保元素不是只读的
+                if (!element.hasAttribute('readonly')) {
+                    element.classList.add(this.editConfig.editableClass);
+                    element.style.cursor = 'pointer';
+                    
+                    // 移除可能存在的旧事件监听器
+                    const newElement = element.cloneNode(true);
+                    element.parentNode.replaceChild(newElement, element);
+                    
+                    // 添加新的事件监听器
+                    newElement.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        editModal.show(newElement, field);
+                    });
+                }
+            });
+        });
     }
 }

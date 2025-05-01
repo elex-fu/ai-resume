@@ -38,21 +38,49 @@ AI简历生成器是一个基于人工智能的简历创建和管理平台，帮
 
 ### 前端
 - HTML5/CSS3/JavaScript
+- Jest 测试框架
+- Babel 转译器
 - 响应式设计
 - 模块化CSS
 
 ### 后端
-- Java SpringBoot框架
-- JWT认证
+- Java 8
+- Spring Boot 2.3.12
+- Spring Security 安全框架
+- Spring Data JPA
+- JWT 认证 (jjwt 0.11.5)
 - RESTful API设计
+- Lombok 简化开发
 
 ### 数据存储
-- MySQL数据库
+- MySQL 数据库
+- H2 数据库（测试环境）
 - 文件存储系统
 
 ### AI/机器学习
-- OpenAI API集成
+- OpenAI API集成 (openai-gpt3-java)
 - 内容分析和优化算法
+
+### 文档处理
+- iText PDF (5.5.13.3) - PDF生成
+- PDFBox (2.0.27) - PDF解析
+- Apache POI (5.2.3) - Word文档处理
+- Flying Saucer (9.1.22) - HTML转PDF
+- Jsoup (1.15.4) - HTML解析
+
+## 项目结构
+```
+ai-resume/
+├── src/                # 源代码目录
+│   ├── main/          # 主要代码
+│   └── test/          # 测试代码
+├── target/            # 编译输出目录
+├── pom.xml           # Maven配置文件
+├── package.json      # Node.js配置文件
+├── .babelrc         # Babel配置
+├── jest.config.cjs  # Jest测试配置
+└── README.md        # 项目文档
+```
 
 ## 使用说明
 
@@ -79,9 +107,11 @@ AI简历生成器是一个基于人工智能的简历创建和管理平台，帮
 ## 安装与部署
 
 ### 环境要求
-- JDK 11+
+- JDK 8+
 - Maven 3.6+
 - MySQL 5.7+
+- Node.js 14+
+- npm 6+
 
 ### 本地运行
 1. 克隆项目
@@ -126,14 +156,143 @@ AI简历生成器是一个基于人工智能的简历创建和管理平台，帮
 
 我们欢迎各种形式的贡献，包括但不限于：
 
+### 如何贡献
+1. Fork 项目到您的GitHub账号
+2. 创建您的特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交您的改动 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建一个Pull Request
+
+### 贡献类型
 - 提交Bug报告
 - 提出新功能建议
 - 改进文档
 - 提交代码修复或新功能
+- 完善测试用例
+- 改进项目结构
+
+### 提交规范
+- 使用清晰的提交信息
+- 保持代码风格一致
+- 添加必要的测试
+- 更新相关文档
+
+## 版本发布记录
+
+### v1.0.0 (2024-02)
+- 初始版本发布
+- 基本简历生成功能
+- AI内容优化
+- 多种简历模板
+
+### v1.1.0 (计划中)
+- 增强AI分析功能
+- 新增行业模板
+- 完善用户系统
+- 版本管理功能
+
+## 许可证
+
+本项目采用 MIT 许可证。查看 [LICENSE](LICENSE) 文件了解更多详细信息。
+
+## 致谢
+
+- [OpenAI](https://openai.com/) - AI能力支持
+- [Spring Boot](https://spring.io/projects/spring-boot) - 后端框架
+- [iText](https://itextpdf.com/) - PDF处理
+- [Apache POI](https://poi.apache.org/) - Office文档处理
 
 ## 联系方式
 
 - 项目主页: https://github.com/elex-fu/ai-resume
 - 问题反馈: https://github.com/elex-fu/ai-resume/issues
 - 电子邮件: elex.fou@gmail.com
+
+## 开发指南
+
+### 开发环境设置
+1. 安装必要的开发工具
+   ```bash
+   # 安装Node.js依赖
+   npm install
+   
+   # 安装Maven依赖
+   mvn install
+   ```
+
+2. 配置数据库
+   - 创建MySQL数据库：ai_resume
+   - 修改`src/main/resources/application.properties`配置：
+     ```properties
+     spring.datasource.url=jdbc:mysql://localhost:3306/ai_resume?useSSL=false
+     spring.datasource.username=your_username
+     spring.datasource.password=your_password
+     ```
+
+3. 配置OpenAI API
+   - 在`application.properties`中添加您的OpenAI API密钥：
+     ```properties
+     openai.api.key=your_api_key
+     ```
+
+### 代码规范
+- 使用Google Java代码风格
+- 提交前运行单元测试：`mvn test`
+- 使用Lombok注解简化代码
+- RESTful API遵循标准命名规范
+
+### 分支管理
+- main: 主分支，用于生产环境
+- develop: 开发分支，用于功能集成
+- feature/*: 新功能开发
+- bugfix/*: 问题修复
+- release/*: 版本发布
+
+### 测试
+1. 单元测试
+   ```bash
+   # 运行后端测试
+   mvn test
+   
+   # 运行前端测试
+   npm test
+   ```
+
+2. 集成测试
+   - 使用H2内存数据库进行测试
+   - 测试配置位于`src/test/resources/`
+
+### 部署
+1. 构建项目
+   ```bash
+   # 构建后端
+   mvn clean package
+   
+   # 构建前端
+   npm run build
+   ```
+
+2. 部署到服务器
+   ```bash
+   java -jar target/ai-resume-1.0-SNAPSHOT.jar
+   ```
+
+3. 配置Nginx（可选）
+   ```nginx
+   server {
+       listen 80;
+       server_name your_domain.com;
+       
+       location / {
+           proxy_pass http://localhost:8080;
+       }
+   }
+   ```
+
+## 安全注意事项
+- 所有API请求需要JWT认证
+- 密码使用BCrypt加密存储
+- 文件上传限制大小和类型
+- 定期更新依赖包版本
+- 使用环境变量存储敏感信息
 
