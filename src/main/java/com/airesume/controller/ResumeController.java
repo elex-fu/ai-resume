@@ -1,10 +1,12 @@
 package com.airesume.controller;
 
+import com.airesume.bo.OptimizeResumeBO;
+import com.airesume.controller.vo.OptimizeResumeRequestVO;
 import com.airesume.factory.ResumeVOFactory;
 import com.airesume.model.ResumePO;
 import com.airesume.service.ResumeService;
 import com.airesume.service.UserService;
-import com.airesume.vo.ResumeVO;
+import com.airesume.controller.vo.ResumeVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -145,5 +147,26 @@ public class ResumeController {
         } catch (IOException e) {
             return ResponseEntity.badRequest().body("文件上传失败：" + e.getMessage());
         }
+    }
+    /**
+     * 简历智能优化
+     * 根据简历id、优化描述进行简历优化
+     * 调用大模型进行优化
+     * 返回优化后的简历，并提供新老简历对比。
+     */
+    @PostMapping("/optimize")
+    public ResponseEntity<?> optimizeResume(@RequestBody OptimizeResumeRequestVO requestVO) {
+        // 检查resumeId是否存在
+        ResumePO resumePO = resumeService.getResumeById(requestVO.getResumeId());
+        if (resumePO == null) {
+            return ResponseEntity.badRequest().body("简历不存在");
+        }
+        // 检查optimizeDescription是否为空
+        if (requestVO.getOptimizeDescription() == null || requestVO.getOptimizeDescription().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("优化描述不能为空");
+        }
+                                            // 调用大模型进行优化
+        OptimizeResumeBO optimizedResume = resumeService.optimizeResume(requestVO.getResumeId(), requestVO.getOptimizeDescription());
+        return ResponseEntity.ok(optimizedResume);
     }
 } 

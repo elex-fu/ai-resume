@@ -191,12 +191,69 @@ class EditModal {
             // 对于描述类字段，使用textarea
             formGrid.innerHTML = `
                 <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>描述</label>
+                    <label>${this.getFieldLabel(field)}</label>
                     <textarea rows="4">${currentValue}</textarea>
                 </div>
             `;
+        } else if (field.includes('Date')) {
+            // 对于日期字段，使用date类型input
+            formGrid.innerHTML = `
+                <div class="form-group">
+                    <label>${this.getFieldLabel(field)}</label>
+                    <input type="date" value="${currentValue}">
+                </div>
+            `;
+        } else if (field === 'avatar') {
+            // 对于头像字段，使用file类型input
+            formGrid.innerHTML = `
+                <div class="form-group">
+                    <label>${this.getFieldLabel(field)}</label>
+                    <input type="file" accept="image/*">
+                    <img src="${currentValue}" style="max-width: 100px; margin-top: 10px;">
+                </div>
+            `;
+        } else if (field === 'email') {
+            // 对于邮箱字段，使用email类型input
+            formGrid.innerHTML = `
+                <div class="form-group">
+                    <label>${this.getFieldLabel(field)}</label>
+                    <input type="email" value="${currentValue}">
+                </div>
+            `;
+        } else if (field === 'phone') {
+            // 对于手机号字段，使用tel类型input
+            formGrid.innerHTML = `
+                <div class="form-group">
+                    <label>${this.getFieldLabel(field)}</label>
+                    <input type="tel" value="${currentValue}" pattern="[0-9]{11}">
+                </div>
+            `;
+        } else if (field === 'gender') {
+            // 对于性别字段，使用select
+            formGrid.innerHTML = `
+                <div class="form-group">
+                    <label>${this.getFieldLabel(field)}</label>
+                    <select>
+                        <option value="男" ${currentValue === '男' ? 'selected' : ''}>男</option>
+                        <option value="女" ${currentValue === '女' ? 'selected' : ''}>女</option>
+                    </select>
+                </div>
+            `;
+        } else if (field === 'political') {
+            // 对于政治面貌字段，使用select
+            formGrid.innerHTML = `
+                <div class="form-group">
+                    <label>${this.getFieldLabel(field)}</label>
+                    <select>
+                        <option value="">请选择</option>
+                        <option value="中共党员" ${currentValue === '中共党员' ? 'selected' : ''}>中共党员</option>
+                        <option value="共青团员" ${currentValue === '共青团员' ? 'selected' : ''}>共青团员</option>
+                        <option value="群众" ${currentValue === '群众' ? 'selected' : ''}>群众</option>
+                    </select>
+                </div>
+            `;
         } else {
-            // 对于普通字段，使用input
+            // 对于普通字段，使用text类型input
             formGrid.innerHTML = `
                 <div class="form-group">
                     <label>${this.getFieldLabel(field)}</label>
@@ -218,8 +275,25 @@ class EditModal {
         if (!this.currentElement || !this.currentField) return;
         
         const formGrid = this.modal.querySelector('.form-grid');
-        const input = formGrid.querySelector('input, textarea');
-        const newValue = input.value.trim();
+        let newValue;
+        
+        // 根据字段类型获取值
+        if (this.currentField === 'description') {
+            newValue = formGrid.querySelector('textarea').value.trim();
+        } else if (this.currentField === 'avatar') {
+            const fileInput = formGrid.querySelector('input[type="file"]');
+            if (fileInput.files.length > 0) {
+                // 处理文件上传
+                const file = fileInput.files[0];
+                // TODO: 实现文件上传逻辑
+                return;
+            }
+            return;
+        } else if (this.currentField === 'gender' || this.currentField === 'political') {
+            newValue = formGrid.querySelector('select').value;
+        } else {
+            newValue = formGrid.querySelector('input').value.trim();
+        }
         
         // 更新元素内容
         this.currentElement.textContent = newValue;
@@ -239,18 +313,56 @@ class EditModal {
 
     getFieldLabel(field) {
         const labels = {
-            'company': '公司名称',
-            'role': '职位',
-            'workTime': '工作时间',
-            'projectName': '项目名称',
-            'projectRole': '担任角色',
-            'projectTime': '项目时间',
+            // 基本信息
+            'name': '姓名',
+            'avatar': '头像',
+            'position': '职位',
+            'gender': '性别',
+            'age': '年龄',
+            'political': '政治面貌',
+            'educationLevel': '学历',
+            'experience': '工作经验',
+            'status': '求职状态',
+            'phone': '手机号码',
+            'email': '邮箱',
+            'location': '所在地',
+            
+            // 求职意向
+            'jobPosition': '期望职位',
+            'city': '期望城市',
+            'salary': '期望薪资',
+            'entryTime': '到岗时间',
+            
+            // 教育经历
             'school': '学校',
             'major': '专业',
-            'educationTime': '就读时间',
+            'degree': '学历',
+            'startDate': '开始时间',
+            'endDate': '结束时间',
+            'gpa': 'GPA',
+            'rank': '排名',
+            'description': '描述',
+            
+            // 工作经历
+            'company': '公司',
+            'department': '部门',
+            'workPosition': '职位',
+            
+            // 项目经历
+            'name': '项目名称',
+            'role': '担任角色',
+            
+            // 校园经历
+            'organization': '组织名称',
+            'position': '职位',
+            
+            // 获奖经历
+            'awardName': '奖项名称',
+            'date': '获奖时间',
+            
+            // 技能特长
             'skillName': '技能名称',
-            'skillDetail': '技能描述',
-            'skillLevel': '技能水平'
+            'level': '掌握程度'
         };
         
         return labels[field] || field;

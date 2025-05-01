@@ -1,5 +1,9 @@
 package com.airesume.service.impl;
 
+import com.airesume.bo.OptimizeResult;
+import com.airesume.bo.OptimizeResumeBO;
+import com.airesume.factory.ResumeVOFactory;
+import com.airesume.llm.LLMService;
 import com.airesume.model.ResumePO;
 import com.airesume.model.UserPO;
 import com.airesume.repository.ResumeRepository;
@@ -9,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +23,9 @@ public class ResumeServiceImpl implements ResumeService {
     
     @Autowired
     private ResumeRepository resumeRepository;
+    
+    @Autowired
+    private LLMService llmService;
     
     @Override
     public ResumePO saveResume(ResumePO resumePO) {
@@ -49,11 +58,13 @@ public class ResumeServiceImpl implements ResumeService {
     
     @Override
     public ResumePO generateResume(String content) {
-        // TODO: 调用AI服务生成简历
         ResumePO resumePO = new ResumePO();
+        
         // 设置基本信息
-        resumePO.setName("Generated Resume");
-        // 其他字段设置...
+        ResumePO.BasicInfo basicInfo = new ResumePO.BasicInfo();
+        basicInfo.setName("Generated Resume");
+        resumePO.setBasicInfo(basicInfo);
+        
         return saveResume(resumePO);
     }
     
@@ -70,14 +81,11 @@ public class ResumeServiceImpl implements ResumeService {
             // 解析文件内容
             String fileContent = "";
             if (file != null && !file.isEmpty()) {
-                // 根据文件类型解析内容
                 String fileName = file.getOriginalFilename();
                 if (fileName != null) {
                     if (fileName.endsWith(".txt") || fileName.endsWith(".doc") || fileName.endsWith(".docx")) {
-                        // 简单处理文本文件，实际项目中应该使用更复杂的解析库
                         fileContent = new String(file.getBytes());
                     } else if (fileName.endsWith(".pdf")) {
-                        // PDF文件需要特殊处理，这里简单返回提示
                         fileContent = "PDF文件内容: " + fileName;
                     }
                 }
@@ -89,30 +97,34 @@ public class ResumeServiceImpl implements ResumeService {
                 combinedContent += "\n\n文件内容:\n" + fileContent;
             }
             
-            // 调用AI服务生成简历
-            // 这里使用模拟数据，实际项目中应该调用AI服务
+            // 创建简历对象
             ResumePO resumePO = new ResumePO();
-            resumePO.setName("张三");
-            resumePO.setEmail("zhangsan@example.com");
-            resumePO.setPhone("13800138000");
+            
+            // 设置基本信息
+            ResumePO.BasicInfo basicInfo = new ResumePO.BasicInfo();
+            basicInfo.setName("张三");
+            basicInfo.setEmail("zhangsan@example.com");
+            basicInfo.setPhone("13800138000");
+            resumePO.setBasicInfo(basicInfo);
             
             // 添加教育经历
             ResumePO.Education education = new ResumePO.Education();
             education.setSchool("北京大学");
             education.setMajor("计算机科学");
             education.setDegree("学士");
-            education.setPeriod("2015-2019");
+            education.setStartDate("2015");
+            education.setEndDate("2019");
             resumePO.getEducationList().add(education);
             
-            // 添加工作经验
-            ResumePO.Experience experience = new ResumePO.Experience();
-            experience.setCompany("科技有限公司");
-            experience.setPosition("软件工程师");
-            experience.setPeriod("2019-至今");
-            experience.setDescription("负责后端开发，使用Java和Spring框架");
-            resumePO.getExperienceList().add(experience);
+            // 添加工作经历
+            ResumePO.WorkExperience work = new ResumePO.WorkExperience();
+            work.setCompany("科技有限公司");
+            work.setPosition("软件工程师");
+            work.setStartDate("2019");
+            work.setEndDate("至今");
+            work.setDescription("负责后端开发，使用Java和Spring框架");
+            resumePO.getWorkList().add(work);
             
-            // 存储简历
             return saveResume(resumePO);
         } catch (Exception e) {
             throw new RuntimeException("处理文件失败: " + e.getMessage());
@@ -157,5 +169,32 @@ public class ResumeServiceImpl implements ResumeService {
             "您如何处理团队协作中的技术分歧？",
             "请分享一个您解决过的技术难题"
         };
+    }
+
+
+    /**
+     * 简历智能优化
+     * 根据简历id、优化描述进行简历优化
+     * 调用大模型进行优化
+     * 返回优化后的简历，并提供新老简历对比，不需要保存，需要让用户确认后才能保存
+     */
+    @Override
+    public OptimizeResumeBO optimizeResume(Long resumeId, String optimizeDescription) {
+        // 获取原始简历
+        ResumePO originalResume = getResumeById(resumeId);
+        
+        // 调用大模型服务进行优化
+        OptimizeResult optimizeResult = llmService.optimizeResume(originalResume, optimizeDescription);
+        
+        // 构建返回结果
+        OptimizeResumeBO result = new OptimizeResumeBO();
+        result.setOriginalResume(ResumeVOFactory.createResumeVO(originalResume));
+        result.setOptimizedResume(optimizeResult.isHasChanges() ?
+                ResumeVOFactory.createResumeVO(optimizeResult.getOptimizedResume()) : null);
+        result.setOptimizeDescription(optimizeDescription);
+        result.setOptimizeResult(optimizeResult.getOptimizeExplanation());
+        result.setOptimizeTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        
+        return result;
     }
 } 

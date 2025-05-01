@@ -2,20 +2,20 @@
     <!-- 基本信息 -->
     <div class="default-basic-info">
         <div class="default-avatar-container">
-            <img data-bind="basic.avatar" alt="头像" class="default-avatar-img">
+            <img data-bind="basicInfo.avatar" alt="头像" class="default-avatar-img">
         </div>
         <div class="default-basic-info-container">
-            <h1 class="default-resume-name" data-bind="basic.name"></h1>
+            <h1 class="default-resume-name" data-bind="basicInfo.name"></h1>
             <p class="default-resume-info">
-                <span data-bind="basic.gender"></span> | 
-                <span data-bind="basic.age"></span> | 
-                <span data-bind="basic.education"></span> | 
-                <span data-bind="basic.experience"></span> | 
-                <span data-bind="basic.status"></span>
+                <span data-bind="basicInfo.gender"></span> | 
+                <span data-bind="basicInfo.age"></span> | 
+                <span data-bind="basicInfo.educationLevel"></span> | 
+                <span data-bind="basicInfo.experience"></span> | 
+                <span data-bind="basicInfo.status"></span>
             </p>
             <p class="default-resume-contact">
-                <span>联系电话：</span><span data-bind="basic.phone"></span> | 
-                <span>邮箱：</span><span data-bind="basic.email"></span>
+                <span>联系电话：</span><span data-bind="basicInfo.phone"></span> | 
+                <span>邮箱：</span><span data-bind="basicInfo.email"></span>
             </p>
         </div>
     </div>
@@ -26,13 +26,13 @@
         <div class="default-job-intention">
             <div class="default-intention-item">
                 <span>求职岗位: </span>
-                <span data-bind="intention.position"></span> | 
+                <span data-bind="jobIntention.position"></span> | 
                 <span>意向城市: </span>
-                <span data-bind="intention.city"></span> | 
+                <span data-bind="jobIntention.city"></span> | 
                 <span>期望薪资: </span>
-                <span data-bind="intention.salary"></span> | 
+                <span data-bind="jobIntention.salary"></span> | 
                 <span>到岗时间: </span>
-                <span data-bind="intention.entryTime"></span>
+                <span data-bind="jobIntention.entryTime"></span>
             </div>
         </div>
     </div>
@@ -40,12 +40,12 @@
     <!-- 教育经历 -->
     <div class="default-resume-section">
         <h2 class="default-section-title">教育经历</h2>
-        <div class="default-education-items" data-bind="education.map(item => `
+        <div class="default-education-items" data-bind="educationList.map(item => `
             <div class='default-education-item'>
                 <div class='default-edu-main'>
                     <span>${item.school}</span>
                     <span>${item.major}</span>
-                    <span>${item.time}</span>
+                    <span>${item.startDate} - ${item.endDate}</span>
                 </div>
                 <div class='default-edu-detail'>
                     <span>学位: ${item.degree}</span>
@@ -62,12 +62,13 @@
     <!-- 工作经历 -->
     <div class="default-resume-section">
         <h2 class="default-section-title">工作经历</h2>
-        <div class="default-work-items" data-bind="work.map(item => `
+        <div class="default-work-items" data-bind="workList.map(item => `
             <div class='default-work-item'>
                 <div class='default-work-header'>
                     <span>${item.company}</span>
+                    <span>${item.department}</span>
                     <span>${item.position}</span>
-                    <span>${item.time}</span>
+                    <span>${item.startDate} - ${item.endDate}</span>
                 </div>
                 <div class='default-work-description'>
                     <p>${item.description}</p>
@@ -79,12 +80,12 @@
     <!-- 项目经历 -->
     <div class="default-resume-section">
         <h2 class="default-section-title">项目经历</h2>
-        <div class="default-project-items" data-bind="project.map(item => `
+        <div class="default-project-items" data-bind="projectList.map(item => `
             <div class='default-project-item'>
                 <div class='default-project-header'>
                     <span>${item.name}</span>
                     <span>${item.role}</span>
-                    <span>${item.time}</span>
+                    <span>${item.startDate} - ${item.endDate}</span>
                 </div>
                 <div class='default-project-description'>
                     <p>${item.description}</p>
@@ -96,10 +97,10 @@
     <!-- 技能特长 -->
     <div class="default-resume-section">
         <h2 class="default-section-title">技能特长</h2>
-        <div class="default-skills-items" data-bind="skills.map(item => `
+        <div class="default-skills-items" data-bind="skillList.map(item => `
             <div class='default-skill-item'>
                 <span>${item.name}</span>
-                <div class='default-skill-progress' style='width: ${item.level}%'></div>
+                <span>${item.description}</span>
             </div>
         `)"></div>
     </div>

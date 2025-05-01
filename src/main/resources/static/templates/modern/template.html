@@ -7,8 +7,18 @@
         </div>
         <div class="modern-basic-info">
             <h1 class="modern-resume-name" data-field="name">姓名</h1>
-            <p class="modern-resume-info" data-field="basicInfo">性别 | 年龄 | 学历 | 工作经验 | 在职状态</p>
-            <p class="modern-resume-contact" data-field="contact">联系电话：手机号码 | 邮箱：邮箱地址</p>
+            <p class="modern-resume-info">
+                <span data-field="gender">性别</span> | 
+                <span data-field="age">年龄</span> | 
+                <span data-field="educationLevel">学历</span> | 
+                <span data-field="experience">工作经验</span> | 
+                <span data-field="status">在职状态</span>
+            </p>
+            <p class="modern-resume-contact">
+                联系电话：<span data-field="phone">手机号码</span> | 
+                邮箱：<span data-field="email">邮箱地址</span> |
+                所在地：<span data-field="location">所在地</span>
+            </p>
         </div>
     </div>
 
@@ -34,20 +44,27 @@
         <!-- 教育经历 -->
         <div class="modern-timeline-section">
             <h2 class="modern-section-title">教育经历</h2>
-            <div class="modern-education-items" data-list="education">
+            <div class="modern-education-items" data-list="educationList">
                 <div class="modern-education-item">
                     <div class="modern-timeline-dot"></div>
                     <div class="modern-timeline-content">
                         <div class="modern-edu-main">
                             <span data-field="school">学校名称</span>
+                            <span data-field="major">专业</span>
                             <span data-field="degree">学位</span>
-                            <span data-field="eduTime">就读时间</span>
+                            <span>
+                                <span data-field="startDate">开始时间</span> - 
+                                <span data-field="endDate">结束时间</span>
+                            </span>
                         </div>
                         <div class="modern-edu-detail">
                             <span>绩点: </span>
                             <span data-field="gpa">GPA成绩</span>
                             <span>成绩排名: </span>
                             <span data-field="rank">排名情况</span>
+                        </div>
+                        <div class="modern-edu-description">
+                            <p data-field="description">教育经历描述</p>
                         </div>
                     </div>
                 </div>
@@ -57,14 +74,18 @@
         <!-- 工作经历 -->
         <div class="modern-timeline-section">
             <h2 class="modern-section-title">工作经历</h2>
-            <div class="modern-work-items" data-list="work">
+            <div class="modern-work-items" data-list="workList">
                 <div class="modern-work-item">
                     <div class="modern-timeline-dot"></div>
                     <div class="modern-timeline-content">
                         <div class="modern-work-header">
                             <span data-field="company">公司名称</span>
-                            <span data-field="role">部门和职位</span>
-                            <span data-field="workTime">工作时间</span>
+                            <span data-field="department">部门</span>
+                            <span data-field="position">职位</span>
+                            <span>
+                                <span data-field="startDate">开始时间</span> - 
+                                <span data-field="endDate">结束时间</span>
+                            </span>
                         </div>
                         <div class="modern-work-description">
                             <p data-field="description">工作描述</p>
@@ -77,14 +98,17 @@
         <!-- 项目经历 -->
         <div class="modern-timeline-section">
             <h2 class="modern-section-title">项目经历</h2>
-            <div class="modern-project-items" data-list="project">
+            <div class="modern-project-items" data-list="projectList">
                 <div class="modern-project-item">
                     <div class="modern-timeline-dot"></div>
                     <div class="modern-timeline-content">
                         <div class="modern-project-header">
-                            <span data-field="projectName">项目名称</span>
-                            <span data-field="projectRole">担任角色</span>
-                            <span data-field="projectTime">项目时间</span>
+                            <span data-field="name">项目名称</span>
+                            <span data-field="role">担任角色</span>
+                            <span>
+                                <span data-field="startDate">开始时间</span> - 
+                                <span data-field="endDate">结束时间</span>
+                            </span>
                         </div>
                         <div class="modern-project-description">
                             <p data-field="description">项目描述</p>
@@ -97,14 +121,17 @@
         <!-- 校内经历 -->
         <div class="modern-timeline-section">
             <h2 class="modern-section-title">校内经历</h2>
-            <div class="modern-campus-items" data-list="campus">
+            <div class="modern-campus-items" data-list="campusList">
                 <div class="modern-campus-item">
                     <div class="modern-timeline-dot"></div>
                     <div class="modern-timeline-content">
                         <div class="modern-campus-header">
-                            <span data-field="campusOrg">组织名称</span>
-                            <span data-field="campusRole">担任职务</span>
-                            <span data-field="campusTime">任职时间</span>
+                            <span data-field="organization">组织名称</span>
+                            <span data-field="position">担任职务</span>
+                            <span>
+                                <span data-field="startDate">开始时间</span> - 
+                                <span data-field="endDate">结束时间</span>
+                            </span>
                         </div>
                         <div class="modern-campus-description">
                             <p data-field="description">经历描述</p>
@@ -119,18 +146,22 @@
     <div class="modern-bottom-section">
         <div class="modern-awards-section">
             <h2 class="modern-section-title">荣誉奖项</h2>
-            <div class="modern-awards-items" data-list="awards">
+            <div class="modern-awards-items" data-list="awardList">
                 <div class="modern-award-item">
-                    <span data-field="awardInfo">奖项信息</span>
+                    <span data-field="name">奖项名称</span>
+                    <span data-field="date">获奖时间</span>
+                    <span data-field="description">奖项描述</span>
                 </div>
             </div>
         </div>
 
         <div class="modern-skills-section">
             <h2 class="modern-section-title">个人技能</h2>
-            <div class="modern-skills-items" data-list="skills">
+            <div class="modern-skills-items" data-list="skillList">
                 <div class="modern-skill-item">
-                    <span data-field="skillInfo">技能信息</span>
+                    <span data-field="name">技能名称</span>
+                    <span data-field="level">掌握程度</span>
+                    <span data-field="description">技能描述</span>
                 </div>
             </div>
         </div>

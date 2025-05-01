@@ -21,8 +21,18 @@
                     <!-- 基本信息 -->
                     <div class="basic-info-container">
                         <h1 class="resume-name" data-field="name">姓名</h1>
-                        <p class="resume-info" data-field="basicInfo">基本信息</p>
-                        <p class="resume-contact" data-field="contact">联系方式</p>
+                        <p class="resume-info">
+                            <span data-field="gender">性别</span> | 
+                            <span data-field="age">年龄</span> | 
+                            <span data-field="educationLevel">学历</span> | 
+                            <span data-field="experience">工作经验</span> | 
+                            <span data-field="status">在职状态</span>
+                        </p>
+                        <p class="resume-contact">
+                            联系电话：<span data-field="phone">手机号码</span> | 
+                            邮箱：<span data-field="email">邮箱地址</span> |
+                            所在地：<span data-field="location">所在地</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -41,12 +51,22 @@
             <!-- 教育经历 -->
             <div class="resume-section">
                 <h2 class="section-title">教育经历</h2>
-                <div class="education-items" data-list="education">
+                <div class="education-items" data-list="educationList">
                     <div class="education-item">
                         <p class="edu-main" data-field="school">学校名称</p>
                         <p class="edu-detail" data-field="major">专业</p>
                         <p class="edu-detail" data-field="degree">学历</p>
-                        <p class="edu-detail" data-field="time">时间</p>
+                        <p class="edu-detail">
+                            <span data-field="startDate">开始时间</span> - 
+                            <span data-field="endDate">结束时间</span>
+                        </p>
+                        <p class="edu-detail">
+                            <span>绩点: </span>
+                            <span data-field="gpa">GPA成绩</span>
+                            <span>成绩排名: </span>
+                            <span data-field="rank">排名情况</span>
+                        </p>
+                        <p class="edu-detail" data-field="description">教育经历描述</p>
                     </div>
                 </div>
             </div>
@@ -54,12 +74,15 @@
             <!-- 工作经历 -->
             <div class="resume-section">
                 <h2 class="section-title">工作经历</h2>
-                <div class="work-items" data-list="work">
+                <div class="work-items" data-list="workList">
                     <div class="work-item">
                         <p class="work-header" data-field="company">公司名称</p>
                         <p class="work-description" data-field="department">部门</p>
                         <p class="work-description" data-field="position">职位</p>
-                        <p class="work-description" data-field="time">时间</p>
+                        <p class="work-description">
+                            <span data-field="startDate">开始时间</span> - 
+                            <span data-field="endDate">结束时间</span>
+                        </p>
                         <p class="work-description" data-field="description">工作描述</p>
                     </div>
                 </div>
@@ -68,11 +91,14 @@
             <!-- 项目经历 -->
             <div class="resume-section">
                 <h2 class="section-title">项目经历</h2>
-                <div class="project-items" data-list="project">
+                <div class="project-items" data-list="projectList">
                     <div class="project-item">
                         <p class="project-header" data-field="name">项目名称</p>
                         <p class="project-description" data-field="role">项目角色</p>
-                        <p class="project-description" data-field="time">项目时间</p>
+                        <p class="project-description">
+                            <span data-field="startDate">开始时间</span> - 
+                            <span data-field="endDate">结束时间</span>
+                        </p>
                         <p class="project-description" data-field="description">项目描述</p>
                     </div>
                 </div>
@@ -81,10 +107,14 @@
             <!-- 校内经历 -->
             <div class="resume-section">
                 <h2 class="section-title">校内经历</h2>
-                <div class="campus-items" data-list="campus">
+                <div class="campus-items" data-list="campusList">
                     <div class="campus-item">
-                        <p class="campus-header" data-field="title">经历标题</p>
-                        <p class="campus-description" data-field="time">时间</p>
+                        <p class="campus-header" data-field="organization">组织名称</p>
+                        <p class="campus-description" data-field="position">担任职务</p>
+                        <p class="campus-description">
+                            <span data-field="startDate">开始时间</span> - 
+                            <span data-field="endDate">结束时间</span>
+                        </p>
                         <p class="campus-description" data-field="description">经历描述</p>
                     </div>
                 </div>
@@ -93,16 +123,24 @@
             <!-- 荣誉奖项 -->
             <div class="resume-section">
                 <h2 class="section-title">荣誉奖项</h2>
-                <div class="awards-items" data-list="awards">
-                    <p class="award-item" data-field="awardInfo">奖项信息</p>
+                <div class="awards-items" data-list="awardList">
+                    <div class="award-item">
+                        <p class="award-name" data-field="name">奖项名称</p>
+                        <p class="award-date" data-field="date">获奖时间</p>
+                        <p class="award-description" data-field="description">奖项描述</p>
+                    </div>
                 </div>
             </div>
             
             <!-- 个人技能 -->
             <div class="resume-section">
                 <h2 class="section-title">个人技能</h2>
-                <div class="skills-items" data-list="skills">
-                    <p class="skill-item" data-field="skillInfo">技能信息</p>
+                <div class="skills-items" data-list="skillList">
+                    <div class="skill-item">
+                        <p class="skill-name" data-field="name">技能名称</p>
+                        <p class="skill-level" data-field="level">掌握程度</p>
+                        <p class="skill-description" data-field="description">技能描述</p>
+                    </div>
                 </div>
             </div>
         </div>

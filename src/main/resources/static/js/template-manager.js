@@ -69,15 +69,14 @@ export class TemplateManager {
             } else {
                 // 否则使用默认样式
                 this.resetToDefaultStyle();
+                // 如果有简历数据且没有使用模板，仍需要渲染
+                if (this.resumeData) {
+                    await this.renderResumeData(this.resumeData);
+                }
             }
             
             // 初始化样式管理
             this.initStyleManagement();
-            
-            // 如果有简历数据，立即渲染
-            if (this.resumeData) {
-                await this.renderResumeData(this.resumeData);
-            }
             
             console.log('模板管理器初始化完成');
         } catch (error) {
@@ -458,14 +457,24 @@ export class TemplateManager {
             }
 
             const [_, arrayPath, template] = matches;
-            // console.log(`处理数组映射: ${arrayPath}`, template);
+            
+            // 修正数组路径名称
+            const pathMap = {
+                'education': 'educationList',
+                'work': 'workList',
+                'project': 'projectList',
+                'campus': 'campusList',
+                'awards': 'awardList',
+                'skills': 'skillList'
+            };
+            
+            const actualPath = pathMap[arrayPath] || arrayPath;
             
             // 获取数组数据
-            const array = this.getNestedValue(data, arrayPath) || [];
-            // console.log(`数组数据:`, array);
+            const array = this.getNestedValue(data, actualPath) || [];
             
             if (!Array.isArray(array)) {
-                console.warn(`${arrayPath} 不是一个数组`);
+                console.warn(`${actualPath} 不是一个数组`);
                 return;
             }
 
@@ -485,7 +494,7 @@ export class TemplateManager {
                     // 替换模板中的变量
                     const itemHtml = html.replace(/\${(.*?)}/g, (match, expr) => {
                         try {
-                            // 处理特殊字段
+                            // 处理时间字段
                             if (expr.includes('time') && item.startDate && item.endDate) {
                                 return `${item.startDate} - ${item.endDate}`;
                             }
@@ -493,7 +502,6 @@ export class TemplateManager {
                             // 处理普通字段
                             const field = expr.trim().replace('item.', '');
                             const value = item[field];
-                            //字段value没有值时打印日志
                             if (!value) {
                                 console.log(`字段 ${field} 没有值:`, item);
                             }
@@ -504,12 +512,10 @@ export class TemplateManager {
                         }
                     });
 
-                    // 如果itemHtml没有值，打印日志
                     if (!itemHtml) {
                         console.warn('itemHtml没有值:', item);
                     }
 
-                    // 创建新的元素并添加到容器
                     const div = document.createElement('div');
                     div.innerHTML = itemHtml;
                     const newElement = div.firstElementChild;
@@ -524,7 +530,7 @@ export class TemplateManager {
 
             // 如果没有数据，显示提示信息
             if (array.length === 0) {
-                const emptyMessage = this.getEmptyMessage(arrayPath);
+                const emptyMessage = this.getEmptyMessage(actualPath);
                 if (emptyMessage) {
                     const emptyDiv = document.createElement('div');
                     emptyDiv.className = 'empty-message';
@@ -543,12 +549,12 @@ export class TemplateManager {
      */
     getEmptyMessage(arrayPath) {
         const messages = {
-            'education': '暂无教育经历',
-            'work': '暂无工作经历',
-            'project': '暂无项目经历',
-            'campus': '暂无校园经历',
-            'awards': '暂无获奖经历',
-            'skills': '暂无技能特长'
+            'educationList': '暂无教育经历',
+            'workList': '暂无工作经历',
+            'projectList': '暂无项目经历',
+            'campusList': '暂无校园经历',
+            'awardList': '暂无获奖经历',
+            'skillList': '暂无技能特长'
         };
         return messages[arrayPath] || '暂无数据';
     }

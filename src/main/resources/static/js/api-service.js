@@ -60,6 +60,12 @@ export const API_CONFIG = {
             mockFile: '/mock/upload-mock-data.json',
             mockKey: 'generateData'
         },
+        'resume/optimize': {
+            url: '/resume/optimize',
+            method: 'POST',
+            mockFile: '/mock/optimize-mock-data.json',
+            mockKey: 'optimizeData'
+        },
         
         // 用户认证相关接口
         'auth/login': {
@@ -248,7 +254,6 @@ const ApiService = {
         /**
          * 删除简历
          * @param {number} id - 简历ID
-         * @returns {Promise<void>}
          */
         deleteResume: async (id) => {
             return apiRequest('resume/delete', {
@@ -299,6 +304,21 @@ const ApiService = {
             
             return apiRequest('resume/generate', {
                 body: formData
+            });
+        },
+
+        /**
+         * 优化简历
+         * @param {number} resumeId - 简历ID
+         * @param {string} optimizeDescription - 优化描述
+         * @returns {Promise<Object>} 优化后的简历数据
+         */
+        optimizeResume: async (resumeId, optimizeDescription) => {
+            return apiRequest('resume/optimize', {
+                body: {
+                    resumeId,
+                    optimizeDescription
+                }
             });
         }
     },

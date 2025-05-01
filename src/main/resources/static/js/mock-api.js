@@ -6,7 +6,7 @@
 // Mock配置
 export const MOCK_CONFIG = {
     // 全局开关：是否启用模拟数据
-    enabled: true,
+    enabled: false,
     
     // 模拟数据延迟（毫秒）- 模拟网络延迟
     delay: 30,

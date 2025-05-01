@@ -7,8 +7,18 @@
         </div>
         <div class="creative-basic-info">
             <h1 class="creative-resume-name" data-field="name">姓名</h1>
-            <p class="creative-resume-info" data-field="basicInfo">性别 | 年龄 | 学历 | 工作经验 | 在职状态</p>
-            <p class="creative-resume-contact" data-field="contact">联系电话：手机号码 | 邮箱：邮箱地址</p>
+            <p class="creative-resume-info">
+                <span data-field="gender">性别</span> | 
+                <span data-field="age">年龄</span> | 
+                <span data-field="educationLevel">学历</span> | 
+                <span data-field="experience">工作经验</span> | 
+                <span data-field="status">在职状态</span>
+            </p>
+            <p class="creative-resume-contact">
+                联系电话：<span data-field="phone">手机号码</span> | 
+                邮箱：<span data-field="email">邮箱地址</span> |
+                所在地：<span data-field="location">所在地</span>
+            </p>
         </div>
     </div>
 
@@ -32,18 +42,25 @@
     <!-- 教育经历卡片 -->
     <div class="creative-card">
         <h2 class="creative-section-title">教育经历</h2>
-        <div class="creative-education-items" data-list="education">
+        <div class="creative-education-items" data-list="educationList">
             <div class="creative-education-item">
                 <div class="creative-edu-main">
                     <span data-field="school">学校名称</span>
+                    <span data-field="major">专业</span>
                     <span data-field="degree">学位</span>
-                    <span data-field="eduTime">就读时间</span>
+                    <span>
+                        <span data-field="startDate">开始时间</span> - 
+                        <span data-field="endDate">结束时间</span>
+                    </span>
                 </div>
                 <div class="creative-edu-detail">
                     <span>绩点: </span>
                     <span data-field="gpa">GPA成绩</span>
                     <span>成绩排名: </span>
                     <span data-field="rank">排名情况</span>
+                </div>
+                <div class="creative-edu-description">
+                    <p data-field="description">教育经历描述</p>
                 </div>
             </div>
         </div>
@@ -52,12 +69,16 @@
     <!-- 工作经历卡片 -->
     <div class="creative-card">
         <h2 class="creative-section-title">工作经历</h2>
-        <div class="creative-work-items" data-list="work">
+        <div class="creative-work-items" data-list="workList">
             <div class="creative-work-item">
                 <div class="creative-work-header">
                     <span data-field="company">公司名称</span>
-                    <span data-field="role">部门和职位</span>
-                    <span data-field="workTime">工作时间</span>
+                    <span data-field="department">部门</span>
+                    <span data-field="position">职位</span>
+                    <span>
+                        <span data-field="startDate">开始时间</span> - 
+                        <span data-field="endDate">结束时间</span>
+                    </span>
                 </div>
                 <div class="creative-work-description">
                     <p data-field="description">工作描述</p>
@@ -69,12 +90,15 @@
     <!-- 项目经历卡片 -->
     <div class="creative-card">
         <h2 class="creative-section-title">项目经历</h2>
-        <div class="creative-project-items" data-list="project">
+        <div class="creative-project-items" data-list="projectList">
             <div class="creative-project-item">
                 <div class="creative-project-header">
-                    <span data-field="projectName">项目名称</span>
-                    <span data-field="projectRole">担任角色</span>
-                    <span data-field="projectTime">项目时间</span>
+                    <span data-field="name">项目名称</span>
+                    <span data-field="role">担任角色</span>
+                    <span>
+                        <span data-field="startDate">开始时间</span> - 
+                        <span data-field="endDate">结束时间</span>
+                    </span>
                 </div>
                 <div class="creative-project-description">
                     <p data-field="description">项目描述</p>
@@ -86,12 +110,15 @@
     <!-- 校内经历卡片 -->
     <div class="creative-card">
         <h2 class="creative-section-title">校内经历</h2>
-        <div class="creative-campus-items" data-list="campus">
+        <div class="creative-campus-items" data-list="campusList">
             <div class="creative-campus-item">
                 <div class="creative-campus-header">
-                    <span data-field="campusOrg">组织名称</span>
-                    <span data-field="campusRole">担任职务</span>
-                    <span data-field="campusTime">任职时间</span>
+                    <span data-field="organization">组织名称</span>
+                    <span data-field="position">担任职务</span>
+                    <span>
+                        <span data-field="startDate">开始时间</span> - 
+                        <span data-field="endDate">结束时间</span>
+                    </span>
                 </div>
                 <div class="creative-campus-description">
                     <p data-field="description">经历描述</p>
@@ -103,9 +130,11 @@
     <!-- 荣誉奖项卡片 -->
     <div class="creative-card">
         <h2 class="creative-section-title">荣誉奖项</h2>
-        <div class="creative-awards-items" data-list="awards">
+        <div class="creative-awards-items" data-list="awardList">
             <div class="creative-award-item">
-                <span data-field="awardInfo">奖项信息</span>
+                <span data-field="name">奖项名称</span>
+                <span data-field="date">获奖时间</span>
+                <span data-field="description">奖项描述</span>
             </div>
         </div>
     </div>
@@ -113,9 +142,11 @@
     <!-- 个人技能卡片 -->
     <div class="creative-card">
         <h2 class="creative-section-title">个人技能</h2>
-        <div class="creative-skills-items" data-list="skills">
+        <div class="creative-skills-items" data-list="skillList">
             <div class="creative-skill-item">
-                <span data-field="skillInfo">技能信息</span>
+                <span data-field="name">技能名称</span>
+                <span data-field="level">掌握程度</span>
+                <span data-field="description">技能描述</span>
             </div>
         </div>
     </div>

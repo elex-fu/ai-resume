@@ -1,32 +1,41 @@
-package com.airesume.model;
+package com.airesume.controller.vo;
 
 import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 简历实体类
+ * 简历展示数据模型
  */
 @Data
-public class ResumePO {
+public class ResumeVO {
     private Long id;
     
-    private BasicInfo basicInfo = new BasicInfo();
-
-    private String summary;
-
-    private JobIntention jobIntention = new JobIntention();    
+    // 基本信息
+    private BasicInfo basicInfo;
     
+    // 求职意向
+    private JobIntention jobIntention;
+    
+    // 个人总结
+    private String summary;
+    
+    // 教育经历
     private List<Education> educationList = new ArrayList<>();
     
+    // 工作经历
     private List<WorkExperience> workList = new ArrayList<>();
     
+    // 项目经历
     private List<Project> projectList = new ArrayList<>();
     
+    // 校园经历
     private List<CampusExperience> campusList = new ArrayList<>();
     
+    // 获奖经历
     private List<Award> awardList = new ArrayList<>();
     
+    // 技能特长
     private List<Skill> skillList = new ArrayList<>();
     
     @Data
@@ -106,4 +115,4 @@ public class ResumePO {
         private String level;
         private String description;
     }
-} 
+}

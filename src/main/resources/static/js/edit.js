@@ -5,58 +5,68 @@ import { TemplateManager } from './template-manager.js';
 
 // 简历数据结构定义
 const RESUME_DATA_SCHEMA = {
-    basic: {
+    basicInfo: {
         name: '',
+        avatar: '',
+        position: '',
         gender: '',
         age: '',
-        phone: '',
-        email: '',
-        location: '',
+        political: '',
         educationLevel: '',
         experience: '',
         status: '',
-        avatar: ''
+        phone: '',
+        email: '',
+        location: ''
     },
-    intention: {
+    jobIntention: {
         position: '',
         city: '',
         salary: '',
         entryTime: ''
     },
-    education: [{
+    summary: '',
+    educationList: [{
         school: '',
         major: '',
         degree: '',
-        time: '',
+        startDate: '',
+        endDate: '',
+        description: '',
         gpa: '',
-        rank: '',
-        description: ''
+        rank: ''
     }],
-    work: [{
+    workList: [{
         company: '',
+        department: '',
         position: '',
-        time: '',
+        startDate: '',
+        endDate: '',
         description: ''
     }],
-    project: [{
+    projectList: [{
         name: '',
         role: '',
-        time: '',
+        startDate: '',
+        endDate: '',
         description: ''
     }],
-    campus: [{
+    campusList: [{
         organization: '',
-        role: '',
-        time: '',
+        position: '',
+        startDate: '',
+        endDate: '',
         description: ''
     }],
-    awards: [{
+    awardList: [{
         name: '',
-        date: ''
+        date: '',
+        description: ''
     }],
-    skills: [{
+    skillList: [{
         name: '',
-        level: ''
+        level: '',
+        description: ''
     }]
 };
 
@@ -80,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function initApp() {
     try {
         // 先初始化模板管理器
-        await initTemplateManager();
+        // await initTemplateManager();
         
         // 加载简历数据
         const resumeId = getResumeIdFromUrl();
@@ -128,17 +138,21 @@ function validateResumeData(data) {
             if (source && source[key] !== undefined) {
                 if (Array.isArray(target[key])) {
                     target[key] = source[key].map(item => {
-                        const validatedItem = validateObject({...target[key][0]}, item);
-                        // 处理时间字段
-                        if (item.startDate && item.endDate) {
-                            validatedItem.time = `${item.startDate} - ${item.endDate}`;
-                        }
-                        return validatedItem;
+                        return validateObject({...target[key][0]}, item);
                     });
                 } else if (typeof target[key] === 'object') {
                     target[key] = validateObject(target[key], source[key]);
                 } else {
-                    target[key] = source[key];
+                    // 特殊字段验证
+                    if (key === 'phone') {
+                        target[key] = validatePhone(source[key]);
+                    } else if (key === 'email') {
+                        target[key] = validateEmail(source[key]);
+                    } else if (key === 'age') {
+                        target[key] = validateAge(source[key]);
+                    } else {
+                        target[key] = source[key];
+                    }
                 }
             }
         }
@@ -146,6 +160,35 @@ function validateResumeData(data) {
     }
     
     return validateObject(validatedData, data);
+}
+
+// 验证手机号
+function validatePhone(phone) {
+    if (!phone) return phone;
+    const phoneRegex = /^1[3-9]\d{9}$/;
+    if (!phoneRegex.test(phone)) {
+        console.warn('手机号格式不正确:', phone);
+    }
+    return phone;
+}
+
+// 验证邮箱
+function validateEmail(email) {
+    if (!email) return email;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+        console.warn('邮箱格式不正确:', email);
+    }
+    return email;
+}
+
+// 验证年龄
+function validateAge(age) {
+    if (!age) return age;
+    if (!/^\d+岁?$/.test(age)) {
+        console.warn('年龄格式不正确:', age);
+    }
+    return age;
 }
 
 // 加载简历数据
@@ -214,22 +257,19 @@ async function initTemplateManager(resumeData) {
 
 // 初始化工具栏
 function initToolbar() {
-    const toolbar = document.querySelector('.toolbar');
-    if (!toolbar) return;
+    // 绑定保存按钮事件
+    document.querySelector('#saveBtn')?.addEventListener('click', saveResume);
     
-    const toolbarButtons = [
-        { class: 'save-btn', icon: 'save', text: '保存', click: saveResume },
-        { class: 'export-btn', icon: 'export', text: '导出', click: exportResumePDF },
-        { class: 'optimize-btn', icon: 'optimize', text: 'AI优化', click: () => openAIEditModal() }
-    ];
+    // 绑定导出PDF按钮事件
+    document.querySelector('#exportPdfBtn')?.addEventListener('click', exportResumePDF);
     
-    toolbarButtons.forEach(btn => {
-        const button = document.createElement('button');
-        button.className = btn.class;
-        button.innerHTML = `<i class="icon-${btn.icon}"></i>${btn.text}`;
-        button.addEventListener('click', btn.click);
-        toolbar.appendChild(button);
-    });
+    // 绑定应用修改按钮事件
+    const handwritingBtn = document.querySelector('#handwritingBtn');
+    if (handwritingBtn) {
+        handwritingBtn.addEventListener('click', applyOptimize);
+    } else {
+        console.warn('未找到应用修改按钮');
+    }
 }
 
 // 初始化可编辑内容监听器
@@ -256,29 +296,29 @@ function fillModalWithExistingData(sectionType) {
     
     // 根据区域类型打开不同的编辑模态框
     switch (sectionType) {
-        case 'basic':
-            openBasicInfoModal(window.resumeData.basic);
+        case 'basicInfo':
+            openBasicInfoModal(window.resumeData.basicInfo);
             break;
-        case 'intention':
-            openJobIntentionModal(window.resumeData.intention);
+        case 'jobIntention':
+            openJobIntentionModal(window.resumeData.jobIntention);
             break;
-        case 'education':
-            openEducationModal(window.resumeData.education);
+        case 'educationList':
+            openEducationModal(window.resumeData.educationList);
             break;
-        case 'work':
-            openWorkExperienceModal(window.resumeData.work);
+        case 'workList':
+            openWorkExperienceModal(window.resumeData.workList);
             break;
-        case 'project':
-            openProjectExperienceModal(window.resumeData.project);
+        case 'projectList':
+            openProjectExperienceModal(window.resumeData.projectList);
             break;
-        case 'campus':
-            openCampusExperienceModal(window.resumeData.campus);
+        case 'campusList':
+            openCampusExperienceModal(window.resumeData.campusList);
             break;
-        case 'awards':
-            openAwardsModal(window.resumeData.awards);
+        case 'awardList':
+            openAwardsModal(window.resumeData.awardList);
             break;
-        case 'skills':
-            openSkillsModal(window.resumeData.skills);
+        case 'skillList':
+            openSkillsModal(window.resumeData.skillList);
             break;
         default:
             console.log(`未知的区域类型: ${sectionType}`);
@@ -414,70 +454,80 @@ async function renderResumeData(data) {
 function updateEditableSections(data) {
     // 基本信息
     updateSectionContent('.basic-info-section', {
-        name: data.basic.name,
-        gender: data.basic.gender,
-        age: data.basic.age,
-        phone: data.basic.phone,
-        email: data.basic.email,
-        location: data.basic.location,
-        educationLevel: data.basic.educationLevel,
-        experience: data.basic.experience,
-        status: data.basic.status
+        name: data.basicInfo.name,
+        avatar: data.basicInfo.avatar,
+        position: data.basicInfo.position,
+        gender: data.basicInfo.gender,
+        age: data.basicInfo.age,
+        political: data.basicInfo.political,
+        educationLevel: data.basicInfo.educationLevel,
+        experience: data.basicInfo.experience,
+        status: data.basicInfo.status,
+        phone: data.basicInfo.phone,
+        email: data.basicInfo.email,
+        location: data.basicInfo.location
     });
 
     // 求职意向
     updateSectionContent('.job-intention-section', {
-        position: data.intention.position,
-        city: data.intention.city,
-        salary: data.intention.salary,
-        entryTime: data.intention.entryTime
+        position: data.jobIntention.position,
+        city: data.jobIntention.city,
+        salary: data.jobIntention.salary,
+        entryTime: data.jobIntention.entryTime
     });
 
     // 教育经历
-    updateListSection('.education-list', data.education, (item) => ({
+    updateListSection('.education-list', data.educationList, (item) => ({
         school: item.school,
         major: item.major,
         degree: item.degree,
-        time: item.time,
+        startDate: item.startDate,
+        endDate: item.endDate,
         gpa: item.gpa,
         rank: item.rank,
         description: item.description
     }));
 
     // 工作经历
-    updateListSection('.work-experience-list', data.work, (item) => ({
+    updateListSection('.work-experience-list', data.workList, (item) => ({
         company: item.company,
+        department: item.department,
         position: item.position,
-        time: item.time,
+        startDate: item.startDate,
+        endDate: item.endDate,
         description: item.description
     }));
 
     // 项目经历
-    updateListSection('.project-experience-list', data.project, (item) => ({
+    updateListSection('.project-experience-list', data.projectList, (item) => ({
         name: item.name,
         role: item.role,
-        time: item.time,
+        startDate: item.startDate,
+        endDate: item.endDate,
         description: item.description
     }));
 
     // 校园经历
-    updateListSection('.campus-experience-list', data.campus, (item) => ({
+    updateListSection('.campus-experience-list', data.campusList, (item) => ({
         organization: item.organization,
-        role: item.role,
-        time: item.time,
+        position: item.position,
+        startDate: item.startDate,
+        endDate: item.endDate,
         description: item.description
     }));
 
     // 获奖情况
-    updateListSection('.awards-list', data.awards, (item) => ({
+    updateListSection('.awards-list', data.awardList, (item) => ({
         name: item.name,
-        date: item.date
+        date: item.date,
+        description: item.description
     }));
 
     // 技能特长
-    updateListSection('.skills-list', data.skills, (item) => ({
+    updateListSection('.skills-list', data.skillList, (item) => ({
         name: item.name,
-        level: item.level
+        level: item.level,
+        description: item.description
     }));
 }
 
@@ -520,4 +570,149 @@ function updateListSection(selector, items, dataMapper) {
         
         container.appendChild(itemElement);
     });
+}
+
+/**
+ * 合并简历数据
+ * @param {Object} originalResume - 原始简历数据
+ * @param {Object} optimizedResume - 优化后的简历数据（可能只包含修改的字段）
+ * @returns {Object} 合并后的简历数据
+ */
+function mergeResumeData(originalResume, optimizedResume) {
+    if (!optimizedResume) return originalResume;
+    
+    const mergedResume = { ...originalResume };
+    
+    // 遍历优化后的简历数据的所有字段
+    Object.keys(optimizedResume).forEach(key => {
+        const optimizedValue = optimizedResume[key];
+        
+        // 如果字段存在且不为null且不为空字符串，则更新
+        if (optimizedValue !== null && optimizedValue !== undefined && 
+            !(typeof optimizedValue === 'string' && optimizedValue.trim() === '')) {
+            if (Array.isArray(optimizedValue)) {
+                // 如果是数组类型（如教育经历、工作经历等），需要逐项合并
+                if (optimizedValue.length > 0) {  // 只在数组不为空时进行合并
+                    mergedResume[key] = optimizedValue.map((item, index) => {
+                        const originalItem = (originalResume[key] && originalResume[key][index]) || {};
+                        return mergeResumeItem(originalItem, item);
+                    });
+                }
+            } else if (typeof optimizedValue === 'object') {
+                // 如果是对象类型（如基本信息、求职意向等），需要递归合并
+                mergedResume[key] = mergeResumeItem(originalResume[key] || {}, optimizedValue);
+            } else {
+                // 如果是基本类型，直接更新
+                mergedResume[key] = optimizedValue;
+            }
+        }
+    });
+    
+    return mergedResume;
+}
+
+/**
+ * 合并简历项目数据
+ * @param {Object} originalItem - 原始项目数据
+ * @param {Object} optimizedItem - 优化后的项目数据
+ * @returns {Object} 合并后的项目数据
+ */
+function mergeResumeItem(originalItem, optimizedItem) {
+    if (!optimizedItem) return originalItem;
+    
+    const mergedItem = { ...originalItem };
+    
+    // 遍历优化后的项目数据的所有字段
+    Object.keys(optimizedItem).forEach(key => {
+        const optimizedValue = optimizedItem[key];
+        // 如果字段存在且不为null且不为空字符串，则更新
+        if (optimizedValue !== null && optimizedValue !== undefined && 
+            !(typeof optimizedValue === 'string' && optimizedValue.trim() === '')) {
+            mergedItem[key] = optimizedValue;
+        }
+    });
+    
+    return mergedItem;
+}
+
+/**
+ * 应用AI优化
+ */
+async function applyOptimize() {
+    try {
+        showLoading('正在优化简历...');
+        
+        // 获取当前简历ID
+        const resumeId = getResumeIdFromUrl();
+        if (!resumeId) {
+            throw new Error('未找到简历ID');
+        }
+        
+        // 获取优化描述
+        const optimizeDescription = document.querySelector('#handwritingInput')?.value;
+        if (!optimizeDescription) {
+            showToast('请输入优化描述');
+            hideLoading();
+            return;
+        }
+        
+        // 调用优化API
+        const optimizeResult = await ApiService.resume.optimizeResume(resumeId, optimizeDescription);
+        
+        // 合并并更新简历数据
+        const mergedResumeData = mergeResumeData(window.resumeData, optimizeResult.optimizedResume);
+        window.resumeData = validateResumeData(mergedResumeData);
+        
+        // 重新渲染简历
+        await renderResumeData(window.resumeData);
+        
+        // 显示优化结果
+        showOptimizeResult(optimizeResult);
+        
+        showToast('简历优化成功');
+    } catch (error) {
+        console.error('优化简历失败:', error);
+        showToast('优化简历失败: ' + error.message);
+    } finally {
+        hideLoading();
+    }
+}
+
+/**
+ * 显示优化结果
+ * @param {Object} optimizeResult - 优化结果数据
+ */
+function showOptimizeResult(optimizeResult) {
+    // 获取结果容器
+    const resultContainer = document.querySelector('#optimizeComparison');
+    if (!resultContainer) return;
+    
+    // 清空现有内容
+    resultContainer.innerHTML = '';
+    
+    // 创建结果内容
+    const content = document.createElement('div');
+    content.className = 'optimize-result';
+    
+    // 添加优化时间
+    const timeInfo = document.createElement('div');
+    timeInfo.className = 'optimize-time';
+    timeInfo.innerHTML = `<strong>优化时间：</strong>${optimizeResult.optimizeTime}`;
+    content.appendChild(timeInfo);
+    
+    // 添加优化说明
+    const description = document.createElement('div');
+    description.className = 'optimize-description';
+    description.innerHTML = `<strong>优化说明：</strong>${optimizeResult.optimizeDescription}`;
+    content.appendChild(description);
+    
+    // 添加优化结果
+    const result = document.createElement('div');
+    result.className = 'optimize-detail';
+    result.innerHTML = `<strong>优化结果：</strong>${optimizeResult.optimizeResult}`;
+    content.appendChild(result);
+    
+    // 添加到容器
+    resultContainer.appendChild(content);
+    resultContainer.style.display = 'block';
 }

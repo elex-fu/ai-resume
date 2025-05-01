@@ -1,6 +1,7 @@
 {
-  "basic": {
-    "name": "张三#",
+  "id": 1,
+  "basicInfo": {
+    "name": "张三六",
     "avatar": "/images/default-avatar.png",
     "position": "产品经理",
     "gender": "男",
@@ -12,14 +13,14 @@
     "email": "example@email.com",
     "location": "广东广州"
   },
-    "intention": {
+  "jobIntention": {
     "position": "产品经理",
     "city": "广东广州",
     "salary": "11-13k",
     "entryTime": "随时到岗"
   },
   "summary": "",
-  "education": [
+  "educationList": [
     {
       "school": "腾讯大学",
       "major": "计算机",
@@ -31,7 +32,7 @@
       "rank": "前30%"
     }
   ],
-  "work": [
+  "workList": [
     {
       "company": "腾讯科技广州有限公司",
       "department": "QQ邮箱产品部",
@@ -41,7 +42,7 @@
       "description": "负责版本上线后的推广工作，通过微博、博客和论坛等渠道将新功能触达用户"
     }
   ],
-  "project": [
+  "projectList": [
     {
       "name": "腾讯大学 \"最亮的明天\"暖灯行动",
       "role": "项目负责人",
@@ -50,7 +51,7 @@
       "description": "引导释放邮箱空间, 帮助贫困山区 1、引导用户删除旧邮件，倡导资源节约和合理利用，将节约下来的运营成本投入公益项目，帮助贫困山区的教室改善照明环境"
     }
   ],
-  "campus": [
+  "campusList": [
     {
       "organization": "腾讯大学产品协会",
       "position": "产品研发部 副主席",
@@ -59,7 +60,7 @@
       "description": "主导产品项目立项 主导QQ邮箱超大附件、漂流瓶、记事本等多个产品的立项，资源协调、进度管理和对外合作工作"
     }
   ],
-  "awards": [
+  "awardList": [
     {
       "name": "2014.8 腾讯大学求是杯\"腾讯文化奖\"金奖",
       "date": "",
@@ -71,16 +72,16 @@
       "description": ""
     }
   ],
-  "skills": [
+  "skillList": [
     {
       "name": "语言技能: 英语CET6、粤语",
       "level": "",
-      "description": ""
+      "description": "476分"
     },
     {
       "name": "办公技能: 熟练使用Office办公软件、Axure RP、Visio",
       "level": "",
-      "description": ""
+      "description": "使用熟练"
     }
   ]
 }

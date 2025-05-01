@@ -1,5 +1,6 @@
 package com.airesume.service;
 
+import com.airesume.bo.OptimizeResumeBO;
 import com.airesume.model.ResumePO;
 import com.airesume.model.UserPO;
 import org.springframework.web.multipart.MultipartFile;
@@ -86,5 +87,7 @@ public interface ResumeService {
     String[] generateInterviewSuggestions(String id);
 
     String optimizeContent(String id, String content, String type);
+
+    OptimizeResumeBO optimizeResume(Long resumeId, String optimizeDescription);
 
 } 

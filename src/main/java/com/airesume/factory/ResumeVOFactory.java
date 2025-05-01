@@ -1,9 +1,10 @@
 package com.airesume.factory;
 
 import com.airesume.model.ResumePO;
-import com.airesume.vo.ResumeVO;
+import com.airesume.controller.vo.ResumeVO;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.compress.utils.Lists;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,82 +26,31 @@ public class ResumeVOFactory {
         
         ResumeVO resumeVO = new ResumeVO();
         resumeVO.setId(resumePO.getId());
+        resumeVO.setSummary(StringUtils.defaultString(resumePO.getSummary(), ""));
         
-        // 设置基本信息
-        ResumeVO.BasicInfo basicInfo = new ResumeVO.BasicInfo();
-        basicInfo.setName(resumePO.getName());
-        basicInfo.setAge(resumePO.getAge() != null ? resumePO.getAge() + "岁" : "");
-        basicInfo.setPhone(resumePO.getPhone());
-        basicInfo.setEmail(resumePO.getEmail());
-        basicInfo.setEducationLevel(resumePO.getEducation());
-        basicInfo.setExperience(resumePO.getExperience());
-        // 设置默认值
-        basicInfo.setGender("未设置");
-        basicInfo.setStatus("求职中");
-        basicInfo.setPolitical("群众");
-        basicInfo.setLocation("未设置");
+        // 转换基本信息
+        resumeVO.setBasicInfo(convertBasicInfo(resumePO.getBasicInfo()));
         
-        resumeVO.setBasic(basicInfo);
-        
-        // 设置默认头像
-        resumeVO.setAvatar("/images/default-avatar.png");
-        
-        // 设置求职意向
-        ResumeVO.JobIntention intention = new ResumeVO.JobIntention();
-        intention.setPosition("未设置");
-        intention.setCity("未设置");
-        intention.setSalary("面议");
-        intention.setEntryTime("随时到岗");
-        resumeVO.setIntention(intention);
+        // 转换求职意向
+        resumeVO.setJobIntention(convertJobIntention(resumePO.getJobIntention()));
         
         // 转换教育经历
-        List<ResumeVO.Education> educationList = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(resumePO.getEducationList())) {
-            for (ResumePO.Education edu : resumePO.getEducationList()) {
-                ResumeVO.Education education = new ResumeVO.Education();
-                education.setSchool(edu.getSchool());
-                education.setMajor(edu.getMajor());
-                education.setDegree(edu.getDegree());
-                education.setEduTime(edu.getPeriod());
-                education.setGpa(""); // 默认空值
-                education.setRank(""); // 默认空值
-                educationList.add(education);
-            }
-        }
-        resumeVO.setEducation(educationList);
+        resumeVO.setEducationList(convertEducationList(resumePO.getEducationList()));
         
-        // 转换工作经验
-        List<ResumeVO.WorkExperience> workList = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(resumePO.getExperienceList())) {
-            for (ResumePO.Experience exp : resumePO.getExperienceList()) {
-                ResumeVO.WorkExperience work = new ResumeVO.WorkExperience();
-                work.setCompany(exp.getCompany());
-                work.setPosition(exp.getPosition());
-                work.setWorkTime(exp.getPeriod());
-                work.setDescription(exp.getDescription());
-                work.setDepartment(""); // 默认空值
-                workList.add(work);
-            }
-        }
-        resumeVO.setWork(workList);
+        // 转换工作经历
+        resumeVO.setWorkList(convertWorkList(resumePO.getWorkList()));
         
-        // 创建空列表避免空指针
-        resumeVO.setProject(new ArrayList<>());
-        resumeVO.setCampus(new ArrayList<>());
-        resumeVO.setAwards(new ArrayList<>());
-        resumeVO.setSkills(new ArrayList<>());
+        // 转换项目经历
+        resumeVO.setProjectList(convertProjectList(resumePO.getProjectList()));
         
-        // 设置分析数据
-        ResumeVO.Analysis analysis = new ResumeVO.Analysis();
-        analysis.setScore(0);
-        analysis.setItems(new ArrayList<>());
-        resumeVO.setAnalysis(analysis);
+        // 转换校园经历
+        resumeVO.setCampusList(convertCampusList(resumePO.getCampusList()));
         
-        // 设置模板
-        ResumeVO.Template template = new ResumeVO.Template();
-        template.setCurrent("standard");
-        template.setColor("#1a73e8");
-        resumeVO.setTemplate(template);
+        // 转换获奖经历
+        resumeVO.setAwardList(convertAwardList(resumePO.getAwardList()));
+        
+        // 转换技能特长
+        resumeVO.setSkillList(convertSkillList(resumePO.getSkillList()));
         
         return resumeVO;
     }
@@ -119,57 +69,31 @@ public class ResumeVOFactory {
         
         ResumePO resumePO = new ResumePO();
         resumePO.setId(resumeVO.getId());
+        resumePO.setSummary(StringUtils.defaultString(resumeVO.getSummary(), ""));
         
-        // 设置基本信息
-        if (resumeVO.getBasic() != null) {
-            ResumeVO.BasicInfo basicInfo = resumeVO.getBasic();
-            resumePO.setName(basicInfo.getName());
-            // 处理年龄字符串
-            String ageStr = basicInfo.getAge();
-            if (ageStr != null && ageStr.endsWith("岁")) {
-                try {
-                    resumePO.setAge(Integer.parseInt(ageStr.substring(0, ageStr.length() - 1)));
-                } catch (NumberFormatException e) {
-                    resumePO.setAge(0);
-                }
-            } else {
-                resumePO.setAge(0);
-            }
-            resumePO.setPhone(basicInfo.getPhone());
-            resumePO.setEmail(basicInfo.getEmail());
-            resumePO.setEducation(basicInfo.getEducationLevel());
-            resumePO.setExperience(basicInfo.getExperience());
-        }
+        // 转换基本信息
+        resumePO.setBasicInfo(convertBasicInfoToPO(resumeVO.getBasicInfo()));
+        
+        // 转换求职意向
+        resumePO.setJobIntention(convertJobIntentionToPO(resumeVO.getJobIntention()));
         
         // 转换教育经历
-        List<ResumePO.Education> educationList = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(resumeVO.getEducation())) {
-            for (ResumeVO.Education edu : resumeVO.getEducation()) {
-                ResumePO.Education education = new ResumePO.Education();
-                education.setSchool(edu.getSchool());
-                education.setMajor(edu.getMajor());
-                education.setDegree(edu.getDegree());
-                education.setPeriod(edu.getEduTime());
-                education.setResumePO(resumePO);
-                educationList.add(education);
-            }
-        }
-        resumePO.setEducationList(educationList);
+        resumePO.setEducationList(convertEducationListToPO(resumeVO.getEducationList()));
         
-        // 转换工作经验
-        List<ResumePO.Experience> experienceList = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(resumeVO.getWork())) {
-            for (ResumeVO.WorkExperience work : resumeVO.getWork()) {
-                ResumePO.Experience experience = new ResumePO.Experience();
-                experience.setCompany(work.getCompany());
-                experience.setPosition(work.getPosition());
-                experience.setPeriod(work.getWorkTime());
-                experience.setDescription(work.getDescription());
-                experience.setResumePO(resumePO);
-                experienceList.add(experience);
-            }
-        }
-        resumePO.setExperienceList(experienceList);
+        // 转换工作经历
+        resumePO.setWorkList(convertWorkListToPO(resumeVO.getWorkList()));
+        
+        // 转换项目经历
+        resumePO.setProjectList(convertProjectListToPO(resumeVO.getProjectList()));
+        
+        // 转换校园经历
+        resumePO.setCampusList(convertCampusListToPO(resumeVO.getCampusList()));
+        
+        // 转换获奖经历
+        resumePO.setAwardList(convertAwardListToPO(resumeVO.getAwardList()));
+        
+        // 转换技能特长
+        resumePO.setSkillList(convertSkillListToPO(resumeVO.getSkillList()));
         
         return resumePO;
     }
@@ -181,11 +105,247 @@ public class ResumeVOFactory {
      */
     public static List<ResumeVO> createResumeVOList(List<ResumePO> resumePOs) {
         if(CollectionUtils.isEmpty(resumePOs)){
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
 
         return resumePOs.stream()
                 .map(ResumeVOFactory::createResumeVO)
                 .collect(Collectors.toList());
+    }
+
+    private static ResumeVO.BasicInfo convertBasicInfo(ResumePO.BasicInfo poInfo) {
+        if (poInfo == null) {
+            return new ResumeVO.BasicInfo();
+        }
+        ResumeVO.BasicInfo voInfo = new ResumeVO.BasicInfo();
+        BeanUtils.copyProperties(poInfo, voInfo);
+        
+        // 处理年龄格式
+        if (StringUtils.isNotBlank(poInfo.getAge()) && !poInfo.getAge().endsWith("岁")) {
+            voInfo.setAge(poInfo.getAge() + "岁");
+        }
+        
+        // 设置默认值
+        voInfo.setName(StringUtils.defaultString(voInfo.getName(), ""));
+        voInfo.setAvatar(StringUtils.defaultString(voInfo.getAvatar(), ""));
+        voInfo.setPosition(StringUtils.defaultString(voInfo.getPosition(), ""));
+        voInfo.setGender(StringUtils.defaultString(voInfo.getGender(), ""));
+        voInfo.setPolitical(StringUtils.defaultString(voInfo.getPolitical(), ""));
+        voInfo.setEducationLevel(StringUtils.defaultString(voInfo.getEducationLevel(), ""));
+        voInfo.setExperience(StringUtils.defaultString(voInfo.getExperience(), ""));
+        voInfo.setStatus(StringUtils.defaultString(voInfo.getStatus(), ""));
+        voInfo.setPhone(StringUtils.defaultString(voInfo.getPhone(), ""));
+        voInfo.setEmail(StringUtils.defaultString(voInfo.getEmail(), ""));
+        voInfo.setLocation(StringUtils.defaultString(voInfo.getLocation(), ""));
+        
+        return voInfo;
+    }
+
+    private static ResumePO.BasicInfo convertBasicInfoToPO(ResumeVO.BasicInfo voInfo) {
+        if (voInfo == null) {
+            return new ResumePO.BasicInfo();
+        }
+        ResumePO.BasicInfo poInfo = new ResumePO.BasicInfo();
+        BeanUtils.copyProperties(voInfo, poInfo);
+        
+        // 处理年龄格式
+        if (StringUtils.isNotBlank(voInfo.getAge()) && voInfo.getAge().endsWith("岁")) {
+            poInfo.setAge(voInfo.getAge().substring(0, voInfo.getAge().length() - 1));
+        }
+        
+        return poInfo;
+    }
+
+    private static ResumeVO.JobIntention convertJobIntention(ResumePO.JobIntention poIntention) {
+        if (poIntention == null) {
+            return new ResumeVO.JobIntention();
+        }
+        ResumeVO.JobIntention voIntention = new ResumeVO.JobIntention();
+        BeanUtils.copyProperties(poIntention, voIntention);
+        
+        // 设置默认值
+        voIntention.setPosition(StringUtils.defaultString(voIntention.getPosition(), ""));
+        voIntention.setCity(StringUtils.defaultString(voIntention.getCity(), ""));
+        voIntention.setSalary(StringUtils.defaultString(voIntention.getSalary(), "面议"));
+        voIntention.setEntryTime(StringUtils.defaultString(voIntention.getEntryTime(), "随时到岗"));
+        
+        return voIntention;
+    }
+
+    private static ResumePO.JobIntention convertJobIntentionToPO(ResumeVO.JobIntention voIntention) {
+        if (voIntention == null) {
+            return new ResumePO.JobIntention();
+        }
+        ResumePO.JobIntention poIntention = new ResumePO.JobIntention();
+        BeanUtils.copyProperties(voIntention, poIntention);
+        return poIntention;
+    }
+
+    private static List<ResumeVO.Education> convertEducationList(List<ResumePO.Education> poList) {
+        if (CollectionUtils.isEmpty(poList)) {
+            return new ArrayList<>();
+        }
+        return poList.stream().map(po -> {
+            ResumeVO.Education vo = new ResumeVO.Education();
+            BeanUtils.copyProperties(po, vo);
+            // 设置默认值
+            vo.setSchool(StringUtils.defaultString(vo.getSchool(), ""));
+            vo.setMajor(StringUtils.defaultString(vo.getMajor(), ""));
+            vo.setDegree(StringUtils.defaultString(vo.getDegree(), ""));
+            vo.setStartDate(StringUtils.defaultString(vo.getStartDate(), ""));
+            vo.setEndDate(StringUtils.defaultString(vo.getEndDate(), ""));
+            vo.setDescription(StringUtils.defaultString(vo.getDescription(), ""));
+            vo.setGpa(StringUtils.defaultString(vo.getGpa(), ""));
+            vo.setRank(StringUtils.defaultString(vo.getRank(), ""));
+            return vo;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumePO.Education> convertEducationListToPO(List<ResumeVO.Education> voList) {
+        if (CollectionUtils.isEmpty(voList)) {
+            return new ArrayList<>();
+        }
+        return voList.stream().map(vo -> {
+            ResumePO.Education po = new ResumePO.Education();
+            BeanUtils.copyProperties(vo, po);
+            return po;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumeVO.WorkExperience> convertWorkList(List<ResumePO.WorkExperience> poList) {
+        if (CollectionUtils.isEmpty(poList)) {
+            return new ArrayList<>();
+        }
+        return poList.stream().map(po -> {
+            ResumeVO.WorkExperience vo = new ResumeVO.WorkExperience();
+            BeanUtils.copyProperties(po, vo);
+            // 设置默认值
+            vo.setCompany(StringUtils.defaultString(vo.getCompany(), ""));
+            vo.setDepartment(StringUtils.defaultString(vo.getDepartment(), ""));
+            vo.setPosition(StringUtils.defaultString(vo.getPosition(), ""));
+            vo.setStartDate(StringUtils.defaultString(vo.getStartDate(), ""));
+            vo.setEndDate(StringUtils.defaultString(vo.getEndDate(), ""));
+            vo.setDescription(StringUtils.defaultString(vo.getDescription(), ""));
+            return vo;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumePO.WorkExperience> convertWorkListToPO(List<ResumeVO.WorkExperience> voList) {
+        if (CollectionUtils.isEmpty(voList)) {
+            return new ArrayList<>();
+        }
+        return voList.stream().map(vo -> {
+            ResumePO.WorkExperience po = new ResumePO.WorkExperience();
+            BeanUtils.copyProperties(vo, po);
+            return po;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumeVO.Project> convertProjectList(List<ResumePO.Project> poList) {
+        if (CollectionUtils.isEmpty(poList)) {
+            return new ArrayList<>();
+        }
+        return poList.stream().map(po -> {
+            ResumeVO.Project vo = new ResumeVO.Project();
+            BeanUtils.copyProperties(po, vo);
+            // 设置默认值
+            vo.setName(StringUtils.defaultString(vo.getName(), ""));
+            vo.setRole(StringUtils.defaultString(vo.getRole(), ""));
+            vo.setStartDate(StringUtils.defaultString(vo.getStartDate(), ""));
+            vo.setEndDate(StringUtils.defaultString(vo.getEndDate(), ""));
+            vo.setDescription(StringUtils.defaultString(vo.getDescription(), ""));
+            return vo;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumePO.Project> convertProjectListToPO(List<ResumeVO.Project> voList) {
+        if (CollectionUtils.isEmpty(voList)) {
+            return new ArrayList<>();
+        }
+        return voList.stream().map(vo -> {
+            ResumePO.Project po = new ResumePO.Project();
+            BeanUtils.copyProperties(vo, po);
+            return po;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumeVO.CampusExperience> convertCampusList(List<ResumePO.CampusExperience> poList) {
+        if (CollectionUtils.isEmpty(poList)) {
+            return new ArrayList<>();
+        }
+        return poList.stream().map(po -> {
+            ResumeVO.CampusExperience vo = new ResumeVO.CampusExperience();
+            BeanUtils.copyProperties(po, vo);
+            // 设置默认值
+            vo.setOrganization(StringUtils.defaultString(vo.getOrganization(), ""));
+            vo.setPosition(StringUtils.defaultString(vo.getPosition(), ""));
+            vo.setStartDate(StringUtils.defaultString(vo.getStartDate(), ""));
+            vo.setEndDate(StringUtils.defaultString(vo.getEndDate(), ""));
+            vo.setDescription(StringUtils.defaultString(vo.getDescription(), ""));
+            return vo;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumePO.CampusExperience> convertCampusListToPO(List<ResumeVO.CampusExperience> voList) {
+        if (CollectionUtils.isEmpty(voList)) {
+            return new ArrayList<>();
+        }
+        return voList.stream().map(vo -> {
+            ResumePO.CampusExperience po = new ResumePO.CampusExperience();
+            BeanUtils.copyProperties(vo, po);
+            return po;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumeVO.Award> convertAwardList(List<ResumePO.Award> poList) {
+        if (CollectionUtils.isEmpty(poList)) {
+            return new ArrayList<>();
+        }
+        return poList.stream().map(po -> {
+            ResumeVO.Award vo = new ResumeVO.Award();
+            BeanUtils.copyProperties(po, vo);
+            // 设置默认值
+            vo.setName(StringUtils.defaultString(vo.getName(), ""));
+            vo.setDate(StringUtils.defaultString(vo.getDate(), ""));
+            vo.setDescription(StringUtils.defaultString(vo.getDescription(), ""));
+            return vo;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumePO.Award> convertAwardListToPO(List<ResumeVO.Award> voList) {
+        if (CollectionUtils.isEmpty(voList)) {
+            return new ArrayList<>();
+        }
+        return voList.stream().map(vo -> {
+            ResumePO.Award po = new ResumePO.Award();
+            BeanUtils.copyProperties(vo, po);
+            return po;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumeVO.Skill> convertSkillList(List<ResumePO.Skill> poList) {
+        if (CollectionUtils.isEmpty(poList)) {
+            return new ArrayList<>();
+        }
+        return poList.stream().map(po -> {
+            ResumeVO.Skill vo = new ResumeVO.Skill();
+            BeanUtils.copyProperties(po, vo);
+            // 设置默认值
+            vo.setName(StringUtils.defaultString(vo.getName(), ""));
+            vo.setLevel(StringUtils.defaultString(vo.getLevel(), ""));
+            vo.setDescription(StringUtils.defaultString(vo.getDescription(), ""));
+            return vo;
+        }).collect(Collectors.toList());
+    }
+
+    private static List<ResumePO.Skill> convertSkillListToPO(List<ResumeVO.Skill> voList) {
+        if (CollectionUtils.isEmpty(voList)) {
+            return new ArrayList<>();
+        }
+        return voList.stream().map(vo -> {
+            ResumePO.Skill po = new ResumePO.Skill();
+            BeanUtils.copyProperties(vo, po);
+            return po;
+        }).collect(Collectors.toList());
     }
 }
