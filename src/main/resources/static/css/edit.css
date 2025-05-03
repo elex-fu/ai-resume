@@ -1069,4 +1069,44 @@ body {
 .project-description p,
 .campus-description p {
     margin: 5px 0;
+}
+
+/* 优化结果显示 */
+.optimize-result-container {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.optimize-result {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.optimize-time {
+    color: #666;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.optimize-description {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.optimize-detail {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
+.optimize-detail strong {
+    color: #1a73e8;
+    display: block;
+    margin-bottom: 8px;
 } 

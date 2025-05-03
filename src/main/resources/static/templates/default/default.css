@@ -278,3 +278,39 @@
         margin-top: 20px;
     }
 }
+
+/* 可编辑区域样式 */
+.editable-section {
+    position: relative;
+    padding: 2px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.editable-section:hover {
+    background-color: #f0f7ff;
+}
+
+.editable-section:hover .edit-button {
+    opacity: 1;
+}
+
+.edit-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background: #0d66da;
+}

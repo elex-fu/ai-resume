@@ -232,7 +232,7 @@ async function initComponents() {
     initToolbar();
     
     // 初始化可编辑内容监听器
-    initEditableContentListeners();
+    // initEditableContentListeners();
 }
 
 // 初始化模板管理器
@@ -264,12 +264,37 @@ function initToolbar() {
     document.querySelector('#exportPdfBtn')?.addEventListener('click', exportResumePDF);
     
     // 绑定应用修改按钮事件
-    const handwritingBtn = document.querySelector('#handwritingBtn');
-    if (handwritingBtn) {
-        handwritingBtn.addEventListener('click', applyOptimize);
+    const optimizeBtn = document.querySelector('.optimize-btn');
+    if (optimizeBtn) {
+        optimizeBtn.addEventListener('click', async () => {
+            // 获取选中的优化选项
+            const options = {
+                professional: document.getElementById('opt-professional').checked,
+                keywords: document.getElementById('opt-keywords').checked,
+                quantify: document.getElementById('opt-quantify').checked,
+                grammar: document.getElementById('opt-grammar').checked
+            };
+            
+            // 构建优化描述
+            const optimizeDescription = buildOptimizeDescription(options);
+            
+            // 调用优化函数
+            await applyOptimize(optimizeDescription);
+        });
     } else {
-        console.warn('未找到应用修改按钮');
+        console.warn('未找到优化按钮');
     }
+}
+
+// 构建优化描述
+function buildOptimizeDescription(options) {
+    const descriptions = [];
+    if (options.professional) descriptions.push('使用更专业的表达方式');
+    if (options.keywords) descriptions.push('添加行业关键词');
+    if (options.quantify) descriptions.push('量化描述工作成果');
+    if (options.grammar) descriptions.push('优化语法和拼写');
+    
+    return descriptions.join('，') || '优化简历内容';
 }
 
 // 初始化可编辑内容监听器
@@ -287,7 +312,7 @@ function initEditableContentListeners() {
     });
 }
 
-// 填充模态框数据
+// 填充编辑框数据
 function fillModalWithExistingData(sectionType) {
     if (!window.resumeData) {
         console.error('没有简历数据');
@@ -296,13 +321,13 @@ function fillModalWithExistingData(sectionType) {
     
     // 根据区域类型打开不同的编辑模态框
     switch (sectionType) {
-        case 'basicInfo':
+        case 'basic':
             openBasicInfoModal(window.resumeData.basicInfo);
             break;
         case 'jobIntention':
             openJobIntentionModal(window.resumeData.jobIntention);
             break;
-        case 'educationList':
+        case 'education':
             openEducationModal(window.resumeData.educationList);
             break;
         case 'workList':
@@ -638,7 +663,7 @@ function mergeResumeItem(originalItem, optimizedItem) {
 /**
  * 应用AI优化
  */
-async function applyOptimize() {
+async function applyOptimize(optimizeDescription) {
     try {
         showLoading('正在优化简历...');
         
@@ -646,14 +671,6 @@ async function applyOptimize() {
         const resumeId = getResumeIdFromUrl();
         if (!resumeId) {
             throw new Error('未找到简历ID');
-        }
-        
-        // 获取优化描述
-        const optimizeDescription = document.querySelector('#handwritingInput')?.value;
-        if (!optimizeDescription) {
-            showToast('请输入优化描述');
-            hideLoading();
-            return;
         }
         
         // 调用优化API

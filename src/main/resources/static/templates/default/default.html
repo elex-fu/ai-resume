@@ -1,10 +1,10 @@
 <div class="default-resume-container">
     <!-- 基本信息 -->
-    <div class="default-basic-info">
-        <div class="default-avatar-container">
+    <div class="default-basic-info ">
+        <div class="default-avatar-container editable-section" data-section="avatar">
             <img data-bind="basicInfo.avatar" alt="头像" class="default-avatar-img">
         </div>
-        <div class="default-basic-info-container">
+        <div class="default-basic-info-container editable-section"   data-section="basic">
             <h1 class="default-resume-name" data-bind="basicInfo.name"></h1>
             <p class="default-resume-info">
                 <span data-bind="basicInfo.gender"></span> | 
@@ -21,7 +21,7 @@
     </div>
 
     <!-- 求职意向 -->
-    <div class="default-resume-section">
+    <div class="default-resume-section editable-section" data-section="jobIntention">
         <h2 class="default-section-title">求职意向</h2>
         <div class="default-job-intention">
             <div class="default-intention-item">
@@ -38,7 +38,7 @@
     </div>
 
     <!-- 教育经历 -->
-    <div class="default-resume-section">
+    <div class="default-resume-section editable-section" data-section="education">
         <h2 class="default-section-title">教育经历</h2>
         <div class="default-education-items" data-bind="educationList.map(item => `
             <div class='default-education-item'>
@@ -60,7 +60,7 @@
     </div>
 
     <!-- 工作经历 -->
-    <div class="default-resume-section">
+    <div class="default-resume-section editable-section" data-section="work">
         <h2 class="default-section-title">工作经历</h2>
         <div class="default-work-items" data-bind="workList.map(item => `
             <div class='default-work-item'>
@@ -78,7 +78,7 @@
     </div>
 
     <!-- 项目经历 -->
-    <div class="default-resume-section">
+    <div class="default-resume-section editable-section" data-section="project">
         <h2 class="default-section-title">项目经历</h2>
         <div class="default-project-items" data-bind="projectList.map(item => `
             <div class='default-project-item'>
@@ -95,7 +95,7 @@
     </div>
 
     <!-- 技能特长 -->
-    <div class="default-resume-section">
+    <div class="default-resume-section editable-section" data-section="skills">
         <h2 class="default-section-title">技能特长</h2>
         <div class="default-skills-items" data-bind="skillList.map(item => `
             <div class='default-skill-item'>
